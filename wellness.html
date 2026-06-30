@@ -108,10 +108,27 @@
     </div>
     <script>
         // Get breed and age from URL or localStorage
+        // Get breed and age from URL params (priority) or localStorage
         const urlParams = new URLSearchParams(window.location.search);
-        let breed = urlParams.get('breed') || localStorage.getItem('dogBreed');
-        let age = parseFloat(urlParams.get('age')) || parseFloat(localStorage.getItem('dogAge'));
-        let breedData = JSON.parse(localStorage.getItem('breedData') || '{}');
+        let breed = urlParams.get('breed');
+        let age = parseFloat(urlParams.get('age'));
+        let breedData = null;
+        
+        // If URL params exist, use them and update localStorage
+        if (breed && !isNaN(age)) {
+            localStorage.setItem('dogBreed', breed);
+            localStorage.setItem('dogAge', age);
+            // Fetch breed data from our database
+            breedData = breedDatabase[breed];
+            if (breedData) {
+                localStorage.setItem('breedData', JSON.stringify(breedData));
+            }
+        } else {
+            // Fall back to localStorage
+            breed = localStorage.getItem('dogBreed');
+            age = parseFloat(localStorage.getItem('dogAge'));
+            breedData = JSON.parse(localStorage.getItem('breedData') || 'null');
+        }
         
         let currentQuestion = 0;
         let answers = {};
@@ -251,7 +268,8 @@
         }
 
         function init() {
-            if (!breed || !age || !breedData.name) {
+            // Validate we have all required data
+            if (!breed || isNaN(age) || age < 0 || !breedData || !breedData.name) {
                 document.getElementById('startBtn').style.display = 'none';
                 document.getElementById('noData').style.display = 'block';
                 return;

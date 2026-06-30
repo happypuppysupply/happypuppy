@@ -1,163 +1,358 @@
 // Cart functionality for Happy Puppy Wellness
-// Integrates with Shopify store
+// Integrates with Shopify store - using actual products from happypuppysupply.com
 
-const CART_KEY = 'hpw_cart';
+const CART_KEY = 'hpc_cart';
 
-// Product database with Shopify variant IDs
+// Product database with actual Shopify variant IDs from happypuppysupply.com
 const products = {
+    // Health & Wellness - Supplements
     'wuffes-hip-joint': {
         id: '45670672367660',
         name: 'Wuffes Hip & Joint Chews',
         price: 85.00,
         emoji: '🦴',
-        handle: 'wuffes-hip-joint-chews-for-dogs-mobility-support-supplement-suitable-for-small-breeds-large-breeds-made-in-usa-60-soft-chews'
+        handle: 'wuffes-hip-joint-chews-for-dogs-mobility-support-supplement-suitable-for-small-breeds-large-breeds-made-in-usa-60-soft-chews',
+        category: 'Health & Wellness'
     },
     'wuffes-allergy': {
         id: '45674659315756',
         name: 'Wuffes Allergy & Itch Chews',
         price: 43.00,
         emoji: '✨',
-        handle: 'wuffes-allergy-itch-chews-for-dogs-skin-immune-support-supplement-for-seasonal-allergies-itch-relief-all-breeds-ages-made-in-usa'
+        handle: 'wuffes-allergy-itch-chews-for-dogs-skin-immune-support-supplement-for-seasonal-allergies-itch-relief-all-breeds-ages-made-in-usa',
+        category: 'Health & Wellness'
     },
     'probiotics': {
         id: '45701821628460',
         name: 'Probiotics for Dogs',
         price: 39.82,
         emoji: '🥩',
-        handle: 'probiotics-for-dogs-prebiotic-probiotic-dog-supplement-with-ginger-root-icelandic-seaweed-and-organic-kelp-all-breeds-and-sizes-60-count'
+        handle: 'probiotics-for-dogs-prebiotic-probiotic-dog-supplement-with-ginger-root-icelandic-seaweed-and-organic-kelp-all-breeds-and-sizes-60-count',
+        category: 'Health & Wellness'
     },
-    'veterinary-strength': {
+    'veterinary-cognition': {
         id: '45701821661228',
         name: 'Veterinary Strength Healthy Cognition',
         price: 75.76,
         emoji: '💊',
-        handle: 'veterinary-strength-healthy-cognition-chews-senior-wellness-supplement-for-dogs-supports-cognition-immune-function-metabolism-60-count'
+        handle: 'veterinary-strength-healthy-cognition-chews-senior-wellness-supplement-for-dogs-supports-cognition-immune-function-metabolism-60-count',
+        category: 'Health & Wellness'
     },
     'smart-vitality': {
         id: '45701814255660',
         name: 'Smart Vitality Hip & Joint Supplement',
         price: 18.83,
         emoji: '💪',
-        handle: 'smart-vitality-hip-joint-supplement-for-dogs-with-glucosamine-dog-joint-support-dog-supplements-for-mobility-flexibility-60ct'
+        handle: 'smart-vitality-hip-joint-supplement-for-dogs-with-glucosamine-dog-joint-support-dog-supplements-for-mobility-flexibility-60ct',
+        category: 'Health & Wellness'
     },
-    'bully-sticks': {
-        id: '45701720277036',
-        name: '100% Natural Bully Sticks',
-        price: 40.52,
-        emoji: '🦴',
-        handle: '100-natural-12-in-bully-sticks-for-dogs-tough-long-lasting-rawhide-free-single-ingredient-beef-pizzle-chew-treats-for-medium-large-dogs-aggressive-chewers-5-count-pack'
-    },
-    'training-treats-chicken': {
-        id: '45701703827500',
-        name: 'Rewarding Life Training Treats (Chicken)',
-        price: 10.19,
-        emoji: '✅',
-        handle: 'rewarding-life-soft-dog-training-treats-natural-grain-free-chicken-and-lamb-recipe-6-oz-bag'
-    },
-    'training-treats-turkey': {
-        id: '45701703860268',
-        name: 'Rewarding Life Training Treats (Turkey)',
-        price: 10.19,
-        emoji: '✅',
-        handle: 'rewarding-life-soft-dog-training-treats-natural-grain-free-turkey-and-duck-recipe-6-oz-bag'
-    },
-    'chicken-feet': {
-        id: '45674251092012',
-        name: 'USA Chicken Feet (5lbs)',
-        price: 115.00,
-        emoji: '🐔',
-        handle: 'usa-chicken-feet-5lbs-225-235-feet-natural-scent-only-washed-with-water-human-grade-and-100-natural-wholesome-dog-chew-treats-high-in-protein-glucosamine-and-chondroitin-enrichment-chewing-lean-chews'
-    },
-    'redbarn-collagen': {
-        id: '45701720932396',
-        name: 'Redbarn Collagen-Wrapped Esophagus',
-        price: 77.98,
-        emoji: '🦷',
-        handle: 'redbarn-collagen-wrapped-esophagus-slices-20-pack-natural-dog-chews-long-lasting-alternative-to-traditional-rawhide-for-all-dog-sizes-grain-free-beef-treats-slow-roasted'
-    },
-    'redbarn-braided': {
-        id: '45701722243116',
-        name: 'Redbarn Braided Collagen Chews',
-        price: 199.47,
-        emoji: '🦴',
-        handle: 'redbarn-medium-braided-collagen-wrapped-esophagus-dog-chews-30-count-natural-grain-free-gluten-free-alternative-to-traditional-rawhide-long-lasting-treats-for-dogs'
-    },
-    'hip-joint-advanced': {
-        id: '45701814386732',
-        name: 'Dog Hip and Joint Chews - Advanced',
-        price: 26.16,
-        emoji: '🦴',
-        handle: 'dog-hip-and-joint-chews-advanced-mobility-support-with-high-potency-glucosamine-green-lipped-mussel-omega-3-turmeric-150-count-soft-chews-for-joint-health'
-    },
-    'pupflex': {
+    'pupflex-joint': {
         id: '45701814747180',
         name: 'Pupflex+ Hip and Joint Supplement',
         price: 74.52,
         emoji: '🦴',
-        handle: 'pupflex-hip-and-joint-supplement-dogs-vet-created-soft-chews-w-uc-ii-collagen-curcuvet-omega-3-uc-ii-collagen-more-effective-than-glucosamine-chondroitin-dog-joint-supplement-60-ct'
+        handle: 'pupflex-hip-and-joint-supplement-dogs-vet-created-soft-chews-w-uc-ii®-collagen-curcuvet®-omega-3-uc-ii-collagen-more-effective-than-glucosamine-chondroitin-dog-joint-supplement-60-ct',
+        category: 'Health & Wellness'
+    },
+    'dog-hip-joint-advanced': {
+        id: '45701814386732',
+        name: 'Dog Hip and Joint Chews - Advanced',
+        price: 26.16,
+        emoji: '🦴',
+        handle: 'dog-hip-and-joint-chews-advanced-mobility-support-with-high-potency-glucosamine-green-lipped-mussel-omega-3-turmeric-150-count-soft-chews-for-joint-health',
+        category: 'Health & Wellness'
+    },
+    'bladder-control': {
+        id: '45701822447660',
+        name: 'Bladder Control Supplement',
+        price: 28.96,
+        emoji: '💧',
+        handle: 'bladder-control-pet-supplies-for-bladder-health-support-urinary-tract-health-dog-health-supplement-pet-support-for-dogs-30-capsules-30-servings',
+        category: 'Health & Wellness'
     },
     'calming-care': {
         id: '45701814321196',
         name: 'Purina Pro Plan Calming Care',
         price: 33.95,
         emoji: '💙',
-        handle: 'purina-pro-plan-veterinary-supplements-calming-care-calming-dog-supplements-30-ct-boxes'
+        handle: 'purina-pro-plan-veterinary-supplements-calming-care-calming-dog-supplements-30-ct-boxes',
+        category: 'Health & Wellness'
     },
-    'orthopedic-bed': {
-        id: 'custom_orthopedic_bed',
-        name: 'Orthopedic Memory Foam Bed',
-        price: 89.99,
+    'calming-spray': {
+        id: '45701821562924',
+        name: 'Pet Calming Spray',
+        price: 8.39,
+        emoji: '🌿',
+        handle: 'pet-calming-spray-pheromone-mood-calming-diffuser-improve-estrus-agitation-anxiety-relief-prevent-howling-cat-dog-health-supply',
+        category: 'Health & Wellness'
+    },
+    'gut-health': {
+        id: '45701814353964',
+        name: 'Dog Gut Health Supplement',
+        price: 44.83,
+        emoji: '🥩',
+        handle: 'dog-gut-health-supplement-plasma-powered-soft-chews-for-dog-immune-health-support-gut-health-made-with-natural-ingredients-for-dogs-of-all-breeds-sizes-60-count',
+        category: 'Health & Wellness'
+    },
+    'omega-skin': {
+        id: '45701815107628',
+        name: 'Omega Canine Coat & Skin Chews',
+        price: 22.85,
+        emoji: '✨',
+        handle: 'omega-canine-coat-skin-chews-skin-coat-chewables-for-dogs-120-soft-chews-fish-oil',
+        category: 'Dog Treats & Chews'
+    },
+    
+    // Treats & Chews
+    'bully-sticks': {
+        id: '45701720277036',
+        name: '100% Natural Bully Sticks',
+        price: 40.52,
+        emoji: '🦴',
+        handle: '100-natural-12-in-bully-sticks-for-dogs-tough-long-lasting-rawhide-free-single-ingredient-beef-pizzle-chew-treats-for-medium-large-dogs-aggressive-chewers-5-count-pack',
+        category: 'Dog Treats & Chews'
+    },
+    'training-treats-chicken': {
+        id: '45701703827500',
+        name: 'Rewarding Life Training Treats (Chicken)',
+        price: 10.19,
+        emoji: '✅',
+        handle: 'rewarding-life-soft-dog-training-treats-natural-grain-free-chicken-and-lamb-recipe-6-oz-bag',
+        category: 'Dog Treats & Chews'
+    },
+    'training-treats-turkey': {
+        id: '45701703860268',
+        name: 'Rewarding Life Training Treats (Turkey)',
+        price: 10.19,
+        emoji: '✅',
+        handle: 'rewarding-life-soft-dog-training-treats-natural-grain-free-turkey-and-duck-recipe-6-oz-bag',
+        category: 'Dog Treats & Chews'
+    },
+    'chicken-feet': {
+        id: '45674251092012',
+        name: 'USA Chicken Feet (5lbs)',
+        price: 115.00,
+        emoji: '🐔',
+        handle: 'usa-chicken-feet-5lbs-225-235-feet-natural-scent-only-washed-with-water-human-grade-and-100-natural-wholesome-dog-chew-treats-high-in-protein-glucosamine-and-chondroitin-enrichment-chewing-lean-chews',
+        category: 'Dog Treats & Chews'
+    },
+    'redbarn-collagen': {
+        id: '45701720932396',
+        name: 'Redbarn Collagen-Wrapped Esophagus',
+        price: 77.98,
+        emoji: '🦷',
+        handle: 'redbarn-collagen-wrapped-esophagus-slices-20-pack-natural-dog-chews-long-lasting-alternative-to-traditional-rawhide-for-all-dog-sizes-grain-free-beef-treats-slow-roasted',
+        category: 'Dog Treats & Chews'
+    },
+    'redbarn-braided': {
+        id: '45701722243116',
+        name: 'Redbarn Braided Collagen Chews',
+        price: 199.47,
+        emoji: '🦴',
+        handle: 'redbarn-medium-braided-collagen-wrapped-esophagus-dog-chews-30-count-natural-grain-free-gluten-free-alternative-to-traditional-rawhide-long-lasting-treats-for-dogs',
+        category: 'Dog Treats & Chews'
+    },
+    'activfresh-small': {
+        id: '45701722374188',
+        name: 'Activfresh Dental Chews - Small',
+        price: 10.84,
+        emoji: '🦷',
+        handle: 'activfresh-dog-chews-for-mini-and-small-dogs-5-20-lbs-dental-chews-to-freshen-breath-chicken-flavor-16-9-oz-56-chews-56-ct-pouch',
+        category: 'Dog Treats & Chews'
+    },
+    'activfresh-medium': {
+        id: '45701720309804',
+        name: 'Activfresh Dental Chews - Medium',
+        price: 14.71,
+        emoji: '🦷',
+        handle: 'activfresh-dog-chews-for-small-and-medium-dogs-20-40-lbs-dental-chews-to-freshen-breath-chicken-flavor-15-5-oz-21-chews-21-ct-pouch',
+        category: 'Dog Treats & Chews'
+    },
+    'mighty-paw-yak': {
+        id: '45674540171308',
+        name: 'Mighty Paw Yak Cheese Dog Chews',
+        price: 46.00,
+        emoji: '🧀',
+        handle: 'mighty-paw-yak-cheese-dog-chews-all-natural-treats-for-your-pup',
+        category: 'Dog Treats & Chews'
+    },
+    'bacon-yak-cheese': {
+        id: '45701720014892',
+        name: 'Bacon Yak Cheese Dog Chews',
+        price: 41.11,
+        emoji: '🧀',
+        handle: 'bacon-yak-cheese-dog-chews-the-better-for-you-chew-100-natural-long-lasting-healthy-dog-treats-lactose-grain-free-protein-rich-for-dogs-65-lbs-smaller-4-count',
+        category: 'Dog Treats & Chews'
+    },
+    'glucosamine-soft-chews': {
+        id: '45701814288428',
+        name: 'Glucosamine Hip & Joint Soft Chews',
+        price: 15.74,
+        emoji: '🦴',
+        handle: 'glucosamine-hip-joint-supplement-for-dogs-60-soft-chews-joint-support-supplement-with-msm-and-krill-dog-health-supplies-large-small-breed-chicken-flavored-chewables',
+        category: 'Dog Treats & Chews'
+    },
+    'marosnacks': {
+        id: '45701751898156',
+        name: 'Marosnacks with Real Bone Marrow',
+        price: 14.50,
+        emoji: '🦴',
+        handle: 'marosnacks-small-dog-treats-with-real-bone-marrow-40-oz-canister',
+        category: 'Dog Treats & Chews'
+    },
+    'zaggler-bacon': {
+        id: '45701751865388',
+        name: 'Zaggler Rolling Chew Toy - Bacon',
+        price: 27.28,
+        emoji: '🦴',
+        handle: 'zaggler-rolling-dog-chew-toy-for-aggressive-chewers-real-bacon-made-in-usa-giant',
+        category: 'Dog Treats & Chews'
+    },
+    
+    // Dog Beds
+    'orthopedic-crate-mat': {
+        id: '45701788139564',
+        name: 'Restful Dreamer Orthopedic Crate Mat',
+        price: 41.08,
         emoji: '🛏️',
-        handle: 'orthopedic-memory-foam-bed',
-        url: 'https://www.happypuppysupply.com/collections/dog-beds-mats'
+        handle: 'pet-products-restful-dreamer-medium-large-orthopedic-foam-deluxe-crate-mat-gray',
+        category: 'Dog Beds & Mats'
     },
-    'calming-bed': {
-        id: 'custom_calming_bed',
-        name: 'Calming Donut Bed',
-        price: 79.99,
+    'orthopedic-crate-mat-2pack': {
+        id: '45701802852396',
+        name: 'Restful Dreamer Orthopedic Mat (2-Pack)',
+        price: 62.64,
         emoji: '🛏️',
-        handle: 'calming-donut-bed',
-        url: 'https://www.happypuppysupply.com/collections/dog-beds-mats'
+        handle: '2-pack-pet-products-restful-dreamer-medium-large-orthopedic-foam-deluxe-crate-mat-gray',
+        category: 'Dog Beds & Mats'
     },
-    'puzzle-toys': {
-        id: 'custom_puzzle_toys',
-        name: 'Interactive Puzzle Toys',
-        price: 24.99,
-        emoji: '🧩',
-        handle: 'interactive-puzzle-toys',
-        url: 'https://www.happypuppysupply.com/collections/toys-entertainment'
+    'memory-foam-mattress': {
+        id: '45701787910188',
+        name: 'Memory Foam Mattress Mat (2-Pack)',
+        price: 53.04,
+        emoji: '🛏️',
+        handle: '2-pack-pet-products-mattress-edition-medium-memory-foam-dog-kennel-crate-mat-gray',
+        category: 'Dog Beds & Mats'
     },
-    'plush-toys': {
-        id: 'custom_plush_toys',
-        name: 'Plush Comfort Toys',
-        price: 18.99,
-        emoji: '🧸',
-        handle: 'plush-comfort-toys',
-        url: 'https://www.happypuppysupply.com/collections/toys-entertainment'
+    'winter-warm-bed': {
+        id: '45701787254828',
+        name: 'Winter Warm Dog House Bed',
+        price: 26.86,
+        emoji: '🛏️',
+        handle: 'winter-warm-dog-house-detachable-pet-sleeping-bed-for-small-medium-dogs-cats-soft-non-slip-dog-kennel-puppy-kitten-nest',
+        category: 'Dog Beds & Mats'
     },
-    'active-toys': {
-        id: 'custom_active_toys',
-        name: 'Active Play Toys',
-        price: 22.99,
+    'dog-blankets': {
+        id: '45701787582508',
+        name: 'Dog Blankets 3-Pack',
+        price: 7.82,
+        emoji: '🛏️',
+        handle: 'dog-blankets-for-dogs-3-pack-dog-blanket-washable-23-x-16-fuzzy-soft-pet-mat-throw-cover-for-kennel-crate-bed-cute-paw-pattern-cat-blanket-blankets-for-dogs-pet-blanket',
+        category: 'Dog Beds & Mats'
+    },
+    
+    // Crates & Kennels
+    'dog-crate-42': {
+        id: '45701822840876',
+        name: '42 Inch Foldable Dog Crate',
+        price: 92.42,
+        emoji: '🏠',
+        handle: '42-inch-dog-crate-dog-crates-and-kennels-foldable-large-dog-crate-for-large-dogs-with-handle-double-door-outdoor-metal-wire-dog-cage-with-plastic-tray-for-medium-dogs-black',
+        category: 'Outdoor Kennels & Pens'
+    },
+    'dog-crate-36': {
+        id: '45701703729196',
+        name: '36 Inch Foldable Dog Crate',
+        price: 72.42,
+        emoji: '🏠',
+        handle: '36-inch-dog-crate-dog-crates-and-kennels-foldable-large-dog-crate-for-large-dogs-with-handle-double-door-outdoor-metal-wire-dog-cage-with-plastic-tray-for-medium-dogs-pink',
+        category: 'Outdoor Kennels & Pens'
+    },
+    'heavy-duty-crate-48': {
+        id: '45701776769068',
+        name: '48 Inch Heavy Duty Dog Crate',
+        price: 185.86,
+        emoji: '🏠',
+        handle: '48-inch-heavy-duty-dog-crate-indestructible-escape-proof-kennel-with-double-door-removable-tray-for-medium-to-large-dogs-black',
+        category: 'Outdoor Kennels & Pens'
+    },
+    'wooden-dog-furniture': {
+        id: '45701809537068',
+        name: 'Dog Crate Furniture with Drawers',
+        price: 219.27,
+        emoji: '🏠',
+        handle: '44-in-dog-crate-furniture-with-drawers-wooden-dog-cage-with-open-compartment-double-doors-heavy-duty-indoor-house-end-table-for-small-medium-large-breeds-vintage-brown-black',
+        category: 'Outdoor Kennels & Pens'
+    },
+    
+    // Toys & Entertainment
+    'automatic-ball-launcher': {
+        id: '45701802754092',
+        name: 'Automatic Ball Launcher',
+        price: 74.52,
         emoji: '🎾',
-        handle: 'active-play-toys',
-        url: 'https://www.happypuppysupply.com/collections/toys-entertainment'
+        handle: 'automatic-ball-launcher-for-dogs-2-mini-tennis-ball-thrower-with-3-distance-settings-interactive-puppy-pet-ball-indoor-thrower-fetch-machine-for-small-to-medium-dogs-green',
+        category: 'Toys & Entertainment'
     },
-    'pet-ramp': {
-        id: 'custom_pet_ramp',
-        name: 'Pet Ramp for Furniture',
-        price: 79.99,
-        emoji: '📐',
-        handle: 'pet-ramp',
-        url: 'https://www.happypuppysupply.com/collections/gates-containment'
+    'ball-launcher-orange': {
+        id: '45701802590252',
+        name: 'Ball Launcher with 6 Balls (Orange)',
+        price: 99.27,
+        emoji: '🎾',
+        handle: 'automatic-ball-launcher-for-dogs-with-6-balls-dog-ball-thrower-launcher-orange',
+        category: 'Toys & Entertainment'
     },
-    'grooming-brush': {
-        id: 'custom_grooming_brush',
-        name: 'Professional Grooming Brush',
-        price: 24.99,
-        emoji: '🧴',
-        handle: 'professional-grooming-brush',
-        url: 'https://www.happypuppysupply.com/collections/grooming-care'
+    'plush-hedgehog': {
+        id: '45701703696428',
+        name: 'Plush Squeaky Hedgehog Toy',
+        price: 10.01,
+        emoji: '🧸',
+        handle: 'plush-dog-toy-soft-plush-squeaky-hedgehog-dog-toy-stuffed-biting-training-playing-squeak-toys-for-dog-puppy-1',
+        category: 'Toys & Entertainment'
+    },
+    'squeaker-balls-4pk': {
+        id: '45701800230956',
+        name: 'Flying Disc Fetch Toys 3-Pack',
+        price: 23.43,
+        emoji: '🥏',
+        handle: '3-pcs-flying-disc-dog-fetch-toys-9-05-inch-interactive-flyer-and-tug-toys-feedable-lightweight-nylon-fabric-pet-training-and-outdoor-exercise-toys-for-small-medium-large-dogs-safe-on-teeth',
+        category: 'Toys & Entertainment'
+    },
+    
+    // Feeding
+    'elevated-bowls': {
+        id: '45701749538860',
+        name: 'Elevated Dog Bowls Adjustable',
+        price: 37.40,
+        emoji: '🥣',
+        handle: 'elevated-dog-bowls-adjustable-height-raised-dog-food-bowls-for-small-medium-and-large-dog',
+        category: 'Feeding & Watering'
+    },
+    'slow-feeder': {
+        id: '45701814222892',
+        name: 'Gobble Stopper Slow Feeder',
+        price: 15.15,
+        emoji: '🥣',
+        handle: 'gobble-stopper-slow-feeder-small-1-ct',
+        category: 'Feeding & Watering'
+    },
+    
+    // Wellness Kits
+    'wellness-kit': {
+        id: '45701822054444',
+        name: 'Home Check 4-In-1 Dog Wellness Kit (2 Pack)',
+        price: 49.51,
+        emoji: '✅',
+        handle: 'home-check-4-in-1-dog-wellness-kit-2-pack',
+        category: 'Dog Supplies'
+    },
+    'health-records': {
+        id: '45701815140396',
+        name: 'Premium Canine Health Records (25-Pack)',
+        price: 15.12,
+        emoji: '📋',
+        handle: 'pet-supplies-25-pack-premium-canine-health-record-6x4-inch-booklets-dog-vaccines-large-records-puppy-shot-vaccination-brochure',
+        category: 'Health & Wellness'
     }
 };
 
@@ -176,7 +371,10 @@ function saveCart(cart) {
 // Add item to cart
 function addToCart(productKey, quantity = 1) {
     const product = products[productKey];
-    if (!product) return false;
+    if (!product) {
+        console.error('Product not found:', productKey);
+        return false;
+    }
     
     const cart = getCart();
     const existingItem = cart.find(item => item.key === productKey);
@@ -191,7 +389,7 @@ function addToCart(productKey, quantity = 1) {
             price: product.price,
             emoji: product.emoji,
             handle: product.handle,
-            url: product.url || null,
+            category: product.category,
             quantity: quantity
         });
     }
@@ -206,6 +404,9 @@ function removeFromCart(productKey) {
     let cart = getCart();
     cart = cart.filter(item => item.key !== productKey);
     saveCart(cart);
+    if (document.getElementById('cart-items')) {
+        renderCartPage();
+    }
 }
 
 // Update item quantity
@@ -218,6 +419,9 @@ function updateQuantity(productKey, quantity) {
         } else {
             item.quantity = quantity;
             saveCart(cart);
+            if (document.getElementById('cart-items')) {
+                renderCartPage();
+            }
         }
     }
 }
@@ -226,6 +430,9 @@ function updateQuantity(productKey, quantity) {
 function clearCart() {
     localStorage.removeItem(CART_KEY);
     updateCartCount();
+    if (document.getElementById('cart-items')) {
+        renderCartPage();
+    }
 }
 
 // Get cart total
@@ -246,13 +453,12 @@ function updateCartCount() {
     const count = getCartCount();
     countElements.forEach(el => {
         el.textContent = count;
-        el.style.display = count > 0 ? 'inline-block' : 'none';
+        el.style.display = count > 0 ? 'inline-flex' : 'none';
     });
 }
 
 // Show cart notification
 function showCartNotification(message) {
-    // Remove existing notification
     const existing = document.querySelector('.cart-notification');
     if (existing) existing.remove();
     
@@ -293,28 +499,12 @@ function buildCheckoutUrl() {
     const cart = getCart();
     if (cart.length === 0) return 'https://www.happypuppysupply.com/cart';
     
-    // Build URL with variant IDs
-    const ids = [];
-    const quantities = [];
-    
+    const items = [];
     cart.forEach(item => {
-        // Only add items with numeric IDs (not custom products)
-        if (!item.id.startsWith('custom_')) {
-            ids.push(item.id);
-            quantities.push(item.quantity);
-        }
+        items.push(`${item.id}:${item.quantity}`);
     });
     
-    if (ids.length === 0) {
-        // All items are custom, redirect to collections
-        return 'https://www.happypuppysupply.com/collections/all';
-    }
-    
-    if (ids.length === 1) {
-        return `https://www.happypuppysupply.com/cart/add?id=${ids[0]}&quantity=${quantities[0]}`;
-    }
-    
-    return `https://www.happypuppysupply.com/cart/add?id=${ids.join(',')}&quantity=${quantities.join(',')}`;
+    return `https://www.happypuppysupply.com/cart/add?items=${items.join(',')}`;
 }
 
 // Go to checkout
@@ -351,32 +541,31 @@ function renderCartPage() {
                 <div class="cart-item-emoji">${item.emoji}</div>
                 <div class="cart-item-details">
                     <h4>${item.name}</h4>
+                    <p class="cart-item-category">${item.category}</p>
                     <p class="cart-item-price">$${item.price.toFixed(2)} each</p>
                 </div>
                 <div class="cart-item-quantity">
-                    <button onclick="updateQuantity('${item.key}', ${item.quantity - 1})" class="qty-btn">-</button>
+                    <button onclick="Cart.updateQuantity('${item.key}', ${item.quantity - 1})" class="qty-btn">-</button>
                     <span>${item.quantity}</span>
-                    <button onclick="updateQuantity('${item.key}', ${item.quantity + 1})" class="qty-btn">+</button>
+                    <button onclick="Cart.updateQuantity('${item.key}', ${item.quantity + 1})" class="qty-btn">+</button>
                 </div>
                 <div class="cart-item-total">$${itemTotal}</div>
-                <button onclick="removeFromCart('${item.key}')" class="remove-btn">×</button>
+                <button onclick="Cart.remove('${item.key}')" class="remove-btn">×</button>
             </div>
         `;
     });
     
     container.innerHTML = html;
     
-    // Update summary
     const subtotal = getCartTotal().toFixed(2);
-    const subtotalEl = document.getElementById('cart-subtotal');
-    if (subtotalEl) subtotalEl.textContent = `$${subtotal}`;
+    const subtotalEls = document.querySelectorAll('#cart-subtotal');
+    subtotalEls.forEach(el => el.textContent = `$${subtotal}`);
 }
 
 // Initialize cart on page load
 document.addEventListener('DOMContentLoaded', function() {
     updateCartCount();
     
-    // If on cart page, render cart
     if (document.getElementById('cart-items')) {
         renderCartPage();
     }
@@ -392,5 +581,6 @@ window.Cart = {
     getCount: getCartCount,
     getItems: getCart,
     checkout: goToCheckout,
-    products: products
+    products: products,
+    render: renderCartPage
 };
