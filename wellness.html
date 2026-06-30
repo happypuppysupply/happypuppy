@@ -363,26 +363,32 @@
         };
 
         // Get breed and age from URL or localStorage
-        // Get breed and age from URL params (priority) or localStorage
         const urlParams = new URLSearchParams(window.location.search);
         let breed = urlParams.get('breed');
         let age = parseFloat(urlParams.get('age'));
         let breedData = null;
         
+        // Debug logging
+        console.log('URL breed:', breed, 'URL age:', age, 'parsed age:', age, 'isNaN:', isNaN(age));
+        
         // If URL params exist, use them and update localStorage
-        if (breed && !isNaN(age)) {
+        if (breed && !isNaN(age) && age >= 0) {
+            console.log('Using URL params');
             localStorage.setItem('dogBreed', breed);
             localStorage.setItem('dogAge', age);
             // Fetch breed data from our database
             breedData = breedDatabase[breed];
+            console.log('Breed data from database:', breedData);
             if (breedData) {
                 localStorage.setItem('breedData', JSON.stringify(breedData));
             }
         } else {
             // Fall back to localStorage
+            console.log('Falling back to localStorage');
             breed = localStorage.getItem('dogBreed');
             age = parseFloat(localStorage.getItem('dogAge'));
             breedData = JSON.parse(localStorage.getItem('breedData') || 'null');
+            console.log('LocalStorage breed:', breed, 'age:', age, 'breedData:', breedData);
         }
         
         let currentQuestion = 0;
@@ -524,7 +530,17 @@
 
         function init() {
             // Validate we have all required data
-            if (!breed || isNaN(age) || age < 0 || !breedData || !breedData.name) {
+            console.log('init() - breed:', breed, 'age:', age, 'breedData:', breedData);
+            
+            // Check if we have valid data
+            const hasBreed = breed && breed.trim() !== '';
+            const hasAge = !isNaN(age) && age >= 0;
+            const hasBreedData = breedData && breedData.name;
+            
+            console.log('hasBreed:', hasBreed, 'hasAge:', hasAge, 'hasBreedData:', hasBreedData);
+            
+            if (!hasBreed || !hasAge || !hasBreedData) {
+                console.log('Validation failed - showing error message');
                 document.getElementById('startBtn').style.display = 'none';
                 document.getElementById('noData').style.display = 'block';
                 return;
