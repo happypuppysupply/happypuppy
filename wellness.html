@@ -11,8 +11,10 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Inter', sans-serif; background: var(--fp-cream); color: var(--fp-charcoal); line-height: 1.6; }
         h1, h2, h3, h4 { font-family: 'Playfair Display', serif; font-weight: 400; }
-        .header { background: var(--fp-white); padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(0,0,0,0.05); }
+        .header { background: var(--fp-white); padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; }
         .logo { font-family: 'Playfair Display', serif; font-size: 24px; color: var(--fp-charcoal); text-decoration: none; }
+        .cart-icon { position: relative; text-decoration: none; font-size: 24px; color: var(--fp-charcoal); }
+        .cart-count { position: absolute; top: -8px; right: -8px; background: var(--fp-coral); color: white; font-size: 11px; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; display: none; }
         .container { max-width: 800px; margin: 0 auto; padding: 60px 20px; }
         .dog-info { background: var(--fp-sage); color: white; padding: 15px 25px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; }
         .dog-info a { color: white; text-decoration: underline; font-size: 14px; }
@@ -49,19 +51,28 @@
         .risk-section h3 { margin-bottom: 15px; }
         .recommendations { margin-top: 40px; }
         .recommendations h3 { font-size: 24px; margin-bottom: 30px; text-align: center; }
-        .product-card { display: flex; gap: 20px; padding: 20px; background: var(--fp-light); margin-bottom: 20px; text-decoration: none; color: inherit; transition: transform 0.3s; }
+        .product-card { display: flex; gap: 20px; padding: 20px; background: var(--fp-light); margin-bottom: 20px; text-decoration: none; color: inherit; transition: transform 0.3s; position: relative; }
         .product-card:hover { transform: translateX(10px); }
-        .product-image { width: 100px; height: 100px; background: var(--fp-white); display: flex; align-items: center; justify-content: center; font-size: 40px; }
+        .product-image { width: 100px; height: 100px; background: var(--fp-white); display: flex; align-items: center; justify-content: center; font-size: 40px; flex-shrink: 0; }
+        .product-info { flex: 1; }
         .product-info h4 { font-size: 18px; margin-bottom: 8px; }
         .product-info p { font-size: 14px; color: var(--fp-gray); margin-bottom: 8px; }
         .product-price { font-weight: 600; color: var(--fp-coral); }
-        .shop-btn { display: block; width: 100%; text-align: center; margin-top: 30px; }
+        .add-to-cart-btn { background: var(--fp-charcoal); color: white; border: none; padding: 10px 20px; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; cursor: pointer; margin-top: 10px; transition: all 0.3s; }
+        .add-to-cart-btn:hover { background: var(--fp-coral); }
+        .cart-actions { display: flex; gap: 15px; margin-top: 30px; }
+        .cart-actions .btn { flex: 1; margin: 0; text-align: center; }
+        .view-cart-btn { background: transparent; color: var(--fp-charcoal); border: 2px solid var(--fp-charcoal); }
         @media (max-width: 768px) { .container { padding: 40px 20px; } .question, .results { padding: 30px 20px; } .product-card { flex-direction: column; } }
     </style>
 </head>
 <body>
     <header class="header">
         <a href="/" class="logo">Happy Puppy Supply</a>
+        <a href="/cart.html" class="cart-icon">
+            🛒
+            <span class="cart-count">0</span>
+        </a>
     </header>
     <div class="container">
         <div class="dog-info" id="dogInfo" style="display: none;">
@@ -359,17 +370,21 @@
             // Product recommendations based on breed risks and answers
             const products = getProductRecommendations(breedData, answers, score);
             const productsHtml = products.map(p => `
-                <a href="${p.link}" class="product-card" target="_blank">
+                <div class="product-card">
                     <div class="product-image">${p.emoji}</div>
                     <div class="product-info">
                         <h4>${p.name}</h4>
                         <p>${p.desc}</p>
                         <span class="product-price">${p.price}</span>
+                        <button class="add-to-cart-btn" onclick="Cart.add('${p.key}')">Add to Cart</button>
                     </div>
-                </a>
+                </div>
             `).join('');
             document.getElementById('product-recommendations').innerHTML = productsHtml +
-                '<a href="https://www.happypuppysupply.com/collections/all" class="btn shop-btn" target="_blank">Shop All Products</a>';
+                '<div class="cart-actions">' +
+                '<a href="/cart.html" class="btn view-cart-btn">View Cart</a>' +
+                '<button class="btn" onclick="Cart.checkout()">Checkout Now →</button>' +
+                '</div>';
         }
 
         function getProductRecommendations(data, answers, score) {
@@ -379,7 +394,8 @@
             // Joint products for high-risk breeds or low joint scores
             if (data.jointRisk === 'high' || answers.joints < 2) {
                 products.push({
-                    name: "Wuffes Hip & Joint Chews",
+                    key: \'wuffes-hip-joint\',
+                    name: "Wuffes\ Hip\ \&\ Joint\ Chews",
                     desc: `Essential for ${data.name}s - prevents joint deterioration`,
                     price: "$32.99",
                     emoji: "🦴",
@@ -387,7 +403,8 @@
                 });
                 if (age > 5 || score < 60) {
                     products.push({
-                        name: "Orthopedic Memory Foam Bed",
+                        key: \'orthopedic-bed\',
+                    name: "Orthopedic\ Memory\ Foam\ Bed",
                         desc: "Joint support during rest",
                         price: "$89.99",
                         emoji: "🛏️",
@@ -399,7 +416,8 @@
             // Weight management
             if (data.obesityRisk === 'high' || answers.weight < 2) {
                 products.push({
-                    name: "Smart Vitality Supplement",
+                    key: \'smart-vitality\',
+                    name: "Smart\ Vitality\ Supplement",
                     desc: "Metabolic support for weight management",
                     price: "$28.99",
                     emoji: "💊",
@@ -410,14 +428,16 @@
             // Skin/Allergy products
             if (data.skinRisk === 'high' || answers.skin < 2) {
                 products.push({
-                    name: "Wuffes Allergy & Itch Chews",
+                    key: \'wuffes-allergy\',
+                    name: "Wuffes\ Allergy\ \&\ Itch\ Chews",
                     desc: `Relief from allergies common in ${data.name}s`,
                     price: "$34.99",
                     emoji: "✨",
                     link: "https://www.happypuppysupply.com/products/wuffes-allergy-itch-chews"
                 });
                 products.push({
-                    name: "Probiotics for Dogs",
+                    key: \'probiotics\',
+                    name: "Probiotics\ for\ Dogs",
                     desc: "Gut health supports skin health",
                     price: "$26.99",
                     emoji: "🥩",
@@ -428,7 +448,8 @@
             // Dental products for small breeds
             if (data.dentalRisk === 'high' || data.size === 'small' || answers.dental < 2) {
                 products.push({
-                    name: "100% Natural Bully Sticks",
+                    key: \'bully-sticks\',
+                    name: "100%\ Natural\ Bully\ Sticks",
                     desc: "Natural dental cleaning action",
                     price: "$24.99",
                     emoji: "🦷",
@@ -439,7 +460,8 @@
             // General wellness
             if (products.length < 3) {
                 products.push({
-                    name: "Veterinary Strength Supplements",
+                    key: \'veterinary-strength\',
+                    name: "Veterinary\ Strength\ Supplements",
                     desc: "Comprehensive daily wellness",
                     price: "$45.99",
                     emoji: "💊",
@@ -459,5 +481,6 @@
         // Initialize on load
         init();
     </script>
+<script src="cart.js"></script>
 </body>
 </html>
