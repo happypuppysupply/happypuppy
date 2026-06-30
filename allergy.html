@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Allergy & Immunity Check — Happy Puppy Supply</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root { --fp-cream: #FAF7F5; --fp-white: #FFFFFF; --fp-charcoal: #2D2D2D; --fp-gray: #6B6B6B; --fp-light: #F5F5F5; --fp-blue: #7EC8E3; --fp-coral: #FF8C69; --fp-sage: #9CAF88; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: var(--fp-cream); color: var(--fp-charcoal); line-height: 1.6; }
+        h1, h2, h3, h4 { font-family: 'Playfair Display', serif; font-weight: 400; }
+        .header { background: var(--fp-white); padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(0,0,0,0.05); }
+        .logo { font-family: 'Playfair Display', serif; font-size: 24px; color: var(--fp-charcoal); text-decoration: none; }
+        .container { max-width: 800px; margin: 0 auto; padding: 60px 20px; }
+        .intro { text-align: center; margin-bottom: 60px; }
+        .intro-icon { font-size: 60px; margin-bottom: 20px; }
+        .intro h1 { font-size: 42px; margin-bottom: 20px; }
+        .intro p { color: var(--fp-gray); font-size: 18px; max-width: 600px; margin: 0 auto 30px; }
+        .progress-bar { height: 4px; background: var(--fp-light); margin-bottom: 40px; border-radius: 2px; }
+        .progress-fill { height: 100%; background: var(--fp-blue); border-radius: 2px; transition: width 0.3s; }
+        .question-container { display: none; }
+        .question-container.active { display: block; }
+        .question { background: var(--fp-white); padding: 40px; margin-bottom: 20px; }
+        .question-number { font-size: 12px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--fp-gray); margin-bottom: 10px; }
+        .question h2 { font-size: 24px; margin-bottom: 30px; }
+        .options { display: flex; flex-direction: column; gap: 12px; }
+        .option { display: flex; align-items: center; padding: 20px; background: var(--fp-light); border: 2px solid transparent; cursor: pointer; transition: all 0.3s; }
+        .option:hover { border-color: var(--fp-blue); }
+        .option input { margin-right: 15px; }
+        .btn { display: inline-block; padding: 18px 40px; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.15em; text-decoration: none; border: 2px solid transparent; cursor: pointer; transition: all 0.3s; background: var(--fp-blue); color: white; border-color: var(--fp-blue); margin-top: 20px; }
+        .btn:hover { background: transparent; color: var(--fp-blue); }
+        .results { display: none; background: var(--fp-white); padding: 60px; }
+        .results.show { display: block; }
+        .score-circle { width: 200px; height: 200px; border-radius: 50%; background: linear-gradient(135deg, var(--fp-sage), var(--fp-coral)); display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 0 auto 40px; color: white; }
+        .score-number { font-family: 'Playfair Display', serif; font-size: 72px; font-weight: 600; }
+        .score-label { font-size: 14px; text-transform: uppercase; letter-spacing: 0.1em; }
+        .results h2 { text-align: center; font-size: 32px; margin-bottom: 20px; }
+        .results-summary { text-align: center; color: var(--fp-gray); margin-bottom: 40px; font-size: 18px; }
+        .recommendations { margin-top: 40px; }
+        .recommendations h3 { font-size: 24px; margin-bottom: 30px; text-align: center; }
+        .product-card { display: flex; gap: 20px; padding: 20px; background: var(--fp-light); margin-bottom: 20px; text-decoration: none; color: inherit; transition: transform 0.3s; }
+        .product-card:hover { transform: translateX(10px); }
+        .product-image { width: 100px; height: 100px; background: var(--fp-white); display: flex; align-items: center; justify-content: center; font-size: 40px; }
+        .product-info h4 { font-size: 18px; margin-bottom: 8px; }
+        .product-info p { font-size: 14px; color: var(--fp-gray); margin-bottom: 8px; }
+        .product-price { font-weight: 600; color: var(--fp-coral); }
+        @media (max-width: 768px) { .container { padding: 40px 20px; } .question, .results { padding: 30px 20px; } .product-card { flex-direction: column; } }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <a href="/" class="logo">Happy Puppy Supply</a>
+    </header>
+    <div class="container">
+        <div class="intro" id="intro">
+            <div class="intro-icon">🤧</div>
+            <h1>Allergy & Immunity Check</h1>
+            <p>"Seasonal allergies affect up to 10% of dogs, but many go undiagnosed. The immune system can be supported naturally with the right combination of supplements and care."</p>
+            <p style="font-size: 16px; margin-top: 20px;">Identify immune gaps and get targeted allergy & defense support recommendations.</p>
+            <button class="btn" onclick="startAssessment()">Start Assessment</button>
+        </div>
+        <div id="assessment" style="display: none;">
+            <div class="progress-bar"><div class="progress-fill" id="progress" style="width: 0%"></div></div>
+            <div class="question-container active" data-question="1">
+                <div class="question">
+                    <div class="question-number">Question 1 of 6</div>
+                    <h2>Does your dog experience seasonal itching?</h2>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q1" value="3" onchange="nextQuestion()"><span>Never</span></label>
+                        <label class="option"><input type="radio" name="q1" value="2" onchange="nextQuestion()"><span>Rarely</span></label>
+                        <label class="option"><input type="radio" name="q1" value="1" onchange="nextQuestion()"><span>During specific seasons</span></label>
+                        <label class="option"><input type="radio" name="q1" value="0" onchange="nextQuestion()"><span>Year-round</span></label>
+                    </div>
+                </div>
+            </div>
+            <div class="question-container" data-question="2">
+                <div class="question">
+                    <div class="question-number">Question 2 of 6</div>
+                    <h2>Does your dog have recurring ear infections?</h2>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q2" value="3" onchange="nextQuestion()"><span>Never</span></label>
+                        <label class="option"><input type="radio" name="q2" value="2" onchange="nextQuestion()"><span>Once, long ago</span></label>
+                        <label class="option"><input type="radio" name="q2" value="1" onchange="nextQuestion()"><span>Occasionally</span></label>
+                        <label class="option"><input type="radio" name="q2" value="0" onchange="nextQuestion()"><span>Frequently</span></label>
+                    </div>
+                </div>
+            </div>
+            <div class="question-container" data-question="3">
+                <div class="question">
+                    <div class="question-number">Question 3 of 6</div>
+                    <h2>Any digestive upset with certain foods?</h2>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q3" value="3" onchange="nextQuestion()"><span>No food sensitivities</span></label>
+                        <label class="option"><input type="radio" name="q3" value="2" onchange="nextQuestion()"><span>Rare mild reaction</span></label>
+                        <label class="option"><input type="radio" name="q3" value="1" onchange="nextQuestion()"><span>Known trigger foods</span></label>
+                        <label class="option"><input type="radio" name="q3" value="0" onchange="nextQuestion()"><span>Many food intolerances</span></label>
+                    </div>
+                </div>
+            </div>
+            <div class="question-container" data-question="4">
+                <div class="question">
+                    <div class="question-number">Question 4 of 6</div>
+                    <h2>Does your dog get frequent colds/infections?</h2>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q4" value="3" onchange="nextQuestion()"><span>Very healthy, rarely sick</span></label>
+                        <label class="option"><input type="radio" name="q4" value="2" onchange="nextQuestion()"><span>Occasional minor issues</span></label>
+                        <label class="option"><input type="radio" name="q4" value="1" onchange="nextQuestion()"><span>Several times a year</span></label>
+                        <label class="option"><input type="radio" name="q4" value="0" onchange="nextQuestion()"><span>Frequently unwell</span></label>
+                    </div>
+                </div>
+            </div>
+            <div class="question-container" data-question="5">
+                <div class="question">
+                    <div class="question-number">Question 5 of 6</div>
+                    <h2>Any skin redness or hot spots?</h2>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q5" value="3" onchange="nextQuestion()"><span>Clear healthy skin</span></label>
+                        <label class="option"><input type="radio" name="q5" value="2" onchange="nextQuestion()"><span>Minor occasional issues</span></label>
+                        <label class="option"><input type="radio" name="q5" value="1" onchange="nextQuestion()"><span>Regular hotspots</span></label>
+                        <label class="option"><input type="radio" name="q5" value="0" onchange="nextQuestion()"><span>Chronic skin problems</span></label>
+                    </div>
+                </div>
+            </div>
+            <div class="question-container" data-question="6">
+                <div class="question">
+                    <div class="question-number">Question 6 of 6</div>
+                    <h2>Current supplement routine?</h2>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q6" value="3" onchange="showResults()"><span>Immune support daily</span></label>
+                        <label class="option"><input type="radio" name="q6" value="2" onchange="showResults()"><span>Basic multivitamin</span></label>
+                        <label class="option"><input type="radio" name="q6" value="1" onchange="showResults()"><span>Occasional supplements</span></label>
+                        <label class="option"><input type="radio" name="q6" value="0" onchange="showResults()"><span>No supplements</span></label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="results" id="results">
+            <div class="score-circle"><div class="score-number" id="score">65</div><div class="score-label">Immunity Score</div></div>
+            <h2 id="result-title">Moderate Allergy Susceptibility</h2>
+            <p class="results-summary" id="result-summary">Your dog shows some signs of immune sensitivity.</p>
+            <div class="recommendations">
+                <h3>Recommended Immune Support Products</h3>
+                <div id="product-recommendations"></div>
+            </div>
+            <a href="/" class="btn" style="margin-top: 40px;">Take Another Assessment</a>
+        </div>
+    </div>
+    <script>
+        let currentQuestion = 1;
+        const totalQuestions = 6;
+        let answers = {};
+        function startAssessment() {
+            document.getElementById('intro').style.display = 'none';
+            document.getElementById('assessment').style.display = 'block';
+            updateProgress();
+        }
+        function nextQuestion() {
+            const current = document.querySelector(`.question-container[data-question="${currentQuestion}"]`);
+            const selected = current.querySelector('input:checked');
+            if (selected) {
+                answers[`q${currentQuestion}`] = selected.value;
+                current.classList.remove('active');
+                currentQuestion++;
+                if (currentQuestion <= totalQuestions) {
+                    const next = document.querySelector(`.question-container[data-question="${currentQuestion}"]`);
+                    next.classList.add('active');
+                    updateProgress();
+                }
+            }
+        }
+        function updateProgress() {
+            const progress = ((currentQuestion - 1) / totalQuestions) * 100;
+            document.getElementById('progress').style.width = progress + '%';
+        }
+        function showResults() {
+            const current = document.querySelector(`.question-container[data-question="${currentQuestion}"]`);
+            const selected = current.querySelector('input:checked');
+            if (selected) {
+                answers.q6 = selected.value;
+            }
+            let score = 0;
+            for (let i = 1; i <= 6; i++) {
+                score += parseInt(answers[`q${i}`] || 0);
+            }
+            score = Math.round((score / 18) * 100);
+            document.getElementById('assessment').style.display = 'none';
+            document.getElementById('results').classList.add('show');
+            document.getElementById('score').textContent = score;
+            let title, summary, products;
+            if (score >= 80) {
+                title = "Strong Immune System!";
+                summary = "Excellent immune health! Maintain this resilience with quality supplements during seasonal changes.";
+                products = [
+                    {name: "Allergy & Itch Chews", desc: "Seasonal immune support", price: "$34.99", emoji: "✨", link: "https://www.happypuppysupply.com/products/wuffes-allergy-itch-chews"},
+                    {name: "Probiotics for Dogs", desc: "Gut-immune connection", price: "$26.99", emoji: "🥩", link: "https://www.happypuppysupply.com/products/probiotics-for-dogs"},
+                    {name: "Natural Treats", desc: "Clean, simple ingredients", price: "$24.99", emoji: "🦴", link: "https://www.happypuppysupply.com/collections/dog-treats-chews"}
+                ];
+            } else if (score >= 60) {
+                title = "Moderate Allergy Susceptibility";
+                summary = "Your dog shows some signs of immune sensitivity. Targeted supplements can help strengthen their defenses.";
+                products = [
+                    {name: "Wuffes Allergy & Itch Chews", desc: "Comprehensive immune support", price: "$34.99", emoji: "✨", link: "https://www.happypuppysupply.com/products/wuffes-allergy-itch-chews"},
+                    {name: "Probiotics for Dogs", desc: "Digestive & immune balance", price: "$26.99", emoji: "🥩", link: "https://www.happypuppysupply.com/products/probiotics-for-dogs"},
+                    {name: "Veterinary Strength Supplements", desc: "Advanced immune formula", price: "$45.99", emoji: "💊", link: "https://www.happypuppysupply.com/products/veterinary-strength-healthy-cognition"}
+                ];
+            } else {
+                title = "Immune Support Needed";
+                summary = "Your dog would benefit significantly from immune support. These products can help reduce allergy symptoms and strengthen defenses.";
+                products = [
+                    {name: "Wuffes Allergy & Itch Chews", desc: "Maximum strength relief", price: "$34.99", emoji: "✨", link: "https://www.happypuppysupply.com/products/wuffes-allergy-itch-chews"},
+                    {name: "Veterinary Strength Supplements", desc: "Comprehensive immune boost", price: "$45.99", emoji: "💊", link: "https://www.happypuppysupply.com/products/veterinary-strength-healthy-cognition"},
+                    {name: "Probiotics for Dogs", desc: "Essential gut health", price: "$26.99", emoji: "🥩", link: "https://www.happypuppysupply.com/products/probiotics-for-dogs"}
+                ];
+            }
+            document.getElementById('result-title').textContent = title;
+            document.getElementById('result-summary').textContent = summary;
+            const productsHtml = products.map(p => `
+                <a href="${p.link}" class="product-card" target="_blank">
+                    <div class="product-image">${p.emoji}</div>
+                    <div class="product-info">
+                        <h4>${p.name}</h4>
+                        <p>${p.desc}</p>
+                        <span class="product-price">${p.price}</span>
+                    </div>
+                </a>
+            `).join('');
+            document.getElementById('product-recommendations').innerHTML = productsHtml +
+                '<a href="https://www.happypuppysupply.com/collections/health-wellness" class="btn" style="display: block; text-align: center; margin-top: 30px;" target="_blank">Shop All Immune Products</a>';
+        }
+    </script>
+</body>
+</html>

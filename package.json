@@ -1,0 +1,8 @@
+{
+  "name": "happy-puppy-wellness",
+  "version": "2.0.0",
+  "description": "Happy Puppy Wellness Assessments - Freshly Picked Design",
+  "scripts": {
+    "start": "npx serve ."
+  }
+}

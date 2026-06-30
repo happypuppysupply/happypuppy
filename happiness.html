@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Puppy Score™ — Happy Puppy Supply</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root { --fp-cream: #FAF7F5; --fp-white: #FFFFFF; --fp-charcoal: #2D2D2D; --fp-gray: #6B6B6B; --fp-light: #F5F5F5; --fp-blue: #7EC8E3; --fp-coral: #FF8C69; --fp-sage: #9CAF88; --fp-blush: #F4E1E1; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: var(--fp-cream); color: var(--fp-charcoal); line-height: 1.6; }
+        h1, h2, h3, h4 { font-family: 'Playfair Display', serif; font-weight: 400; }
+        .header { background: var(--fp-white); padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(0,0,0,0.05); }
+        .logo { font-family: 'Playfair Display', serif; font-size: 24px; color: var(--fp-charcoal); text-decoration: none; }
+        .container { max-width: 800px; margin: 0 auto; padding: 60px 20px; }
+        .intro { text-align: center; margin-bottom: 60px; }
+        .intro-icon { font-size: 60px; margin-bottom: 20px; }
+        .intro h1 { font-size: 42px; margin-bottom: 20px; }
+        .intro p { color: var(--fp-gray); font-size: 18px; max-width: 600px; margin: 0 auto 30px; }
+        .progress-bar { height: 4px; background: var(--fp-light); margin-bottom: 40px; border-radius: 2px; }
+        .progress-fill { height: 100%; background: var(--fp-blue); border-radius: 2px; transition: width 0.3s; }
+        .question-container { display: none; }
+        .question-container.active { display: block; }
+        .question { background: var(--fp-white); padding: 40px; margin-bottom: 20px; }
+        .question-number { font-size: 12px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--fp-gray); margin-bottom: 10px; }
+        .question h2 { font-size: 24px; margin-bottom: 30px; }
+        .options { display: flex; flex-direction: column; gap: 12px; }
+        .option { display: flex; align-items: center; padding: 20px; background: var(--fp-light); border: 2px solid transparent; cursor: pointer; transition: all 0.3s; }
+        .option:hover { border-color: var(--fp-blue); }
+        .option input { margin-right: 15px; }
+        .btn { display: inline-block; padding: 18px 40px; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.15em; text-decoration: none; border: 2px solid transparent; cursor: pointer; transition: all 0.3s; background: var(--fp-blue); color: white; border-color: var(--fp-blue); margin-top: 20px; }
+        .btn:hover { background: transparent; color: var(--fp-blue); }
+        .results { display: none; background: var(--fp-white); padding: 60px; }
+        .results.show { display: block; }
+        .score-circle { width: 200px; height: 200px; border-radius: 50%; background: linear-gradient(135deg, var(--fp-blush), var(--fp-coral)); display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 0 auto 40px; color: white; }
+        .score-number { font-family: 'Playfair Display', serif; font-size: 72px; font-weight: 600; }
+        .score-label { font-size: 14px; text-transform: uppercase; letter-spacing: 0.1em; }
+        .results h2 { text-align: center; font-size: 32px; margin-bottom: 20px; }
+        .results-summary { text-align: center; color: var(--fp-gray); margin-bottom: 40px; font-size: 18px; }
+        .recommendations { margin-top: 40px; }
+        .recommendations h3 { font-size: 24px; margin-bottom: 30px; text-align: center; }
+        .product-card { display: flex; gap: 20px; padding: 20px; background: var(--fp-light); margin-bottom: 20px; text-decoration: none; color: inherit; transition: transform 0.3s; }
+        .product-card:hover { transform: translateX(10px); }
+        .product-image { width: 100px; height: 100px; background: var(--fp-white); display: flex; align-items: center; justify-content: center; font-size: 40px; }
+        .product-info h4 { font-size: 18px; margin-bottom: 8px; }
+        .product-info p { font-size: 14px; color: var(--fp-gray); margin-bottom: 8px; }
+        .product-price { font-weight: 600; color: var(--fp-coral); }
+        @media (max-width: 768px) { .container { padding: 40px 20px; } .question, .results { padding: 30px 20px; } .product-card { flex-direction: column; } }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <a href="/" class="logo">Happy Puppy Supply</a>
+    </header>
+    <div class="container">
+        <div class="intro" id="intro">
+            <div class="intro-icon">📸</div>
+            <h1>Happy Puppy Score™</h1>
+            <p>"A happy dog isn't just a well-fed dog - it's a mentally stimulated, socially fulfilled, and physically satisfied companion. True happiness comes from meeting all of your dog's needs."</p>
+            <p style="font-size: 16px; margin-top: 20px;">Rate your dog's happiness across behavior, energy, and sociability. Get a happiness report and enrichment recommendations.</p>
+            <button class="btn" onclick="startAssessment()">Start Assessment</button>
+        </div>
+        <div id="assessment" style="display: none;">
+            <div class="progress-bar"><div class="progress-fill" id="progress" style="width: 0%"></div></div>
+            <div class="question-container active" data-question="1">
+                <div class="question">
+                    <div class="question-number">Question 1 of 5</div>
+                    <h2>How does your dog greet you when you come home?</h2>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q1" value="3" onchange="nextQuestion()"><span>Enthusiastic, tail wagging, brings toys</span></label>
+                        <label class="option"><input type="radio" name="q1" value="2" onchange="nextQuestion()"><span>Happy to see you, moderate excitement</span></label>
+                        <label class="option"><input type="radio" name="q1" value="1" onchange="nextQuestion()"><span>Mild acknowledgment</span></label>
+                        <label class="option"><input type="radio" name="q1" value="0" onchange="nextQuestion()"><span>Indifferent or hides</span></label>
+                    </div>
+                </div>
+            </div>
+            <div class="question-container" data-question="2">
+                <div class="question">
+                    <div class="question-number">Question 2 of 5</div>
+                    <h2>During playtime, your dog is:</h2>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q2" value="3" onchange="nextQuestion()"><span>Highly engaged, initiates play</span></label>
+                        <label class="option"><input type="radio" name="q2" value="2" onchange="nextQuestion()"><span>Enjoys play when prompted</span></label>
+                        <label class="option"><input type="radio" name="q2" value="1" onchange="nextQuestion()"><span>Plays briefly then loses interest</span></label>
+                        <label class="option"><input type="radio" name="q2" value="0" onchange="nextQuestion()"><span>Shows little interest in play</span></label>
+                    </div>
+                </div>
+            </div>
+            <div class="question-container" data-question="3">
+                <div class="question">
+                    <div class="question-number">Question 3 of 5</div>
+                    <h2>How does your dog interact with other dogs/people?</h2>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q3" value="3" onchange="nextQuestion()"><span>Sociable, friendly, confident</span></label>
+                        <label class="option"><input type="radio" name="q3" value="2" onchange="nextQuestion()"><span>Generally comfortable, some hesitation</span></label>
+                        <label class="option"><input type="radio" name="q3" value="1" onchange="nextQuestion()"><span>Avoids interaction or seems nervous</span></label>
+                        <label class="option"><input type="radio" name="q3" value="0" onchange="nextQuestion()"><span>Fearful or aggressive</span></label>
+                    </div>
+                </div>
+            </div>
+            <div class="question-container" data-question="4">
+                <div class="question">
+                    <div class="question-number">Question 4 of 5</div>
+                    <h2>Does your dog have enough mental stimulation?</h2>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q4" value="3" onchange="nextQuestion()"><span>Daily puzzle toys, training, new experiences</span></label>
+                        <label class="option"><input type="radio" name="q4" value="2" onchange="nextQuestion()"><span>Regular walks and some play</span></label>
+                        <label class="option"><input type="radio" name="q4" value="1" onchange="nextQuestion()"><span>Basic routine, limited variety</span></label>
+                        <label class="option"><input type="radio" name="q4" value="0" onchange="nextQuestion()"><span>Little to no enrichment activities</span></label>
+                    </div>
+                </div>
+            </div>
+            <div class="question-container" data-question="5">
+                <div class="question">
+                    <div class="question-number">Question 5 of 5</div>
+                    <h2>How well does your dog sleep?</h2>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q5" value="3" onchange="showResults()"><span>Sleeps soundly through the night</span></label>
+                        <label class="option"><input type="radio" name="q5" value="2" onchange="showResults()"><span>Generally good sleep with minor restlessness</span></label>
+                        <label class="option"><input type="radio" name="q5" value="1" onchange="showResults()"><span>Often wakes up, seems restless</span></label>
+                        <label class="option"><input type="radio" name="q5" value="0" onchange="showResults()"><span>Poor sleep, pacing or whining at night</span></label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="results" id="results">
+            <div class="score-circle"><div class="score-number" id="score">88</div><div class="score-label">Happiness Score</div></div>
+            <h2 id="result-title">Super Happy Pup! 🎉</h2>
+            <p class="results-summary" id="result-summary">Your dog is living their best life! Keep up the great work.</p>
+            <div class="recommendations">
+                <h3>Products to Maintain Happiness</h3>
+                <div id="product-recommendations"></div>
+            </div>
+            <a href="/" class="btn" style="margin-top: 40px;">Take Another Assessment</a>
+        </div>
+    </div>
+    <script>
+        let currentQuestion = 1;
+        const totalQuestions = 5;
+        let answers = {};
+        function startAssessment() {
+            document.getElementById('intro').style.display = 'none';
+            document.getElementById('assessment').style.display = 'block';
+            updateProgress();
+        }
+        function nextQuestion() {
+            const current = document.querySelector(`.question-container[data-question="${currentQuestion}"]`);
+            const selected = current.querySelector('input:checked');
+            if (selected) {
+                answers[`q${currentQuestion}`] = selected.value;
+                current.classList.remove('active');
+                currentQuestion++;
+                if (currentQuestion <= totalQuestions) {
+                    const next = document.querySelector(`.question-container[data-question="${currentQuestion}"]`);
+                    next.classList.add('active');
+                    updateProgress();
+                }
+            }
+        }
+        function updateProgress() {
+            const progress = ((currentQuestion - 1) / totalQuestions) * 100;
+            document.getElementById('progress').style.width = progress + '%';
+        }
+        function showResults() {
+            const current = document.querySelector(`.question-container[data-question="${currentQuestion}"]`);
+            const selected = current.querySelector('input:checked');
+            if (selected) {
+                answers.q5 = selected.value;
+            }
+            let score = 0;
+            for (let i = 1; i <= 5; i++) {
+                score += parseInt(answers[`q${i}`] || 0);
+            }
+            score = Math.round((score / 15) * 100);
+            document.getElementById('assessment').style.display = 'none';
+            document.getElementById('results').classList.add('show');
+            document.getElementById('score').textContent = score;
+            let title, summary, products;
+            if (score >= 80) {
+                title = "Super Happy Pup! 🎉";
+                summary = "Your dog is living their best life! Keep up the great work with continued enrichment and quality care.";
+                products = [
+                    {name: "Interactive Puzzle Toys", desc: "Keep their mind sharp", price: "$24.99", emoji: "🧩", link: "https://www.happypuppysupply.com/collections/toys-entertainment"},
+                    {name: "Premium Comfort Bed", desc: "Quality rest for happy dreams", price: "$79.99", emoji: "🛏️", link: "https://www.happypuppysupply.com/collections/dog-beds-mats"},
+                    {name: "Natural Treat Variety Pack", desc: "Reward their good behavior", price: "$29.99", emoji: "🦴", link: "https://www.happypuppysupply.com/collections/dog-treats-chews"}
+                ];
+            } else if (score >= 60) {
+                title = "Content But Could Be Happier";
+                summary = "Your dog is doing okay, but there's room for more joy. Adding enrichment activities and comfort items can boost their happiness.";
+                products = [
+                    {name: "Plush Comfort Toys", desc: "Companionship & comfort", price: "$18.99", emoji: "🧸", link: "https://www.happypuppysupply.com/collections/toys-entertainment"},
+                    {name: "Memory Foam Dog Bed", desc: "Better sleep = happier days", price: "$89.99", emoji: "🛏️", link: "https://www.happypuppysupply.com/collections/dog-beds-mats"},
+                    {name: "Interactive Fetch Toys", desc: "More engaging playtime", price: "$22.99", emoji: "🎾", link: "https://www.happypuppysupply.com/collections/toys-entertainment"}
+                ];
+            } else {
+                title = "Let's Boost That Happiness";
+                summary = "Your dog could use some extra joy in their life. These products can help address boredom, anxiety, and comfort needs.";
+                products = [
+                    {name: "Calming Comfort Bed", desc: "Security & relaxation", price: "$99.99", emoji: "🛏️", link: "https://www.happypuppysupply.com/collections/dog-beds-mats"},
+                    {name: "Mental Stimulation Toys", desc: "Beat boredom", price: "$26.99", emoji: "🧩", link: "https://www.happypuppysupply.com/collections/toys-entertainment"},
+                    {name: "Long-Lasting Chews", desc: "Satisfying activity", price: "$24.99", emoji: "🦴", link: "https://www.happypuppysupply.com/collections/dog-treats-chews"}
+                ];
+            }
+            document.getElementById('result-title').textContent = title;
+            document.getElementById('result-summary').textContent = summary;
+            const productsHtml = products.map(p => `
+                <a href="${p.link}" class="product-card" target="_blank">
+                    <div class="product-image">${p.emoji}</div>
+                    <div class="product-info">
+                        <h4>${p.name}</h4>
+                        <p>${p.desc}</p>
+                        <span class="product-price">${p.price}</span>
+                    </div>
+                </a>
+            `).join('');
+            document.getElementById('product-recommendations').innerHTML = productsHtml +
+                '<a href="https://www.happypuppysupply.com/collections/all" class="btn" style="display: block; text-align: center; margin-top: 30px;" target="_blank">Shop All Products</a>';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Puppy Assessments — Know Your Dog Inside & Out</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --fp-cream: #FAF7F5;
+            --fp-white: #FFFFFF;
+            --fp-charcoal: #2D2D2D;
+            --fp-gray: #6B6B6B;
+            --fp-light: #F5F5F5;
+            --fp-blue: #7EC8E3;
+            --fp-coral: #FF8C69;
+            --fp-sage: #9CAF88;
+            --fp-blush: #F4E1E1;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--fp-cream);
+            color: var(--fp-charcoal);
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 400;
+        }
+
+        /* Header */
+        .header {
+            background: var(--fp-white);
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 24px;
+            color: var(--fp-charcoal);
+            text-decoration: none;
+        }
+
+        .nav-links a {
+            margin-left: 30px;
+            text-decoration: none;
+            color: var(--fp-gray);
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--fp-blue);
+        }
+
+        /* Hero */
+        .hero {
+            text-align: center;
+            padding: 100px 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero-subtitle {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.25em;
+            color: var(--fp-gray);
+            margin-bottom: 20px;
+        }
+
+        .hero h1 {
+            font-size: clamp(36px, 5vw, 56px);
+            line-height: 1.1;
+            margin-bottom: 24px;
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: var(--fp-gray);
+            max-width: 600px;
+            margin: 0 auto 40px;
+        }
+
+        /* Assessment Grid */
+        .assessments {
+            padding: 60px 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-header h2 {
+            font-size: 36px;
+            margin-bottom: 12px;
+        }
+
+        .section-header p {
+            color: var(--fp-gray);
+        }
+
+        .assessment-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+        }
+
+        .assessment-card {
+            background: var(--fp-white);
+            padding: 40px;
+            border: 1px solid rgba(0,0,0,0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .assessment-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+        }
+
+        .assessment-icon {
+            font-size: 40px;
+            margin-bottom: 20px;
+        }
+
+        .assessment-card h3 {
+            font-size: 22px;
+            margin-bottom: 12px;
+        }
+
+        .assessment-card p {
+            font-size: 14px;
+            color: var(--fp-gray);
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .assessment-meta {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            font-size: 13px;
+            color: var(--fp-gray);
+        }
+
+        .assessment-cta {
+            margin-left: auto;
+            color: var(--fp-blue);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-size: 12px;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--fp-charcoal);
+            color: white;
+            padding: 60px 40px;
+            text-align: center;
+        }
+
+        .footer p {
+            opacity: 0.7;
+            font-size: 14px;
+        }
+
+        .footer a {
+            color: var(--fp-blue);
+            text-decoration: none;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 15px 20px;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .hero {
+                padding: 60px 20px;
+            }
+            
+            .assessments {
+                padding: 40px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <a href="/" class="logo">Happy Puppy Supply</a>
+        <nav class="nav-links">
+            <a href="https://www.happypuppysupply.com">Shop</a>
+            <a href="/">Assessments</a>
+            <a href="https://www.happypuppysupply.com/pages/happy-puppy-club">Club</a>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <p class="hero-subtitle">Personalized Pet Wellness</p>
+        <h1>Know Your Dog Inside & Out</h1>
+        <p>Take our science-backed assessments to discover your dog's wellness needs and get personalized product recommendations from our curated collection.</p>
+    </section>
+
+    <section class="assessments">
+        <div class="section-header">
+            <h2>Choose an Assessment</h2>
+            <p>Each assessment takes 1-2 minutes and provides personalized recommendations</p>
+        </div>
+
+        <div class="assessment-grid">
+            <a href="/wellness" class="assessment-card">
+                <div class="assessment-icon">🦴</div>
+                <h3>Dog Wellness Check</h3>
+                <p>Comprehensive health screening covering mobility, skin, immunity & nutrition. Get a personalized wellness score and supplement recommendations.</p>
+                <div class="assessment-meta">
+                    <span>⏱ 60 sec</span>
+                    <span>7 questions</span>
+                    <span class="assessment-cta">Start →</span>
+                </div>
+            </a>
+
+            <a href="/skin" class="assessment-card">
+                <div class="assessment-icon">✨</div>
+                <h3>Skin & Coat Check</h3>
+                <p>Is that coat as glossy as it could be? Check for dandruff, itching, hotspots and get targeted grooming & supplement picks.</p>
+                <div class="assessment-meta">
+                    <span>⏱ 45 sec</span>
+                    <span>6 questions</span>
+                    <span class="assessment-cta">Start →</span>
+                </div>
+            </a>
+
+            <a href="/mobility" class="assessment-card">
+                <div class="assessment-icon">🏃</div>
+                <h3>Mobility & Joints Check</h3>
+                <p>Spot stiffness before it slows your dog down. Get joint-support supplement & exercise tips tailored to their age.</p>
+                <div class="assessment-meta">
+                    <span>⏱ 50 sec</span>
+                    <span>5 questions</span>
+                    <span class="assessment-cta">Start →</span>
+                </div>
+            </a>
+
+            <a href="/nutrition" class="assessment-card">
+                <div class="assessment-icon">🥩</div>
+                <h3>Nutrition Check</h3>
+                <p>Is your dog getting everything they need? Evaluate diet, treats, and nutritional gaps. Get a tailored feeding plan.</p>
+                <div class="assessment-meta">
+                    <span>⏱ 50 sec</span>
+                    <span>6 questions</span>
+                    <span class="assessment-cta">Start →</span>
+                </div>
+            </a>
+
+            <a href="/dental" class="assessment-card">
+                <div class="assessment-icon">🦷</div>
+                <h3>Dental Health Check</h3>
+                <p>Bad breath, tartar, or gum issues? Assess dental health and get chew & dental care product recommendations.</p>
+                <div class="assessment-meta">
+                    <span>⏱ 40 sec</span>
+                    <span>5 questions</span>
+                    <span class="assessment-cta">Start →</span>
+                </div>
+            </a>
+
+            <a href="/anxiety" class="assessment-card">
+                <div class="assessment-icon">🧘</div>
+                <h3>Calm & Stress Check</h3>
+                <p>Thunderstorms, separation, or general anxiety? Identify triggers and get calming product & routine recommendations.</p>
+                <div class="assessment-meta">
+                    <span>⏱ 60 sec</span>
+                    <span>7 questions</span>
+                    <span class="assessment-cta">Start →</span>
+                </div>
+            </a>
+
+            <a href="/allergy" class="assessment-card">
+                <div class="assessment-icon">🤧</div>
+                <h3>Allergy & Immunity Check</h3>
+                <p>Seasonal allergies, itchy skin, or frequent infections? Identify immune gaps and get targeted allergy & defense support.</p>
+                <div class="assessment-meta">
+                    <span>⏱ 55 sec</span>
+                    <span>6 questions</span>
+                    <span class="assessment-cta">Start →</span>
+                </div>
+            </a>
+
+            <a href="/happiness" class="assessment-card">
+                <div class="assessment-icon">📸</div>
+                <h3>Happy Puppy Score™</h3>
+                <p>Rate your dog's happiness across behavior, energy, and sociability. Get a happiness report and enrichment tips.</p>
+                <div class="assessment-meta">
+                    <span>⏱ 45 sec</span>
+                    <span>5 questions</span>
+                    <span class="assessment-cta">Start →</span>
+                </div>
+            </a>
+
+            <a href="/age" class="assessment-card">
+                <div class="assessment-icon">🎂</div>
+                <h3>Dog Age Calculator</h3>
+                <p>How old is your dog in human years? A science-backed calculator plus a quick senior or puppy wellness screen.</p>
+                <div class="assessment-meta">
+                    <span>⏱ Instant</span>
+                    <span>Calculator + 4 questions</span>
+                    <span class="assessment-cta">Start →</span>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <p>© 2026 Happy Puppy Supply. All recommendations link to products at <a href="https://www.happypuppysupply.com">happypuppysupply.com</a></p>
+    </footer>
+</body>
+</html>
