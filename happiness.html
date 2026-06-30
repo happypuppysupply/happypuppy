@@ -92,10 +92,282 @@
         </div>
     </div>
     <script>
+        const breedDatabase = {
+            labrador: {
+                name: "Labrador Retriever",
+                size: "large",
+                commonIssues: ["Hip/elbow dysplasia", "Obesity", "Ear infections", "Exercise-induced collapse"],
+                jointRisk: "high",
+                skinRisk: "medium",
+                obesityRisk: "high",
+                dentalRisk: "low",
+                anxietyRisk: "low",
+                allergyRisk: "medium",
+                energyLevel: "high"
+            },
+            german_shepherd: {
+                name: "German Shepherd",
+                size: "large",
+                commonIssues: ["Hip/elbow dysplasia", "Bloat", "Degenerative myelopathy", "Pancreatic insufficiency"],
+                jointRisk: "high",
+                skinRisk: "high",
+                obesityRisk: "medium",
+                dentalRisk: "medium",
+                anxietyRisk: "medium",
+                allergyRisk: "high",
+                energyLevel: "high"
+            },
+            golden_retriever: {
+                name: "Golden Retriever",
+                size: "large",
+                commonIssues: ["Hip/elbow dysplasia", "Cancer", "Skin allergies", "Heart disease"],
+                jointRisk: "high",
+                skinRisk: "high",
+                obesityRisk: "high",
+                dentalRisk: "medium",
+                anxietyRisk: "low",
+                allergyRisk: "high",
+                energyLevel: "medium"
+            },
+            french_bulldog: {
+                name: "French Bulldog",
+                size: "small",
+                commonIssues: ["Brachycephalic syndrome", "Skin allergies", "Spinal issues", "Heat sensitivity"],
+                jointRisk: "medium",
+                skinRisk: "high",
+                obesityRisk: "high",
+                dentalRisk: "medium",
+                anxietyRisk: "medium",
+                allergyRisk: "high",
+                energyLevel: "low"
+            },
+            beagle: {
+                name: "Beagle",
+                size: "medium",
+                commonIssues: ["Obesity", "Ear infections", "Epilepsy", "Disc disease"],
+                jointRisk: "medium",
+                skinRisk: "medium",
+                obesityRisk: "high",
+                dentalRisk: "medium",
+                anxietyRisk: "high",
+                allergyRisk: "medium",
+                energyLevel: "high"
+            },
+            poodle: {
+                name: "Poodle",
+                size: "varies",
+                commonIssues: ["Addison's disease", "Hip dysplasia", "Bloat", "Sebaceous adenitis"],
+                jointRisk: "medium",
+                skinRisk: "medium",
+                obesityRisk: "low",
+                dentalRisk: "high",
+                anxietyRisk: "medium",
+                allergyRisk: "medium",
+                energyLevel: "high"
+            },
+            bulldog: {
+                name: "Bulldog",
+                size: "medium",
+                commonIssues: ["Brachycephalic syndrome", "Skin infections", "Hip dysplasia", "Breathing issues"],
+                jointRisk: "high",
+                skinRisk: "high",
+                obesityRisk: "high",
+                dentalRisk: "medium",
+                anxietyRisk: "low",
+                allergyRisk: "high",
+                energyLevel: "low"
+            },
+            yorkshire_terrier: {
+                name: "Yorkshire Terrier",
+                size: "small",
+                commonIssues: ["Dental disease", "Patellar luxation", "Tracheal collapse", "Liver shunt"],
+                jointRisk: "medium",
+                skinRisk: "medium",
+                obesityRisk: "low",
+                dentalRisk: "high",
+                anxietyRisk: "high",
+                allergyRisk: "medium",
+                energyLevel: "medium"
+            },
+            boxer: {
+                name: "Boxer",
+                size: "large",
+                commonIssues: ["Cancer", "Heart disease", "Hip dysplasia", "Bloat"],
+                jointRisk: "medium",
+                skinRisk: "medium",
+                obesityRisk: "medium",
+                dentalRisk: "medium",
+                anxietyRisk: "high",
+                allergyRisk: "medium",
+                energyLevel: "high"
+            },
+            dachshund: {
+                name: "Dachshund",
+                size: "small",
+                commonIssues: ["IVDD (back problems)", "Obesity", "Dental disease", "Patellar luxation"],
+                jointRisk: "high",
+                skinRisk: "medium",
+                obesityRisk: "high",
+                dentalRisk: "high",
+                anxietyRisk: "medium",
+                allergyRisk: "low",
+                energyLevel: "medium"
+            },
+            siberian_husky: {
+                name: "Siberian Husky",
+                size: "medium",
+                commonIssues: ["Eye issues", "Hip dysplasia", "Hypothyroidism", "Zinc deficiency"],
+                jointRisk: "medium",
+                skinRisk: "medium",
+                obesityRisk: "low",
+                dentalRisk: "medium",
+                anxietyRisk: "high",
+                allergyRisk: "medium",
+                energyLevel: "very_high"
+            },
+            chihuahua: {
+                name: "Chihuahua",
+                size: "small",
+                commonIssues: ["Dental disease", "Patellar luxation", "Heart problems", "Hypoglycemia"],
+                jointRisk: "medium",
+                skinRisk: "low",
+                obesityRisk: "low",
+                dentalRisk: "high",
+                anxietyRisk: "high",
+                allergyRisk: "low",
+                energyLevel: "medium"
+            },
+            shih_tzu: {
+                name: "Shih Tzu",
+                size: "small",
+                commonIssues: ["Dental disease", "Eye problems", "Brachycephalic syndrome", "Kidney disease"],
+                jointRisk: "medium",
+                skinRisk: "medium",
+                obesityRisk: "medium",
+                dentalRisk: "high",
+                anxietyRisk: "medium",
+                allergyRisk: "medium",
+                energyLevel: "low"
+            },
+            pug: {
+                name: "Pug",
+                size: "small",
+                commonIssues: ["Brachycephalic syndrome", "Eye problems", "Skin fold infections", "Obesity"],
+                jointRisk: "medium",
+                skinRisk: "high",
+                obesityRisk: "high",
+                dentalRisk: "medium",
+                anxietyRisk: "medium",
+                allergyRisk: "medium",
+                energyLevel: "low"
+            },
+            rottweiler: {
+                name: "Rottweiler",
+                size: "large",
+                commonIssues: ["Hip/elbow dysplasia", "Cancer", "Heart disease", "Bloat"],
+                jointRisk: "high",
+                skinRisk: "medium",
+                obesityRisk: "medium",
+                dentalRisk: "medium",
+                anxietyRisk: "low",
+                allergyRisk: "medium",
+                energyLevel: "medium"
+            },
+            australian_shepherd: {
+                name: "Australian Shepherd",
+                size: "medium",
+                commonIssues: ["Hip dysplasia", "Eye issues", "Epilepsy", "MDR1 drug sensitivity"],
+                jointRisk: "medium",
+                skinRisk: "medium",
+                obesityRisk: "low",
+                dentalRisk: "medium",
+                anxietyRisk: "medium",
+                allergyRisk: "low",
+                energyLevel: "very_high"
+            },
+            corgi: {
+                name: "Pembroke Welsh Corgi",
+                size: "medium",
+                commonIssues: ["IVDD (back problems)", "Hip dysplasia", "Obesity", "Degenerative myelopathy"],
+                jointRisk: "high",
+                skinRisk: "medium",
+                obesityRisk: "high",
+                dentalRisk: "medium",
+                anxietyRisk: "medium",
+                allergyRisk: "low",
+                energyLevel: "high"
+            },
+            great_dane: {
+                name: "Great Dane",
+                size: "giant",
+                commonIssues: ["Bloat", "Hip dysplasia", "Heart disease", "Wobbler syndrome"],
+                jointRisk: "high",
+                skinRisk: "low",
+                obesityRisk: "low",
+                dentalRisk: "medium",
+                anxietyRisk: "medium",
+                allergyRisk: "low",
+                energyLevel: "medium"
+            },
+            doberman: {
+                name: "Doberman Pinscher",
+                size: "large",
+                commonIssues: ["Dilated cardiomyopathy", "Von Willebrand's disease", "Hip dysplasia", "Wobbler syndrome"],
+                jointRisk: "medium",
+                skinRisk: "medium",
+                obesityRisk: "low",
+                dentalRisk: "medium",
+                anxietyRisk: "medium",
+                allergyRisk: "medium",
+                energyLevel: "high"
+            },
+            border_collie: {
+                name: "Border Collie",
+                size: "medium",
+                commonIssues: ["Hip dysplasia", "Epilepsy", "Collie eye anomaly", "MDR1 drug sensitivity"],
+                jointRisk: "medium",
+                skinRisk: "medium",
+                obesityRisk: "low",
+                dentalRisk: "medium",
+                anxietyRisk: "high",
+                allergyRisk: "low",
+                energyLevel: "very_high"
+            },
+            mixed: {
+                name: "Mixed Breed",
+                size: "varies",
+                commonIssues: ["Various - depends on dominant breeds", "Generally healthier due to hybrid vigor"],
+                jointRisk: "medium",
+                skinRisk: "medium",
+                obesityRisk: "medium",
+                dentalRisk: "medium",
+                anxietyRisk: "medium",
+                allergyRisk: "medium",
+                energyLevel: "medium"
+            }
+        };
+
+        // Get breed and age from URL params (priority) or localStorage
         const urlParams = new URLSearchParams(window.location.search);
-        let breed = urlParams.get('breed') || localStorage.getItem('dogBreed');
-        let age = parseFloat(urlParams.get('age')) || parseFloat(localStorage.getItem('dogAge'));
-        let breedData = JSON.parse(localStorage.getItem('breedData') || '{}');
+        let breed = urlParams.get('breed');
+        let age = parseFloat(urlParams.get('age'));
+        let breedData = null;
+        
+        // If URL params exist, use them and update localStorage
+        if (breed && !isNaN(age) && age >= 0) {
+            localStorage.setItem('dogBreed', breed);
+            localStorage.setItem('dogAge', age);
+            // Fetch breed data from our database
+            breedData = breedDatabase[breed];
+            if (breedData) {
+                localStorage.setItem('breedData', JSON.stringify(breedData));
+            }
+        } else {
+            // Fall back to localStorage
+            breed = localStorage.getItem('dogBreed');
+            age = parseFloat(localStorage.getItem('dogAge'));
+            breedData = JSON.parse(localStorage.getItem('breedData') || 'null');
+        }
         
         let currentQuestion = 0;
         let answers = {};
@@ -187,7 +459,11 @@
         }
 
         function init() {
-            if (!breed || !age || !breedData.name) {
+            const hasBreed = breed && breed.trim() !== '';
+            const hasAge = !isNaN(age) && age >= 0;
+            const hasBreedData = breedData && breedData.name;
+            
+            if (!hasBreed || !hasAge || !hasBreedData) {
                 document.getElementById('startBtn').style.display = 'none';
                 document.getElementById('noData').style.display = 'block';
                 return;
