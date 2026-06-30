@@ -14,10 +14,13 @@
         .header { background: var(--fp-white); padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(0,0,0,0.05); }
         .logo { font-family: 'Playfair Display', serif; font-size: 24px; color: var(--fp-charcoal); text-decoration: none; }
         .container { max-width: 800px; margin: 0 auto; padding: 60px 20px; }
+        .dog-info { background: var(--fp-sage); color: white; padding: 15px 25px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; }
+        .dog-info a { color: white; text-decoration: underline; font-size: 14px; }
         .intro { text-align: center; margin-bottom: 60px; }
         .intro-icon { font-size: 60px; margin-bottom: 20px; }
         .intro h1 { font-size: 42px; margin-bottom: 20px; }
         .intro p { color: var(--fp-gray); font-size: 18px; max-width: 600px; margin: 0 auto 30px; }
+        .calorie-info { background: var(--fp-cream); padding: 20px; margin: 20px 0; }
         .progress-bar { height: 4px; background: var(--fp-light); margin-bottom: 40px; border-radius: 2px; }
         .progress-fill { height: 100%; background: var(--fp-blue); border-radius: 2px; transition: width 0.3s; }
         .question-container { display: none; }
@@ -25,6 +28,7 @@
         .question { background: var(--fp-white); padding: 40px; margin-bottom: 20px; }
         .question-number { font-size: 12px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--fp-gray); margin-bottom: 10px; }
         .question h2 { font-size: 24px; margin-bottom: 30px; }
+        .question-context { background: var(--fp-cream); padding: 15px; margin-bottom: 20px; font-size: 14px; color: var(--fp-gray); }
         .options { display: flex; flex-direction: column; gap: 12px; }
         .option { display: flex; align-items: center; padding: 20px; background: var(--fp-light); border: 2px solid transparent; cursor: pointer; transition: all 0.3s; }
         .option:hover { border-color: var(--fp-blue); }
@@ -55,168 +59,273 @@
         <a href="/" class="logo">Happy Puppy Supply</a>
     </header>
     <div class="container">
+        <div class="dog-info" id="dogInfo" style="display: none;">
+            <span id="dogDetails"></span>
+            <a href="/" onclick="clearData()">Change Dog</a>
+        </div>
         <div class="intro" id="intro">
             <div class="intro-icon">🥩</div>
             <h1>Nutrition Check</h1>
-            <p>"Most commercial dog foods meet minimum standards, but optimal nutrition is a different story. The right supplements can fill the gaps between 'surviving' and 'thriving.'"</p>
-            <p style="font-size: 16px; margin-top: 20px;">Evaluate your dog's diet and get personalized nutritional supplement recommendations.</p>
-            <button class="btn" onclick="startAssessment()">Start Assessment</button>
+            <p>"Most commercial dog foods meet minimum standards, but optimal nutrition is different. The right supplements fill the gap between 'surviving' and 'thriving' - especially for breed-specific needs."</p>
+            <div id="calorieInfo" class="calorie-info"></div>
+            <button class="btn" onclick="startAssessment()" id="startBtn" style="display: none;">Start Assessment</button>
+            <p id="noData" style="color: var(--fp-coral); margin-top: 20px;">Please select your dog's breed and age from the <a href="/" style="color: var(--fp-coral);">homepage</a> first.</p>
         </div>
         <div id="assessment" style="display: none;">
             <div class="progress-bar"><div class="progress-fill" id="progress" style="width: 0%"></div></div>
-            <div class="question-container active" data-question="1">
-                <div class="question">
-                    <div class="question-number">Question 1 of 6</div>
-                    <h2>What type of food does your dog primarily eat?</h2>
-                    <div class="options">
-                        <label class="option"><input type="radio" name="q1" value="3" onchange="nextQuestion()"><span>Premium/veterinary prescription diet</span></label>
-                        <label class="option"><input type="radio" name="q1" value="2" onchange="nextQuestion()"><span>Quality commercial dry/wet food</span></label>
-                        <label class="option"><input type="radio" name="q1" value="1" onchange="nextQuestion()"><span>Grocery store brand</span></label>
-                        <label class="option"><input type="radio" name="q1" value="0" onchange="nextQuestion()"><span>Homemade or raw diet</span></label>
-                    </div>
-                </div>
-            </div>
-            <div class="question-container" data-question="2">
-                <div class="question">
-                    <div class="question-number">Question 2 of 6</div>
-                    <h2>How often does your dog get treats?</h2>
-                    <div class="options">
-                        <label class="option"><input type="radio" name="q2" value="3" onchange="nextQuestion()"><span>Rarely or healthy treats only</span></label>
-                        <label class="option"><input type="radio" name="q2" value="2" onchange="nextQuestion()"><span>A few times a day</span></label>
-                        <label class="option"><input type="radio" name="q2" value="1" onchange="nextQuestion()"><span>Frequently throughout the day</span></label>
-                        <label class="option"><input type="radio" name="q2" value="0" onchange="nextQuestion()"><span>Many treats, often table scraps</span></label>
-                    </div>
-                </div>
-            </div>
-            <div class="question-container" data-question="3">
-                <div class="question">
-                    <div class="question-number">Question 3 of 6</div>
-                    <h2>Does your dog currently take any supplements?</h2>
-                    <div class="options">
-                        <label class="option"><input type="radio" name="q3" value="3" onchange="nextQuestion()"><span>Yes, comprehensive daily supplements</span></label>
-                        <label class="option"><input type="radio" name="q3" value="2" onchange="nextQuestion()"><span>One or two basic supplements</span></label>
-                        <label class="option"><input type="radio" name="q3" value="1" onchange="nextQuestion()"><span>Occasional treats with benefits</span></label>
-                        <label class="option"><input type="radio" name="q3" value="0" onchange="nextQuestion()"><span>No supplements</span></label>
-                    </div>
-                </div>
-            </div>
-            <div class="question-container" data-question="4">
-                <div class="question">
-                    <div class="question-number">Question 4 of 6</div>
-                    <h2>How is your dog's weight?</h2>
-                    <div class="options">
-                        <label class="option"><input type="radio" name="q4" value="3" onchange="nextQuestion()"><span>Ideal body condition</span></label>
-                        <label class="option"><input type="radio" name="q4" value="2" onchange="nextQuestion()"><span>Slightly overweight</span></label>
-                        <label class="option"><input type="radio" name="q4" value="1" onchange="nextQuestion()"><span>Overweight</span></label>
-                        <label class="option"><input type="radio" name="q4" value="0" onchange="nextQuestion()"><span>Underweight or obese</span></label>
-                    </div>
-                </div>
-            </div>
-            <div class="question-container" data-question="5">
-                <div class="question">
-                    <div class="question-number">Question 5 of 6</div>
-                    <h2>Does your dog have any digestive issues?</h2>
-                    <div class="options">
-                        <label class="option"><input type="radio" name="q5" value="3" onchange="nextQuestion()"><span>Never, perfect digestion</span></label>
-                        <label class="option"><input type="radio" name="q5" value="2" onchange="nextQuestion()"><span>Rare occasional upset</span></label>
-                        <label class="option"><input type="radio" name="q5" value="1" onchange="nextQuestion()"><span>Frequent loose stools or gas</span></label>
-                        <label class="option"><input type="radio" name="q5" value="0" onchange="nextQuestion()"><span>Chronic digestive problems</span></label>
-                    </div>
-                </div>
-            </div>
-            <div class="question-container" data-question="6">
-                <div class="question">
-                    <div class="question-number">Question 6 of 6</div>
-                    <h2>How is your dog's energy level throughout the day?</h2>
-                    <div class="options">
-                        <label class="option"><input type="radio" name="q6" value="3" onchange="showResults()"><span>Consistent, steady energy</span></label>
-                        <label class="option"><input type="radio" name="q6" value="2" onchange="showResults()"><span>Good energy with normal rest periods</span></label>
-                        <label class="option"><input type="radio" name="q6" value="1" onchange="showResults()"><span>Energy crashes or hyperactivity</span></label>
-                        <label class="option"><input type="radio" name="q6" value="0" onchange="showResults()"><span>Chronic fatigue or extreme hyperactivity</span></label>
-                    </div>
-                </div>
-            </div>
+            <div id="questionsContainer"></div>
         </div>
         <div class="results" id="results">
             <div class="score-circle"><div class="score-number" id="score">75</div><div class="score-label">Nutrition Score</div></div>
             <h2 id="result-title">Good Nutrition Foundation</h2>
             <p class="results-summary" id="result-summary">Your dog has a solid nutritional base with room for optimization.</p>
             <div class="recommendations">
-                <h3>Recommended Nutritional Products</h3>
+                <h3>Recommended for <span id="breedName"></span></h3>
                 <div id="product-recommendations"></div>
             </div>
-            <a href="/" class="btn" style="margin-top: 40px;">Take Another Assessment</a>
+            <a href="/" class="btn" style="margin-top: 40px;">Start New Assessment</a>
         </div>
     </div>
     <script>
-        let currentQuestion = 1;
-        const totalQuestions = 6;
+        const urlParams = new URLSearchParams(window.location.search);
+        let breed = urlParams.get('breed') || localStorage.getItem('dogBreed');
+        let age = parseFloat(urlParams.get('age')) || parseFloat(localStorage.getItem('dogAge'));
+        let breedData = JSON.parse(localStorage.getItem('breedData') || '{}');
+        
+        let currentQuestion = 0;
         let answers = {};
+        let questions = [];
+
+        // Calorie needs by size and age
+        const calorieNeeds = {
+            small: { puppy: 400, adult: 300, senior: 250 },
+            medium: { puppy: 900, adult: 700, senior: 550 },
+            large: { puppy: 1800, adult: 1300, senior: 1000 },
+            giant: { puppy: 2500, adult: 2000, senior: 1500 }
+        };
+
+        function getCalorieInfo(size, age) {
+            const stage = age < 2 ? 'puppy' : age > 7 ? 'senior' : 'adult';
+            return calorieNeeds[size]?.[stage] || calorieNeeds.medium[stage];
+        }
+
+        function generateQuestions(breed, age, data) {
+            const qs = [];
+            const lifeStage = age < 2 ? 'puppy' : age > 7 ? 'senior' : 'adult';
+            const calories = getCalorieInfo(data.size, age);
+            
+            // Food quality
+            qs.push({
+                category: 'food_quality',
+                question: `What type of food does your ${data.name} primarily eat?`,
+                context: `${data.name}s benefit from high-quality protein sources appropriate for their ${lifeStage} stage.`,
+                options: [
+                    { text: 'Premium/veterinary prescription diet', value: 3 },
+                    { text: 'Quality commercial dry/wet food', value: 2 },
+                    { text: 'Grocery store brand', value: 1 },
+                    { text: 'Homemade or raw without vet guidance', value: 0 }
+                ]
+            });
+
+            // Portion control (especially for obesity-prone breeds)
+            if (data.obesityRisk === 'high') {
+                qs.push({
+                    category: 'portions',
+                    question: `How do you measure your ${data.name}'s food?`,
+                    context: `⚠️ ${data.name}s are prone to obesity. Precise portions are essential. Target: ~${calories} calories/day.`,
+                    options: [
+                        { text: 'Measured precisely with a cup/scale', value: 3 },
+                        { text: 'Approximate scoop measurement', value: 2 },
+                        { text: 'Fill bowl when empty', value: 1 },
+                        { text: 'Free-feeding (food always available)', value: 0 }
+                    ]
+                });
+            } else {
+                qs.push({
+                    category: 'portions',
+                    question: 'How do you determine portion sizes?',
+                    context: `Average ${data.name} needs approximately ${calories} calories per day.`,
+                    options: [
+                        { text: 'Follow bag guidelines + vet advice', value: 3 },
+                        { text: 'Use feeding guidelines on bag', value: 2 },
+                        { text: 'Estimate based on appearance', value: 1 },
+                        { text: 'No set amount', value: 0 }
+                    ]
+                });
+            }
+
+            // Treats
+            qs.push({
+                category: 'treats',
+                question: 'How many treats does your dog get daily?',
+                context: data.obesityRisk === 'high' ? 'Treats should be limited for weight management.' : 'Treats should not exceed 10% of daily calories.',
+                options: [
+                    { text: '1-2 small treats or vegetables', value: 3 },
+                    { text: 'A few treats during training', value: 2 },
+                    { text: 'Multiple treats throughout day', value: 1 },
+                    { text: 'Many treats + table scraps', value: 0 }
+                ]
+            });
+
+            // Supplements
+            qs.push({
+                category: 'supplements',
+                question: 'What supplements does your dog receive?',
+                context: data.skinRisk === 'high' || data.jointRisk === 'high' ? `${data.name}s benefit from targeted supplementation.` : 'Basic supplements support overall health.',
+                options: [
+                    { text: 'Daily targeted supplements for breed/age', value: 3 },
+                    { text: 'Basic multivitamin or fish oil', value: 2 },
+                    { text: 'Occasional treats with benefits', value: 1 },
+                    { text: 'No supplements', value: 0 }
+                ]
+            });
+
+            // Eating behavior
+            qs.push({
+                category: 'appetite',
+                question: `How is your ${data.name}'s appetite?`,
+                context: 'Changes in appetite can indicate health issues.',
+                options: [
+                    { text: 'Consistent, eager eater', value: 3 },
+                    { text: 'Eats well most days', value: 2 },
+                    { text: 'Picky or inconsistent', value: 1 },
+                    { text: 'Poor appetite or always ravenous', value: 0 }
+                ]
+            });
+
+            // Digestive health
+            qs.push({
+                category: 'digestion',
+                question: 'How is your dog digestion?',
+                context: 'Healthy digestion indicates proper nutrition absorption.',
+                options: [
+                    { text: 'Consistent, firm stools', value: 3 },
+                    { text: 'Occasional soft stool', value: 2 },
+                    { text: 'Frequent loose stools or gas', value: 1 },
+                    { text: 'Chronic diarrhea or vomiting', value: 0 }
+                ]
+            });
+
+            // Water intake
+            qs.push({
+                category: 'hydration',
+                question: 'Does your dog drink adequate water?',
+                context: 'Proper hydration is essential for kidney and overall health.',
+                options: [
+                    { text: 'Drinks regularly throughout day', value: 3 },
+                    { text: 'Drinks when food is offered', value: 2 },
+                    { text: 'Rarely seems thirsty', value: 1 },
+                    { text: 'Excessive thirst or refuses water', value: 0 }
+                ]
+            });
+
+            return qs;
+        }
+
+        function init() {
+            if (!breed || !age || !breedData.name) {
+                document.getElementById('startBtn').style.display = 'none';
+                document.getElementById('noData').style.display = 'block';
+                return;
+            }
+
+            document.getElementById('dogInfo').style.display = 'flex';
+            document.getElementById('dogDetails').textContent = `${breedData.name}, ${age} years old`;
+            document.getElementById('startBtn').style.display = 'inline-block';
+            document.getElementById('noData').style.display = 'none';
+
+            const calories = getCalorieInfo(breedData.size, age);
+            const stage = age < 2 ? 'puppy' : age > 7 ? 'senior' : 'adult';
+            
+            document.getElementById('calorieInfo').innerHTML = `
+                <strong>${breedData.name} Nutrition Profile</strong><br>
+                Size: ${breedData.size} | Life Stage: ${stage}<br>
+                Estimated daily caloric need: ~${calories} kcal
+                ${data.obesityRisk === 'high' ? '<br><span style="color: var(--fp-coral);">⚠️ This breed is prone to obesity - monitor portions carefully</span>' : ''}
+            `;
+
+            questions = generateQuestions(breed, age, breedData);
+            renderQuestions();
+        }
+
+        function renderQuestions() {
+            const container = document.getElementById('questionsContainer');
+            container.innerHTML = questions.map((q, i) => `
+                <div class="question-container ${i === 0 ? 'active' : ''}" data-question="${i}">
+                    <div class="question">
+                        <div class="question-number">Question ${i + 1} of ${questions.length}</div>
+                        <div class="question-context">${q.context}</div>
+                        <h2>${q.question}</h2>
+                        <div class="options">
+                            ${q.options.map((opt, j) => `
+                                <label class="option">
+                                    <input type="radio" name="q${i}" value="${opt.value}" onchange="${i === questions.length - 1 ? 'showResults()' : 'nextQuestion()'}">
+                                    <span>${opt.text}</span>
+                                </label>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
         function startAssessment() {
             document.getElementById('intro').style.display = 'none';
             document.getElementById('assessment').style.display = 'block';
             updateProgress();
         }
+
         function nextQuestion() {
             const current = document.querySelector(`.question-container[data-question="${currentQuestion}"]`);
             const selected = current.querySelector('input:checked');
             if (selected) {
-                answers[`q${currentQuestion}`] = selected.value;
+                answers[questions[currentQuestion].category] = parseInt(selected.value);
                 current.classList.remove('active');
                 currentQuestion++;
-                if (currentQuestion <= totalQuestions) {
+                if (currentQuestion < questions.length) {
                     const next = document.querySelector(`.question-container[data-question="${currentQuestion}"]`);
                     next.classList.add('active');
                     updateProgress();
                 }
             }
         }
+
         function updateProgress() {
-            const progress = ((currentQuestion - 1) / totalQuestions) * 100;
+            const progress = ((currentQuestion) / questions.length) * 100;
             document.getElementById('progress').style.width = progress + '%';
         }
+
         function showResults() {
-            const current = document.querySelector(`.question-container[data-question="${currentQuestion}"]`);
-            const selected = current.querySelector('input:checked');
-            if (selected) {
-                answers.q6 = selected.value;
+            nextQuestion();
+            
+            let total = 0;
+            let count = 0;
+            for (let cat in answers) {
+                total += answers[cat];
+                count++;
             }
-            let score = 0;
-            for (let i = 1; i <= 6; i++) {
-                score += parseInt(answers[`q${i}`] || 0);
-            }
-            score = Math.round((score / 18) * 100);
+            const score = Math.round((total / (count * 3)) * 100);
+            
             document.getElementById('assessment').style.display = 'none';
             document.getElementById('results').classList.add('show');
             document.getElementById('score').textContent = score;
-            let title, summary, products;
+            document.getElementById('breedName').textContent = breedData.name;
+
+            let title, summary;
             if (score >= 80) {
-                title = "Excellent Nutrition!";
-                summary = "Your dog is receiving outstanding nutritional care! Maintain this high standard with quality supplements and consistent feeding habits.";
-                products = [
-                    {name: "Probiotics for Dogs", desc: "Maintain digestive health", price: "$26.99", emoji: "🥩", link: "https://www.happypuppysupply.com/products/probiotics-for-dogs"},
-                    {name: "Hip & Joint Chews", desc: "Preventive joint nutrition", price: "$32.99", emoji: "🦴", link: "https://www.happypuppysupply.com/products/wuffes-hip-joint-chews"},
-                    {name: "Natural Training Treats", desc: "Healthy reward options", price: "$18.99", emoji: "✅", link: "https://www.happypuppysupply.com/products/rewarding-life-soft-training-treats"}
-                ];
+                title = `Excellent Nutrition! 🥩`;
+                summary = `Your ${breedData.name} is getting outstanding nutrition! Keep up the great work.`;
             } else if (score >= 60) {
-                title = "Good Nutrition Foundation";
-                summary = "Your dog has a solid nutritional base with room for optimization. Targeted supplements can help fill nutritional gaps and improve overall wellness.";
-                products = [
-                    {name: "Probiotics for Dogs", desc: "Digestive & immune support", price: "$26.99", emoji: "🥩", link: "https://www.happypuppysupply.com/products/probiotics-for-dogs"},
-                    {name: "Allergy & Itch Chews", desc: "Skin & coat nutrition", price: "$34.99", emoji: "✨", link: "https://www.happypuppysupply.com/products/wuffes-allergy-itch-chews"},
-                    {name: "Smart Vitality Supplement", desc: "Complete wellness formula", price: "$28.99", emoji: "💊", link: "https://www.happypuppysupply.com/products/smart-vitality-hip-joint-supplement"}
-                ];
+                title = `Good Nutrition Foundation`;
+                summary = `Your ${breedData.name} has a solid nutritional base with room for optimization.`;
             } else {
-                title = "Nutrition Needs Attention";
-                summary = "Your dog's diet may be missing key nutrients. Comprehensive supplements and dietary adjustments can significantly improve energy, digestion, and overall health.";
-                products = [
-                    {name: "Veterinary Strength Supplements", desc: "Comprehensive nutritional support", price: "$45.99", emoji: "💊", link: "https://www.happypuppysupply.com/products/veterinary-strength-healthy-cognition"},
-                    {name: "Probiotics for Dogs", desc: "Essential digestive health", price: "$26.99", emoji: "🥩", link: "https://www.happypuppysupply.com/products/probiotics-for-dogs"},
-                    {name: "Hip & Joint Chews", desc: "Foundation nutritional support", price: "$32.99", emoji: "🦴", link: "https://www.happypuppysupply.com/products/wuffes-hip-joint-chews"}
-                ];
+                title = `Nutrition Needs Attention`;
+                summary = `Your ${breedData.name}'s diet may be missing key nutrients. The recommendations below can help.`;
             }
             document.getElementById('result-title').textContent = title;
             document.getElementById('result-summary').textContent = summary;
+
+            const products = getProductRecommendations(breedData, answers, score);
             const productsHtml = products.map(p => `
                 <a href="${p.link}" class="product-card" target="_blank">
                     <div class="product-image">${p.emoji}</div>
@@ -230,6 +339,76 @@
             document.getElementById('product-recommendations').innerHTML = productsHtml +
                 '<a href="https://www.happypuppysupply.com/collections/health-wellness" class="btn shop-btn" target="_blank">Shop All Health Products</a>';
         }
+
+        function getProductRecommendations(data, answers, score) {
+            const products = [];
+            const lifeStage = age < 2 ? 'puppy' : age > 7 ? 'senior' : 'adult';
+            
+            // Probiotics for digestion issues
+            if (answers.digestion < 2) {
+                products.push({
+                    name: "Probiotics for Dogs",
+                    desc: "Digestive health & nutrient absorption",
+                    price: "$26.99",
+                    emoji: "🥩",
+                    link: "https://www.happypuppysupply.com/products/probiotics-for-dogs"
+                });
+            }
+
+            // Joint supplements for large breeds
+            if (data.jointRisk === 'high') {
+                products.push({
+                    name: "Wuffes Hip & Joint Chews",
+                    desc: `Essential for ${data.name} joint health`,
+                    price: "$32.99",
+                    emoji: "🦴",
+                    link: "https://www.happypuppysupply.com/products/wuffes-hip-joint-chews"
+                });
+            }
+
+            // Skin supplements for allergy-prone breeds
+            if (data.skinRisk === 'high') {
+                products.push({
+                    name: "Wuffes Allergy & Itch Chews",
+                    desc: "Skin health from within",
+                    price: "$34.99",
+                    emoji: "✨",
+                    link: "https://www.happypuppysupply.com/products/wuffes-allergy-itch-chews"
+                });
+            }
+
+            // General wellness supplement
+            if (products.length < 3 || score < 60) {
+                products.push({
+                    name: "Smart Vitality Supplement",
+                    desc: "Complete daily wellness formula",
+                    price: "$28.99",
+                    emoji: "💊",
+                    link: "https://www.happypuppysupply.com/products/smart-vitality-hip-joint-supplement"
+                });
+            }
+
+            // Healthy treats for weight management
+            if (data.obesityRisk === 'high' || answers.treats < 2) {
+                products.push({
+                    name: "Natural Training Treats",
+                    desc: "Low-calorie, healthy rewards",
+                    price: "$18.99",
+                    emoji: "✅",
+                    link: "https://www.happypuppysupply.com/products/rewarding-life-soft-training-treats"
+                });
+            }
+
+            return products.slice(0, 3);
+        }
+
+        function clearData() {
+            localStorage.removeItem('dogBreed');
+            localStorage.removeItem('dogAge');
+            localStorage.removeItem('breedData');
+        }
+
+        init();
     </script>
 </body>
 </html>

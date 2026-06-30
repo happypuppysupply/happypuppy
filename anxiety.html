@@ -7,27 +7,20 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --fp-cream: #FAF7F5;
-            --fp-white: #FFFFFF;
-            --fp-charcoal: #2D2D2D;
-            --fp-gray: #6B6B6B;
-            --fp-light: #F5F5F5;
-            --fp-blue: #7EC8E3;
-            --fp-coral: #FF8C69;
-            --fp-sage: #9CAF88;
-            --fp-blush: #F4E1E1;
-        }
+        :root { --fp-cream: #FAF7F5; --fp-white: #FFFFFF; --fp-charcoal: #2D2D2D; --fp-gray: #6B6B6B; --fp-light: #F5F5F5; --fp-blue: #7EC8E3; --fp-coral: #FF8C69; --fp-sage: #9CAF88; }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Inter', sans-serif; background: var(--fp-cream); color: var(--fp-charcoal); line-height: 1.6; }
         h1, h2, h3, h4 { font-family: 'Playfair Display', serif; font-weight: 400; }
         .header { background: var(--fp-white); padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(0,0,0,0.05); }
         .logo { font-family: 'Playfair Display', serif; font-size: 24px; color: var(--fp-charcoal); text-decoration: none; }
         .container { max-width: 800px; margin: 0 auto; padding: 60px 20px; }
+        .dog-info { background: var(--fp-sage); color: white; padding: 15px 25px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; }
+        .dog-info a { color: white; text-decoration: underline; font-size: 14px; }
         .intro { text-align: center; margin-bottom: 60px; }
         .intro-icon { font-size: 60px; margin-bottom: 20px; }
         .intro h1 { font-size: 42px; margin-bottom: 20px; }
         .intro p { color: var(--fp-gray); font-size: 18px; max-width: 600px; margin: 0 auto 30px; }
+        .anxiety-note { background: #E3F2FD; border-left: 4px solid var(--fp-blue); padding: 20px; margin: 20px 0; }
         .progress-bar { height: 4px; background: var(--fp-light); margin-bottom: 40px; border-radius: 2px; }
         .progress-fill { height: 100%; background: var(--fp-blue); border-radius: 2px; transition: width 0.3s; }
         .question-container { display: none; }
@@ -35,6 +28,7 @@
         .question { background: var(--fp-white); padding: 40px; margin-bottom: 20px; }
         .question-number { font-size: 12px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--fp-gray); margin-bottom: 10px; }
         .question h2 { font-size: 24px; margin-bottom: 30px; }
+        .question-context { background: var(--fp-cream); padding: 15px; margin-bottom: 20px; font-size: 14px; color: var(--fp-gray); }
         .options { display: flex; flex-direction: column; gap: 12px; }
         .option { display: flex; align-items: center; padding: 20px; background: var(--fp-light); border: 2px solid transparent; cursor: pointer; transition: all 0.3s; }
         .option:hover { border-color: var(--fp-blue); }
@@ -43,7 +37,7 @@
         .btn:hover { background: transparent; color: var(--fp-blue); }
         .results { display: none; background: var(--fp-white); padding: 60px; }
         .results.show { display: block; }
-        .score-circle { width: 200px; height: 200px; border-radius: 50%; background: linear-gradient(135deg, var(--fp-blush), var(--fp-coral)); display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 0 auto 40px; color: white; }
+        .score-circle { width: 200px; height: 200px; border-radius: 50%; background: linear-gradient(135deg, var(--fp-blue), var(--fp-coral)); display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 0 auto 40px; color: white; }
         .score-number { font-family: 'Playfair Display', serif; font-size: 72px; font-weight: 600; }
         .score-label { font-size: 14px; text-transform: uppercase; letter-spacing: 0.1em; }
         .results h2 { text-align: center; font-size: 32px; margin-bottom: 20px; }
@@ -56,7 +50,6 @@
         .product-info h4 { font-size: 18px; margin-bottom: 8px; }
         .product-info p { font-size: 14px; color: var(--fp-gray); margin-bottom: 8px; }
         .product-price { font-weight: 600; color: var(--fp-coral); }
-        .shop-btn { display: block; width: 100%; text-align: center; margin-top: 30px; }
         @media (max-width: 768px) { .container { padding: 40px 20px; } .question, .results { padding: 30px 20px; } .product-card { flex-direction: column; } }
     </style>
 </head>
@@ -65,180 +58,245 @@
         <a href="/" class="logo">Happy Puppy Supply</a>
     </header>
     <div class="container">
+        <div class="dog-info" id="dogInfo" style="display: none;">
+            <span id="dogDetails"></span>
+            <a href="/" onclick="clearData()">Change Dog</a>
+        </div>
         <div class="intro" id="intro">
-            <div class="intro-icon">🧘</div>
+            <div class="intro-icon">💙</div>
             <h1>Calm & Stress Check</h1>
-            <p>"Anxiety in dogs is often misunderstood as bad behavior. In reality, it's a genuine emotional state that responds incredibly well to the right calming products and routines."</p>
-            <p style="font-size: 16px; margin-top: 20px;">Identify your dog's stress triggers and get personalized calming product recommendations to help them feel safe and relaxed.</p>
-            <button class="btn" onclick="startAssessment()">Start Assessment</button>
+            <p>"Anxiety affects up to 70% of dogs. Some breeds are genetically predisposed to anxiety, but environmental factors play a huge role. The good news: it's manageable with the right tools."</p>
+            <div id="anxietyNote" class="anxiety-note" style="display: none;"></div>
+            <button class="btn" onclick="startAssessment()" id="startBtn" style="display: none;">Start Assessment</button>
+            <p id="noData" style="color: var(--fp-coral); margin-top: 20px;">Please select your dog's breed and age from the <a href="/" style="color: var(--fp-coral);">homepage</a> first.</p>
         </div>
         <div id="assessment" style="display: none;">
             <div class="progress-bar"><div class="progress-fill" id="progress" style="width: 0%"></div></div>
-            <div class="question-container active" data-question="1">
-                <div class="question">
-                    <div class="question-number">Question 1 of 7</div>
-                    <h2>How does your dog react to thunderstorms or fireworks?</h2>
-                    <div class="options">
-                        <label class="option"><input type="radio" name="q1" value="3" onchange="nextQuestion()"><span>Completely calm, no reaction</span></label>
-                        <label class="option"><input type="radio" name="q1" value="2" onchange="nextQuestion()"><span>Slightly alert but stays calm</span></label>
-                        <label class="option"><input type="radio" name="q1" value="1" onchange="nextQuestion()"><span>Panting, pacing, seeks comfort</span></label>
-                        <label class="option"><input type="radio" name="q1" value="0" onchange="nextQuestion()"><span>Trembling, hiding, destructive behavior</span></label>
-                    </div>
-                </div>
-            </div>
-            <div class="question-container" data-question="2">
-                <div class="question">
-                    <div class="question-number">Question 2 of 7</div>
-                    <h2>How does your dog behave when left alone?</h2>
-                    <div class="options">
-                        <label class="option"><input type="radio" name="q2" value="3" onchange="nextQuestion()"><span>Relaxed, sleeps normally</span></label>
-                        <label class="option"><input type="radio" name="q2" value="2" onchange="nextQuestion()"><span>Mild whining at first, then settles</span></label>
-                        <label class="option"><input type="radio" name="q2" value="1" onchange="nextQuestion()"><span>Excessive barking, anxious behavior</span></label>
-                        <label class="option"><input type="radio" name="q2" value="0" onchange="nextQuestion()"><span>Destructive, accidents, self-harm</span></label>
-                    </div>
-                </div>
-            </div>
-            <div class="question-container" data-question="3">
-                <div class="question">
-                    <div class="question-number">Question 3 of 7</div>
-                    <h2>How does your dog react to new people or visitors?</h2>
-                    <div class="options">
-                        <label class="option"><input type="radio" name="q3" value="3" onchange="nextQuestion()"><span>Friendly and welcoming</span></label>
-                        <label class="option"><input type="radio" name="q3" value="2" onchange="nextQuestion()"><span>Cautious but warms up quickly</span></label>
-                        <label class="option"><input type="radio" name="q3" value="1" onchange="nextQuestion()"><span>Barks, hides, or avoids</span></label>
-                        <label class="option"><input type="radio" name="q3" value="0" onchange="nextQuestion()"><span>Extreme fear or aggression</span></label>
-                    </div>
-                </div>
-            </div>
-            <div class="question-container" data-question="4">
-                <div class="question">
-                    <div class="question-number">Question 4 of 7</div>
-                    <h2>Does your dog show signs of excessive licking or chewing?</h2>
-                    <div class="options">
-                        <label class="option"><input type="radio" name="q4" value="3" onchange="nextQuestion()"><span>Never, normal grooming only</span></label>
-                        <label class="option"><input type="radio" name="q4" value="2" onchange="nextQuestion()"><span>Occasionally when bored</span></label>
-                        <label class="option"><input type="radio" name="q4" value="1" onchange="nextQuestion()"><span>Frequently, causing irritation</span></label>
-                        <label class="option"><input type="radio" name="q4" value="0" onchange="nextQuestion()"><span>Constantly, raw spots or hair loss</span></label>
-                    </div>
-                </div>
-            </div>
-            <div class="question-container" data-question="5">
-                <div class="question">
-                    <div class="question-number">Question 5 of 7</div>
-                    <h2>How does your dog handle car rides?</h2>
-                    <div class="options">
-                        <label class="option"><input type="radio" name="q5" value="3" onchange="nextQuestion()"><span>Enjoys them, relaxed</span></label>
-                        <label class="option"><input type="radio" name="q5" value="2" onchange="nextQuestion()"><span>Slightly nervous but manageable</span></label>
-                        <label class="option"><input type="radio" name="q5" value="1" onchange="nextQuestion()"><span>Drooling, shaking, whining</span></label>
-                        <label class="option"><input type="radio" name="q5" value="0" onchange="nextQuestion()"><span>Severe anxiety or vomiting</span></label>
-                    </div>
-                </div>
-            </div>
-            <div class="question-container" data-question="6">
-                <div class="question">
-                    <div class="question-number">Question 6 of 7</div>
-                    <h2>Does your dog sleep well through the night?</h2>
-                    <div class="options">
-                        <label class="option"><input type="radio" name="q6" value="3" onchange="nextQuestion()"><span>Sleeps soundly all night</span></label>
-                        <label class="option"><input type="radio" name="q6" value="2" onchange="nextQuestion()"><span>Occasional restlessness</span></label>
-                        <label class="option"><input type="radio" name="q6" value="1" onchange="nextQuestion()"><span>Often wakes up, moves around</span></label>
-                        <label class="option"><input type="radio" name="q6" value="0" onchange="nextQuestion()"><span>Rarely sleeps through the night</span></label>
-                    </div>
-                </div>
-            </div>
-            <div class="question-container" data-question="7">
-                <div class="question">
-                    <div class="question-number">Question 7 of 7</div>
-                    <h2>How would you rate your dog's overall anxiety level?</h2>
-                    <div class="options">
-                        <label class="option"><input type="radio" name="q7" value="3" onchange="showResults()"><span>Very calm and confident</span></label>
-                        <label class="option"><input type="radio" name="q7" value="2" onchange="showResults()"><span>Mild anxiety in specific situations</span></label>
-                        <label class="option"><input type="radio" name="q7" value="1" onchange="showResults()"><span>Moderate anxiety, affects daily life</span></label>
-                        <label class="option"><input type="radio" name="q7" value="0" onchange="showResults()"><span>Severe anxiety, significantly impacts life</span></label>
-                    </div>
-                </div>
-            </div>
+            <div id="questionsContainer"></div>
         </div>
         <div class="results" id="results">
-            <div class="score-circle"><div class="score-number" id="score">85</div><div class="score-label">Calm Score</div></div>
-            <h2 id="result-title">Naturally Calm</h2>
-            <p class="results-summary" id="result-summary">Your dog shows excellent emotional resilience.</p>
+            <div class="score-circle"><div class="score-number" id="score">70</div><div class="score-label">Calm Score</div></div>
+            <h2 id="result-title">Managing Well</h2>
+            <p class="results-summary" id="result-summary">Your dog shows some anxiety but is coping reasonably well.</p>
             <div class="recommendations">
-                <h3>Recommended Calming Products</h3>
+                <h3>Calming Products for <span id="breedName"></span></h3>
                 <div id="product-recommendations"></div>
             </div>
-            <a href="/" class="btn" style="margin-top: 40px;">Take Another Assessment</a>
+            <a href="/" class="btn" style="margin-top: 40px;">Start New Assessment</a>
         </div>
     </div>
     <script>
-        let currentQuestion = 1;
-        const totalQuestions = 7;
+        const urlParams = new URLSearchParams(window.location.search);
+        let breed = urlParams.get('breed') || localStorage.getItem('dogBreed');
+        let age = parseFloat(urlParams.get('age')) || parseFloat(localStorage.getItem('dogAge'));
+        let breedData = JSON.parse(localStorage.getItem('breedData') || '{}');
+        
+        let currentQuestion = 0;
         let answers = {};
+        let questions = [];
+
+        function generateQuestions(breed, age, data) {
+            const qs = [];
+            const isAnxiousBreed = data.anxietyRisk === 'high';
+            
+            // Separation anxiety
+            qs.push({
+                category: 'separation',
+                question: `When left alone, how does your ${data.name} behave?`,
+                context: isAnxiousBreed ? `${data.name}s are prone to separation anxiety. Destructive behavior when alone is a key sign.` : 'Some distress when alone is normal, but destructive behavior or constant vocalization indicates anxiety.',
+                options: [
+                    { text: 'Calm, rests until you return', value: 3 },
+                    { text: 'Mild whimpering initially', value: 2 },
+                    { text: 'Destructive behavior, excessive barking', value: 1 },
+                    { text: 'Extreme panic, self-harm attempts', value: 0 }
+                ]
+            });
+
+            // Noise phobia
+            qs.push({
+                category: 'noise',
+                question: 'How does your dog react to thunderstorms, fireworks, or loud noises?',
+                context: 'Noise phobia is one of the most common anxiety triggers in dogs.',
+                options: [
+                    { text: 'Unbothered or curious', value: 3 },
+                    { text: 'Seeks comfort but calms quickly', value: 2 },
+                    { text: 'Hides, shakes, or pants heavily', value: 1 },
+                    { text: 'Extreme panic, tries to escape', value: 0 }
+                ]
+            });
+
+            // Social anxiety
+            qs.push({
+                category: 'social',
+                question: `How does your ${data.name} react to strangers or new situations?`,
+                context: isAnxiousBreed ? `${data.name}s can be wary of strangers. Early socialization is key.` : 'Confidence in new situations varies by temperament and socialization.',
+                options: [
+                    { text: 'Friendly and confident', value: 3 },
+                    { text: 'Cautious but warms up', value: 2 },
+                    { text: 'Fearful, hides, or barks', value: 1 },
+                    { text: 'Aggressive or completely shuts down', value: 0 }
+                ]
+            });
+
+            // Sleep quality
+            qs.push({
+                category: 'sleep',
+                question: 'How well does your dog sleep?',
+                context: 'Restless sleep, frequent waking, or difficulty settling can indicate underlying anxiety.',
+                options: [
+                    { text: 'Sleeps soundly through the night', value: 3 },
+                    { text: 'Occasional restlessness', value: 2 },
+                    { text: 'Frequent waking, pacing at night', value: 1 },
+                    { text: 'Cannot settle, rarely sleeps deeply', value: 0 }
+                ]
+            });
+
+            // Calming tools
+            qs.push({
+                category: 'tools',
+                question: 'What calming tools or routines do you use?',
+                context: 'Consistent routines and environmental enrichment help anxious dogs feel secure.',
+                options: [
+                    { text: 'Multiple tools: crate, music, supplements', value: 3 },
+                    { text: 'One or two calming methods', value: 2 },
+                    { text: 'Occasional comfort items', value: 1 },
+                    { text: 'No specific calming routine', value: 0 }
+                ]
+            });
+
+            // Exercise (critical for anxious high-energy breeds)
+            if (data.energyLevel === 'high' || data.energyLevel === 'very_high') {
+                qs.push({
+                    category: 'exercise',
+                    question: `How much daily exercise does your ${data.name} get?`,
+                    context: `${data.name}s have high energy needs. Insufficient exercise often manifests as anxiety.`,
+                    options: [
+                        { text: '60+ minutes of vigorous exercise', value: 3 },
+                        { text: '30-60 minutes daily', value: 2 },
+                        { text: 'Short walks only', value: 1 },
+                        { text: 'Minimal exercise', value: 0 }
+                    ]
+                });
+            }
+
+            // Compulsive behaviors
+            qs.push({
+                category: 'compulsive',
+                question: 'Any repetitive behaviors (tail chasing, excessive licking, pacing)?',
+                context: 'Compulsive behaviors often develop when anxiety goes unaddressed.',
+                options: [
+                    { text: 'No repetitive behaviors', value: 3 },
+                    { text: 'Rare, short-lived episodes', value: 2 },
+                    { text: 'Frequent but interruptible', value: 1 },
+                    { text: 'Constant, cannot be distracted', value: 0 }
+                ]
+            });
+
+            return qs;
+        }
+
+        function init() {
+            if (!breed || !age || !breedData.name) {
+                document.getElementById('startBtn').style.display = 'none';
+                document.getElementById('noData').style.display = 'block';
+                return;
+            }
+
+            document.getElementById('dogInfo').style.display = 'flex';
+            document.getElementById('dogDetails').textContent = `${breedData.name}, ${age} years old`;
+            document.getElementById('startBtn').style.display = 'inline-block';
+            document.getElementById('noData').style.display = 'none';
+
+            if (breedData.anxietyRisk === 'high') {
+                document.getElementById('anxietyNote').style.display = 'block';
+                document.getElementById('anxietyNote').innerHTML = `
+                    <strong>💡 Breed Note</strong><br>
+                    ${breedData.name}s are genetically predisposed to anxiety. Early intervention with calming tools is especially important for this breed.
+                `;
+            }
+
+            questions = generateQuestions(breed, age, breedData);
+            renderQuestions();
+        }
+
+        function renderQuestions() {
+            const container = document.getElementById('questionsContainer');
+            container.innerHTML = questions.map((q, i) => `
+                <div class="question-container ${i === 0 ? 'active' : ''}" data-question="${i}">
+                    <div class="question">
+                        <div class="question-number">Question ${i + 1} of ${questions.length}</div>
+                        <div class="question-context">${q.context}</div>
+                        <h2>${q.question}</h2>
+                        <div class="options">
+                            ${q.options.map((opt, j) => `
+                                <label class="option">
+                                    <input type="radio" name="q${i}" value="${opt.value}" onchange="${i === questions.length - 1 ? 'showResults()' : 'nextQuestion()'}">
+                                    <span>${opt.text}</span>
+                                </label>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
         function startAssessment() {
             document.getElementById('intro').style.display = 'none';
             document.getElementById('assessment').style.display = 'block';
             updateProgress();
         }
+
         function nextQuestion() {
             const current = document.querySelector(`.question-container[data-question="${currentQuestion}"]`);
             const selected = current.querySelector('input:checked');
             if (selected) {
-                answers[`q${currentQuestion}`] = selected.value;
+                answers[questions[currentQuestion].category] = parseInt(selected.value);
                 current.classList.remove('active');
                 currentQuestion++;
-                if (currentQuestion <= totalQuestions) {
+                if (currentQuestion < questions.length) {
                     const next = document.querySelector(`.question-container[data-question="${currentQuestion}"]`);
                     next.classList.add('active');
                     updateProgress();
                 }
             }
         }
+
         function updateProgress() {
-            const progress = ((currentQuestion - 1) / totalQuestions) * 100;
+            const progress = ((currentQuestion) / questions.length) * 100;
             document.getElementById('progress').style.width = progress + '%';
         }
+
         function showResults() {
-            const current = document.querySelector(`.question-container[data-question="${currentQuestion}"]`);
-            const selected = current.querySelector('input:checked');
-            if (selected) {
-                answers.q7 = selected.value;
+            nextQuestion();
+            
+            let total = 0;
+            let count = 0;
+            for (let cat in answers) {
+                total += answers[cat];
+                count++;
             }
-            let score = 0;
-            for (let i = 1; i <= 7; i++) {
-                score += parseInt(answers[`q${i}`] || 0);
-            }
-            score = Math.round((score / 21) * 100);
+            const score = Math.round((total / (count * 3)) * 100);
+            
             document.getElementById('assessment').style.display = 'none';
             document.getElementById('results').classList.add('show');
             document.getElementById('score').textContent = score;
-            let title, summary, products;
+            document.getElementById('breedName').textContent = breedData.name;
+
+            let title, summary;
             if (score >= 80) {
-                title = "Naturally Calm";
-                summary = "Your dog shows excellent emotional resilience! Maintain this balanced state with enriching toys and occasional calming support during predictable stressors like travel.";
-                products = [
-                    {name: "Plush Squeaky Toys", desc: "Comfort toys for relaxation", price: "$14.99", emoji: "🧸", link: "https://www.happypuppysupply.com/collections/toys-entertainment"},
-                    {name: "Memory Foam Dog Bed", desc: "Secure, cozy sleep space", price: "$79.99", emoji: "🛏️", link: "https://www.happypuppysupply.com/collections/dog-beds-mats"},
-                    {name: "Natural Bully Sticks", desc: "Calming chew activity", price: "$24.99", emoji: "🦴", link: "https://www.happypuppysupply.com/products/100-natural-bully-sticks"}
-                ];
+                title = `Calm & Confident! 💙`;
+                summary = `Your ${breedData.name} is emotionally well-balanced. Keep up the great routines!`;
             } else if (score >= 60) {
-                title = "Mild Anxiety - Manageable with Support";
-                summary = "Your dog experiences situational anxiety. The right calming products and environmental adjustments can significantly improve their comfort in stressful situations.";
-                products = [
-                    {name: "Orthopedic Memory Foam Bed", desc: "Anxiety-reducing sleep sanctuary", price: "$89.99", emoji: "🛏️", link: "https://www.happypuppysupply.com/collections/dog-beds-mats"},
-                    {name: "Interactive Puzzle Toys", desc: "Mental stimulation reduces anxiety", price: "$22.99", emoji: "🧩", link: "https://www.happypuppysupply.com/collections/toys-entertainment"},
-                    {name: "Allergy & Itch Chews", desc: "Reduces stress-related scratching", price: "$34.99", emoji: "✨", link: "https://www.happypuppysupply.com/products/wuffes-allergy-itch-chews"}
-                ];
+                title = `Managing Well`;
+                summary = `Your ${breedData.name} shows some anxiety but is coping. The products below can provide additional support.`;
             } else {
-                title = "Significant Anxiety - Support Needed";
-                summary = "Your dog is experiencing meaningful anxiety that affects their quality of life. A combination of calming products, environmental changes, and professional guidance can help tremendously.";
-                products = [
-                    {name: "Premium Memory Foam Bed", desc: "Deep pressure calming effect", price: "$99.99", emoji: "🛏️", link: "https://www.happypuppysupply.com/collections/dog-beds-mats"},
-                    {name: "Veterinary Strength Supplements", desc: "Natural calming support", price: "$45.99", emoji: "💊", link: "https://www.happypuppysupply.com/products/veterinary-strength-healthy-cognition"},
-                    {name: "Long-Lasting Chew Toys", desc: "Soothing repetitive activity", price: "$18.99", emoji: "🦴", link: "https://www.happypuppysupply.com/collections/dog-treats-chews"}
-                ];
+                title = `Anxiety Support Needed`;
+                summary = `Your ${breedData.name} is experiencing significant anxiety. Consider consulting a veterinary behaviorist along with these calming tools.`;
             }
             document.getElementById('result-title').textContent = title;
             document.getElementById('result-summary').textContent = summary;
+
+            const products = getProductRecommendations(breedData, answers, score);
             const productsHtml = products.map(p => `
                 <a href="${p.link}" class="product-card" target="_blank">
                     <div class="product-image">${p.emoji}</div>
@@ -249,9 +307,63 @@
                     </div>
                 </a>
             `).join('');
-            document.getElementById('product-recommendations').innerHTML = productsHtml + 
-                '<a href="https://www.happypuppysupply.com" class="btn shop-btn" target="_blank">Shop All Calming Products</a>';
+            document.getElementById('product-recommendations').innerHTML = productsHtml +
+                '<a href="https://www.happypuppysupply.com/collections/toys-entertainment" class="btn" style="display: block; text-align: center; margin-top: 30px;" target="_blank">Shop All Calming Products</a>';
         }
+
+        function getProductRecommendations(data, answers, score) {
+            const products = [];
+            
+            // Calming bed for all
+            products.push({
+                name: "Calming Donut Bed",
+                desc: "Security and comfort for anxious dogs",
+                price: "$79.99",
+                emoji: "🛏️",
+                link: "https://www.happypuppysupply.com/collections/dog-beds-mats"
+            });
+
+            // Puzzle toys for mental stimulation
+            if (data.energyLevel === 'high' || data.energyLevel === 'very_high') {
+                products.push({
+                    name: "Interactive Puzzle Toys",
+                    desc: "Mental stimulation reduces anxiety",
+                    price: "$24.99",
+                    emoji: "🧩",
+                    link: "https://www.happypuppysupply.com/collections/toys-entertainment"
+                });
+            }
+
+            // Comfort toys
+            products.push({
+                name: "Plush Comfort Toys",
+                desc: "Soft companions for comfort",
+                price: "$18.99",
+                emoji: "🧸",
+                link: "https://www.happypuppysupply.com/collections/toys-entertainment"
+            });
+
+            // For severe anxiety
+            if (score < 50) {
+                products.push({
+                    name: "Veterinary Strength Calming Supplements",
+                    desc: "Advanced anxiety support",
+                    price: "$45.99",
+                    emoji: "💊",
+                    link: "https://www.happypuppysupply.com/products/veterinary-strength-healthy-cognition"
+                });
+            }
+
+            return products.slice(0, 3);
+        }
+
+        function clearData() {
+            localStorage.removeItem('dogBreed');
+            localStorage.removeItem('dogAge');
+            localStorage.removeItem('breedData');
+        }
+
+        init();
     </script>
 </body>
 </html>

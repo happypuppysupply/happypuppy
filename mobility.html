@@ -7,27 +7,20 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --fp-cream: #FAF7F5;
-            --fp-white: #FFFFFF;
-            --fp-charcoal: #2D2D2D;
-            --fp-gray: #6B6B6B;
-            --fp-light: #F5F5F5;
-            --fp-blue: #7EC8E3;
-            --fp-coral: #FF8C69;
-            --fp-sage: #9CAF88;
-            --fp-blush: #F4E1E1;
-        }
+        :root { --fp-cream: #FAF7F5; --fp-white: #FFFFFF; --fp-charcoal: #2D2D2D; --fp-gray: #6B6B6B; --fp-light: #F5F5F5; --fp-blue: #7EC8E3; --fp-coral: #FF8C69; --fp-sage: #9CAF88; }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Inter', sans-serif; background: var(--fp-cream); color: var(--fp-charcoal); line-height: 1.6; }
         h1, h2, h3, h4 { font-family: 'Playfair Display', serif; font-weight: 400; }
         .header { background: var(--fp-white); padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(0,0,0,0.05); }
         .logo { font-family: 'Playfair Display', serif; font-size: 24px; color: var(--fp-charcoal); text-decoration: none; }
         .container { max-width: 800px; margin: 0 auto; padding: 60px 20px; }
+        .dog-info { background: var(--fp-sage); color: white; padding: 15px 25px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; }
+        .dog-info a { color: white; text-decoration: underline; font-size: 14px; }
         .intro { text-align: center; margin-bottom: 60px; }
         .intro-icon { font-size: 60px; margin-bottom: 20px; }
         .intro h1 { font-size: 42px; margin-bottom: 20px; }
         .intro p { color: var(--fp-gray); font-size: 18px; max-width: 600px; margin: 0 auto 30px; }
+        .joint-warning { background: #FFF3E0; border-left: 4px solid var(--fp-coral); padding: 20px; margin: 20px 0; text-align: left; }
         .progress-bar { height: 4px; background: var(--fp-light); margin-bottom: 40px; border-radius: 2px; }
         .progress-fill { height: 100%; background: var(--fp-blue); border-radius: 2px; transition: width 0.3s; }
         .question-container { display: none; }
@@ -35,6 +28,7 @@
         .question { background: var(--fp-white); padding: 40px; margin-bottom: 20px; }
         .question-number { font-size: 12px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--fp-gray); margin-bottom: 10px; }
         .question h2 { font-size: 24px; margin-bottom: 30px; }
+        .question-context { background: var(--fp-cream); padding: 15px; margin-bottom: 20px; font-size: 14px; color: var(--fp-gray); }
         .options { display: flex; flex-direction: column; gap: 12px; }
         .option { display: flex; align-items: center; padding: 20px; background: var(--fp-light); border: 2px solid transparent; cursor: pointer; transition: all 0.3s; }
         .option:hover { border-color: var(--fp-blue); }
@@ -43,7 +37,7 @@
         .btn:hover { background: transparent; color: var(--fp-blue); }
         .results { display: none; background: var(--fp-white); padding: 60px; }
         .results.show { display: block; }
-        .score-circle { width: 200px; height: 200px; border-radius: 50%; background: linear-gradient(135deg, var(--fp-sage), var(--fp-blue)); display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 0 auto 40px; color: white; }
+        .score-circle { width: 200px; height: 200px; border-radius: 50%; background: linear-gradient(135deg, var(--fp-blue), var(--fp-sage)); display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 0 auto 40px; color: white; }
         .score-number { font-family: 'Playfair Display', serif; font-size: 72px; font-weight: 600; }
         .score-label { font-size: 14px; text-transform: uppercase; letter-spacing: 0.1em; }
         .results h2 { text-align: center; font-size: 32px; margin-bottom: 20px; }
@@ -65,155 +59,260 @@
         <a href="/" class="logo">Happy Puppy Supply</a>
     </header>
     <div class="container">
+        <div class="dog-info" id="dogInfo" style="display: none;">
+            <span id="dogDetails"></span>
+            <a href="/" onclick="clearData()">Change Dog</a>
+        </div>
         <div class="intro" id="intro">
             <div class="intro-icon">🏃</div>
             <h1>Mobility & Joints Check</h1>
-            <p>"Joint health is one of the most overlooked aspects of canine wellness. By the time limping is obvious, significant joint degeneration has already occurred. Early intervention is key."</p>
-            <p style="font-size: 16px; margin-top: 20px;">Spot stiffness before it slows your dog down. Get joint-support supplement recommendations tailored to their age and activity level.</p>
-            <button class="btn" onclick="startAssessment()">Start Assessment</button>
+            <p>"Hip dysplasia and joint issues affect 1 in 5 dogs. Early intervention with proper supplements and care can add years of active, pain-free life to your companion."</p>
+            <div id="jointInfo" class="joint-warning" style="display: none;"></div>
+            <button class="btn" onclick="startAssessment()" id="startBtn" style="display: none;">Start Assessment</button>
+            <p id="noData" style="color: var(--fp-coral); margin-top: 20px;">Please select your dog's breed and age from the <a href="/" style="color: var(--fp-coral);">homepage</a> first.</p>
         </div>
         <div id="assessment" style="display: none;">
             <div class="progress-bar"><div class="progress-fill" id="progress" style="width: 0%"></div></div>
-            <div class="question-container active" data-question="1">
-                <div class="question">
-                    <div class="question-number">Question 1 of 5</div>
-                    <h2>How quickly does your dog get up from lying down?</h2>
-                    <div class="options">
-                        <label class="option"><input type="radio" name="q1" value="3" onchange="nextQuestion()"><span>Springs up immediately</span></label>
-                        <label class="option"><input type="radio" name="q1" value="2" onchange="nextQuestion()"><span>Gets up normally</span></label>
-                        <label class="option"><input type="radio" name="q1" value="1" onchange="nextQuestion()"><span>Slow to rise, needs to stretch first</span></label>
-                        <label class="option"><input type="radio" name="q1" value="0" onchange="nextQuestion()"><span>Struggles to get up, avoids lying down</span></label>
-                    </div>
-                </div>
-            </div>
-            <div class="question-container" data-question="2">
-                <div class="question">
-                    <div class="question-number">Question 2 of 5</div>
-                    <h2>Does your dog show reluctance to jump on furniture or stairs?</h2>
-                    <div class="options">
-                        <label class="option"><input type="radio" name="q2" value="3" onchange="nextQuestion()"><span>No issues with jumping</span></label>
-                        <label class="option"><input type="radio" name="q2" value="2" onchange="nextQuestion()"><span>Occasional hesitation</span></label>
-                        <label class="option"><input type="radio" name="q2" value="1" onchange="nextQuestion()"><span>Avoids high jumps</span></label>
-                        <label class="option"><input type="radio" name="q2" value="0" onchange="nextQuestion()"><span>Can't or won't jump anymore</span></label>
-                    </div>
-                </div>
-            </div>
-            <div class="question-container" data-question="3">
-                <div class="question">
-                    <div class="question-number">Question 3 of 5</div>
-                    <h2>How is your dog's gait when walking?</h2>
-                    <div class="options">
-                        <label class="option"><input type="radio" name="q3" value="3" onchange="nextQuestion()"><span>Smooth, even stride</span></label>
-                        <label class="option"><input type="radio" name="q3" value="2" onchange="nextQuestion()"><span>Slight stiffness after rest</span></label>
-                        <label class="option"><input type="radio" name="q3" value="1" onchange="nextQuestion()"><span>Noticeable limp or favoring one leg</span></label>
-                        <label class="option"><input type="radio" name="q3" value="0" onchange="nextQuestion()"><span>Significant limping or difficulty walking</span></label>
-                    </div>
-                </div>
-            </div>
-            <div class="question-container" data-question="4">
-                <div class="question">
-                    <div class="question-number">Question 4 of 5</div>
-                    <h2>Does your dog still enjoy walks and playtime?</h2>
-                    <div class="options">
-                        <label class="option"><input type="radio" name="q4" value="3" onchange="nextQuestion()"><span>Eager for exercise, tireless</span></label>
-                        <label class="option"><input type="radio" name="q4" value="2" onchange="nextQuestion()"><span>Enjoys moderate activity</span></label>
-                        <label class="option"><input type="radio" name="q4" value="1" onchange="nextQuestion()"><span>Prefers shorter walks</span></label>
-                        <label class="option"><input type="radio" name="q4" value="0" onchange="nextQuestion()"><span>Avoids walks, tires quickly</span></label>
-                    </div>
-                </div>
-            </div>
-            <div class="question-container" data-question="5">
-                <div class="question">
-                    <div class="question-number">Question 5 of 5</div>
-                    <h2>What is your dog's age?</h2>
-                    <div class="options">
-                        <label class="option"><input type="radio" name="q5" value="young" onchange="showResults()"><span>Under 3 years (prevention)</span></label>
-                        <label class="option"><input type="radio" name="q5" value="adult" onchange="showResults()"><span>3-7 years (maintenance)</span></label>
-                        <label class="option"><input type="radio" name="q5" value="senior" onchange="showResults()"><span>7+ years (support)</span></label>
-                    </div>
-                </div>
-            </div>
+            <div id="questionsContainer"></div>
         </div>
         <div class="results" id="results">
-            <div class="score-circle"><div class="score-number" id="score">85</div><div class="score-label">Mobility Score</div></div>
-            <h2 id="result-title">Great Mobility!</h2>
-            <p class="results-summary" id="result-summary">Your dog shows excellent joint health and movement.</p>
+            <div class="score-circle"><div class="score-number" id="score">75</div><div class="score-label">Mobility Score</div></div>
+            <h2 id="result-title">Excellent Mobility!</h2>
+            <p class="results-summary" id="result-summary">Your dog's joints are in great condition.</p>
             <div class="recommendations">
-                <h3>Recommended Joint Support Products</h3>
+                <h3>Joint Support for <span id="breedName"></span></h3>
                 <div id="product-recommendations"></div>
             </div>
-            <a href="/" class="btn" style="margin-top: 40px;">Take Another Assessment</a>
+            <a href="/" class="btn" style="margin-top: 40px;">Start New Assessment</a>
         </div>
     </div>
     <script>
-        let currentQuestion = 1;
-        const totalQuestions = 5;
+        const urlParams = new URLSearchParams(window.location.search);
+        let breed = urlParams.get('breed') || localStorage.getItem('dogBreed');
+        let age = parseFloat(urlParams.get('age')) || parseFloat(localStorage.getItem('dogAge'));
+        let breedData = JSON.parse(localStorage.getItem('breedData') || '{}');
+        
+        let currentQuestion = 0;
         let answers = {};
+        let questions = [];
+
+        function generateQuestions(breed, age, data) {
+            const qs = [];
+            const lifeStage = age < 2 ? 'puppy' : age > 7 ? 'senior' : 'adult';
+            const isHighRisk = data.jointRisk === 'high';
+            
+            // Stiffness after rest (key early sign)
+            qs.push({
+                category: 'stiffness',
+                question: `When your ${data.name} first wakes up or stands after resting, do they:`,
+                context: isHighRisk ? `⚠️ ${data.name}s are prone to joint issues. Stiffness after rest is often the first sign.` : 'Stiffness after rest can indicate developing joint issues.',
+                options: [
+                    { text: 'Move freely without hesitation', value: 3 },
+                    { text: 'Minor stiffness for a few seconds', value: 2 },
+                    { text: 'Noticeable limp or hesitation', value: 1 },
+                    { text: 'Severe difficulty getting up', value: 0 }
+                ]
+            });
+
+            // Exercise tolerance
+            qs.push({
+                category: 'exercise',
+                question: `How does your ${data.name} handle exercise?`,
+                context: isHighRisk ? `${data.name}s need careful exercise management to protect developing joints.` : 'Watch for reluctance to exercise or lagging behind.',
+                options: [
+                    { text: 'Eager to exercise, maintains energy', value: 3 },
+                    { text: 'Slower than before but still enjoys walks', value: 2 },
+                    { text: 'Reluctant to exercise or tires quickly', value: 1 },
+                    { text: 'Refuses exercise or limps afterward', value: 0 }
+                ]
+            });
+
+            // Climbing/jumping (especially for dachshunds and IVDD risk)
+            if (breed === 'dachshund' || breed === 'corgi') {
+                qs.push({
+                    category: 'climbing',
+                    question: `Does your ${data.name} jump on/off furniture or climb stairs?`,
+                    context: `⚠️ CRITICAL: ${data.name}s are prone to back injuries (IVDD). Jumping significantly increases risk.`,
+                    options: [
+                        { text: 'Never - use ramps or are carried', value: 3 },
+                        { text: 'Occasionally supervised', value: 2 },
+                        { text: 'Frequently jumps/climbs', value: 1 },
+                        { text: 'Constantly jumping on/off furniture', value: 0 }
+                    ]
+                });
+            } else {
+                qs.push({
+                    category: 'climbing',
+                    question: `Any difficulty with stairs or getting into the car?`,
+                    context: 'Difficulty with elevation changes often indicates joint pain.',
+                    options: [
+                        { text: 'No difficulty at all', value: 3 },
+                        { text: 'Slower but manages fine', value: 2 },
+                        { text: 'Hesitant or needs encouragement', value: 1 },
+                        { text: 'Cannot do stairs or needs help', value: 0 }
+                    ]
+                });
+            }
+
+            // Weight management (crucial for joints)
+            qs.push({
+                category: 'weight',
+                question: `How would you describe your ${data.name}'s weight?`,
+                context: isHighRisk ? `Weight management is CRITICAL for ${data.name}s - extra pounds put massive stress on their joints.` : 'Even a few extra pounds increases joint stress.',
+                options: [
+                    { text: 'Ideal weight - ribs felt easily', value: 3 },
+                    { text: 'Slightly overweight', value: 2 },
+                    { text: 'Clearly overweight', value: 1 },
+                    { text: 'Obese', value: 0 }
+                ]
+            });
+
+            // Current supplements
+            qs.push({
+                category: 'supplements',
+                question: `Is your ${data.name} currently taking joint supplements?`,
+                context: isHighRisk ? `Preventive joint supplements are recommended for ${data.name}s starting at age 2.` : 'Joint supplements can help prevent issues in at-risk breeds.',
+                options: [
+                    { text: 'Yes, glucosamine/chondroitin daily', value: 3 },
+                    { text: 'Occasionally or fish oil only', value: 2 },
+                    { text: 'Planning to start', value: 1 },
+                    { text: 'No supplements', value: 0 }
+                ]
+            });
+
+            // Lameness/limping
+            qs.push({
+                category: 'lameness',
+                question: `Have you noticed any limping or favoring a leg?`,
+                context: 'Any limping warrants veterinary attention, especially in young dogs.',
+                options: [
+                    { text: 'Never', value: 3 },
+                    { text: 'Rarely after vigorous exercise', value: 2 },
+                    { text: 'Occasionally during walks', value: 1 },
+                    { text: 'Frequent or persistent limping', value: 0 }
+                ]
+            });
+
+            // Sleep surface
+            qs.push({
+                category: 'bedding',
+                question: 'What does your dog sleep on?',
+                context: 'Hard surfaces worsen joint pain. Supportive bedding is especially important for at-risk breeds.',
+                options: [
+                    { text: 'Orthopedic or memory foam bed', value: 3 },
+                    { text: 'Cushioned dog bed', value: 2 },
+                    { text: 'Blanket or thin padding', value: 1 },
+                    { text: 'Hard floor', value: 0 }
+                ]
+            });
+
+            return qs;
+        }
+
+        function init() {
+            if (!breed || !age || !breedData.name) {
+                document.getElementById('startBtn').style.display = 'none';
+                document.getElementById('noData').style.display = 'block';
+                return;
+            }
+
+            document.getElementById('dogInfo').style.display = 'flex';
+            document.getElementById('dogDetails').textContent = `${breedData.name}, ${age} years old`;
+            document.getElementById('startBtn').style.display = 'inline-block';
+            document.getElementById('noData').style.display = 'none';
+
+            // Show joint risk warning
+            if (breedData.jointRisk === 'high') {
+                document.getElementById('jointInfo').style.display = 'block';
+                document.getElementById('jointInfo').innerHTML = `
+                    <strong>⚠️ High Joint Risk Breed</strong><br>
+                    ${breedData.name}s are prone to hip/elbow dysplasia and joint issues. 
+                    ${age < 2 ? 'Preventive care should start NOW.' : age > 7 ? 'Senior joint support is critical at this age.' : 'Early intervention can prevent severe issues.'}
+                `;
+            }
+
+            questions = generateQuestions(breed, age, breedData);
+            renderQuestions();
+        }
+
+        function renderQuestions() {
+            const container = document.getElementById('questionsContainer');
+            container.innerHTML = questions.map((q, i) => `
+                <div class="question-container ${i === 0 ? 'active' : ''}" data-question="${i}">
+                    <div class="question">
+                        <div class="question-number">Question ${i + 1} of ${questions.length}</div>
+                        <div class="question-context">${q.context}</div>
+                        <h2>${q.question}</h2>
+                        <div class="options">
+                            ${q.options.map((opt, j) => `
+                                <label class="option">
+                                    <input type="radio" name="q${i}" value="${opt.value}" onchange="${i === questions.length - 1 ? 'showResults()' : 'nextQuestion()'}">
+                                    <span>${opt.text}</span>
+                                </label>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
         function startAssessment() {
             document.getElementById('intro').style.display = 'none';
             document.getElementById('assessment').style.display = 'block';
             updateProgress();
         }
+
         function nextQuestion() {
             const current = document.querySelector(`.question-container[data-question="${currentQuestion}"]`);
             const selected = current.querySelector('input:checked');
             if (selected) {
-                answers[`q${currentQuestion}`] = selected.value;
+                answers[questions[currentQuestion].category] = parseInt(selected.value);
                 current.classList.remove('active');
                 currentQuestion++;
-                if (currentQuestion <= totalQuestions) {
+                if (currentQuestion < questions.length) {
                     const next = document.querySelector(`.question-container[data-question="${currentQuestion}"]`);
                     next.classList.add('active');
                     updateProgress();
                 }
             }
         }
+
         function updateProgress() {
-            const progress = ((currentQuestion - 1) / totalQuestions) * 100;
+            const progress = ((currentQuestion) / questions.length) * 100;
             document.getElementById('progress').style.width = progress + '%';
         }
+
         function showResults() {
-            const current = document.querySelector(`.question-container[data-question="${currentQuestion}"]`);
-            const selected = current.querySelector('input:checked');
-            if (selected) {
-                answers.q5 = selected.value;
+            nextQuestion();
+            
+            let total = 0;
+            let count = 0;
+            for (let cat in answers) {
+                total += answers[cat];
+                count++;
             }
-            let score = 0;
-            for (let i = 1; i <= 4; i++) {
-                score += parseInt(answers[`q${i}`] || 0);
-            }
-            score = Math.round((score / 12) * 100);
+            const score = Math.round((total / (count * 3)) * 100);
+            
             document.getElementById('assessment').style.display = 'none';
             document.getElementById('results').classList.add('show');
             document.getElementById('score').textContent = score;
-            let title, summary, products;
+            document.getElementById('breedName').textContent = breedData.name;
+
+            let title, summary;
             if (score >= 80) {
-                title = "Great Mobility!";
-                summary = "Excellent joint health! Keep your dog active with preventive joint supplements to maintain this mobility for years to come.";
-                products = [
-                    {name: "Wuffes Hip & Joint Chews", desc: "Preventive glucosamine support", price: "$32.99", emoji: "🦴", link: "https://www.happypuppysupply.com/products/wuffes-hip-joint-chews"},
-                    {name: "Pupflex+ Hip and Joint Supplement", desc: "Advanced mobility formula", price: "$29.99", emoji: "💊", link: "https://www.happypuppysupply.com/products/pupflex-hip-joint-supplement"},
-                    {name: "Smart Vitality Hip & Joint", desc: "Daily wellness maintenance", price: "$28.99", emoji: "✨", link: "https://www.happypuppysupply.com/products/smart-vitality-hip-joint-supplement"}
-                ];
+                title = `Excellent Joint Health! 🏃`;
+                summary = `Great job! Your ${breedData.name} has healthy joints. Continue preventive care to keep them active.`;
             } else if (score >= 60) {
-                title = "Good Mobility with Room for Support";
-                summary = "Your dog is doing well but showing early signs of joint stress. Targeted supplements can help maintain comfort and prevent progression.";
-                products = [
-                    {name: "Wuffes Hip & Joint Chews", desc: "Comprehensive joint support", price: "$32.99", emoji: "🦴", link: "https://www.happypuppysupply.com/products/wuffes-hip-joint-chews"},
-                    {name: "Veterinary Strength Healthy Cognition", desc: "Anti-inflammatory support", price: "$45.99", emoji: "🧠", link: "https://www.happypuppysupply.com/products/veterinary-strength-healthy-cognition"},
-                    {name: "Orthopedic Dog Beds", desc: "Joint-friendly sleeping support", price: "From $49.99", emoji: "🛏️", link: "https://www.happypuppysupply.com/collections/dog-beds-mats"}
-                ];
+                title = `Good Mobility with Room for Improvement`;
+                summary = `Your ${breedData.name} is mobile but could benefit from additional support. The recommendations below can help.`;
             } else {
-                title = "Joint Support Needed";
-                summary = "Your dog is experiencing mobility challenges. The right combination of supplements, comfortable bedding, and gentle exercise can significantly improve quality of life.";
-                products = [
-                    {name: "Wuffes Hip & Joint Chews", desc: "Maximum strength formula", price: "$32.99", emoji: "🦴", link: "https://www.happypuppysupply.com/products/wuffes-hip-joint-chews"},
-                    {name: "Memory Foam Orthopedic Bed", desc: "Pressure-relieving sleep surface", price: "$89.99", emoji: "🛏️", link: "https://www.happypuppysupply.com/collections/dog-beds-mats"},
-                    {name: "Veterinary Strength Healthy Cognition", desc: "Comprehensive senior support", price: "$45.99", emoji: "💊", link: "https://www.happypuppysupply.com/products/veterinary-strength-healthy-cognition"}
-                ];
+                title = `Joint Support Needed`;
+                summary = `Your ${breedData.name} is showing signs of joint issues. Please consult a veterinarian and consider the products below.`;
             }
             document.getElementById('result-title').textContent = title;
             document.getElementById('result-summary').textContent = summary;
+
+            const products = getProductRecommendations(breedData, answers, score);
             const productsHtml = products.map(p => `
                 <a href="${p.link}" class="product-card" target="_blank">
                     <div class="product-image">${p.emoji}</div>
@@ -224,9 +323,66 @@
                     </div>
                 </a>
             `).join('');
-            document.getElementById('product-recommendations').innerHTML = productsHtml + 
-                '<a href="https://www.happypuppysupply.com/collections/health-wellness" class="btn shop-btn" target="_blank">Shop All Joint Support Products</a>';
+            document.getElementById('product-recommendations').innerHTML = productsHtml +
+                '<a href="https://www.happypuppysupply.com/collections/health-wellness" class="btn shop-btn" target="_blank">Shop All Joint Products</a>';
         }
+
+        function getProductRecommendations(data, answers, score) {
+            const products = [];
+            const isBackRisk = breed === 'dachshund' || breed === 'corgi';
+            
+            // Core joint supplement for all, especially high-risk breeds
+            products.push({
+                name: "Wuffes Hip & Joint Chews",
+                desc: `Essential for ${data.name}s - glucosamine, chondroitin & MSM`,
+                price: "$32.99",
+                emoji: "🦴",
+                link: "https://www.happypuppysupply.com/products/wuffes-hip-joint-chews"
+            });
+
+            // Orthopedic bed (critical for seniors and high-risk breeds)
+            if (answers.bedding < 2 || age > 5 || data.jointRisk === 'high') {
+                products.push({
+                    name: "Orthopedic Memory Foam Bed",
+                    desc: isBackRisk ? "Essential back support for IVDD prevention" : "Joint pressure relief during rest",
+                    price: "$89.99",
+                    emoji: "🛏️",
+                    link: "https://www.happypuppysupply.com/collections/dog-beds-mats"
+                });
+            }
+
+            // Ramps for back-risk breeds
+            if (isBackRisk && answers.climbing < 2) {
+                products.push({
+                    name: "Pet Ramp for Furniture",
+                    desc: "Prevent back injuries from jumping",
+                    price: "$79.99",
+                    emoji: "📐",
+                    link: "https://www.happypuppysupply.com/collections/gates-containment"
+                });
+            }
+
+            // Senior support
+            if (age > 7 || score < 50) {
+                products.push({
+                    name: "Veterinary Strength Supplements",
+                    desc: "Maximum strength joint support",
+                    price: "$45.99",
+                    emoji: "💊",
+                    link: "https://www.happypuppysupply.com/products/veterinary-strength-healthy-cognition"
+                });
+            }
+
+            return products.slice(0, 3);
+        }
+
+        function clearData() {
+            localStorage.removeItem('dogBreed');
+            localStorage.removeItem('dogAge');
+            localStorage.removeItem('breedData');
+        }
+
+        init();
     </script>
 </body>
 </html>

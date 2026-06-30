@@ -7,479 +7,293 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --fp-cream: #FAF7F5;
-            --fp-white: #FFFFFF;
-            --fp-charcoal: #2D2D2D;
-            --fp-gray: #6B6B6B;
-            --fp-light: #F5F5F5;
-            --fp-blue: #7EC8E3;
-            --fp-coral: #FF8C69;
-            --fp-sage: #9CAF88;
-            --fp-blush: #F4E1E1;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background: var(--fp-cream);
-            color: var(--fp-charcoal);
-            line-height: 1.6;
-        }
-
-        h1, h2, h3, h4 {
-            font-family: 'Playfair Display', serif;
-            font-weight: 400;
-        }
-
-        .header {
-            background: var(--fp-white);
-            padding: 20px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid rgba(0,0,0,0.05);
-        }
-
-        .logo {
-            font-family: 'Playfair Display', serif;
-            font-size: 24px;
-            color: var(--fp-charcoal);
-            text-decoration: none;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 60px 20px;
-        }
-
-        .intro {
-            text-align: center;
-            margin-bottom: 60px;
-        }
-
-        .intro-icon {
-            font-size: 60px;
-            margin-bottom: 20px;
-        }
-
-        .intro h1 {
-            font-size: 42px;
-            margin-bottom: 20px;
-        }
-
-        .intro p {
-            color: var(--fp-gray);
-            font-size: 18px;
-            max-width: 600px;
-            margin: 0 auto 30px;
-        }
-
-        .progress-bar {
-            height: 4px;
-            background: var(--fp-light);
-            margin-bottom: 40px;
-            border-radius: 2px;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: var(--fp-blue);
-            border-radius: 2px;
-            transition: width 0.3s;
-        }
-
-        .question-container {
-            display: none;
-        }
-
-        .question-container.active {
-            display: block;
-        }
-
-        .question {
-            background: var(--fp-white);
-            padding: 40px;
-            margin-bottom: 20px;
-        }
-
-        .question-number {
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.15em;
-            color: var(--fp-gray);
-            margin-bottom: 10px;
-        }
-
-        .question h2 {
-            font-size: 24px;
-            margin-bottom: 30px;
-        }
-
-        .options {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .option {
-            display: flex;
-            align-items: center;
-            padding: 20px;
-            background: var(--fp-light);
-            border: 2px solid transparent;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .option:hover {
-            border-color: var(--fp-blue);
-        }
-
-        .option input {
-            margin-right: 15px;
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 18px 40px;
-            font-size: 13px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.15em;
-            text-decoration: none;
-            border: 2px solid transparent;
-            cursor: pointer;
-            transition: all 0.3s;
-            background: var(--fp-blue);
-            color: white;
-            border-color: var(--fp-blue);
-            margin-top: 20px;
-        }
-
-        .btn:hover {
-            background: transparent;
-            color: var(--fp-blue);
-        }
-
-        .results {
-            display: none;
-            background: var(--fp-white);
-            padding: 60px;
-        }
-
-        .results.show {
-            display: block;
-        }
-
-        .score-circle {
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--fp-coral), var(--fp-sage));
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 40px;
-            color: white;
-        }
-
-        .score-number {
-            font-family: 'Playfair Display', serif;
-            font-size: 72px;
-            font-weight: 600;
-        }
-
-        .score-label {
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-        }
-
-        .results h2 {
-            text-align: center;
-            font-size: 32px;
-            margin-bottom: 20px;
-        }
-
-        .results-summary {
-            text-align: center;
-            color: var(--fp-gray);
-            margin-bottom: 40px;
-            font-size: 18px;
-        }
-
-        .recommendations {
-            margin-top: 40px;
-        }
-
-        .recommendations h3 {
-            font-size: 24px;
-            margin-bottom: 30px;
-            text-align: center;
-        }
-
-        .product-card {
-            display: flex;
-            gap: 20px;
-            padding: 20px;
-            background: var(--fp-light);
-            margin-bottom: 20px;
-            text-decoration: none;
-            color: inherit;
-            transition: transform 0.3s;
-        }
-
-        .product-card:hover {
-            transform: translateX(10px);
-        }
-
-        .product-image {
-            width: 100px;
-            height: 100px;
-            background: var(--fp-white);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 40px;
-        }
-
-        .product-info h4 {
-            font-size: 18px;
-            margin-bottom: 8px;
-        }
-
-        .product-info p {
-            font-size: 14px;
-            color: var(--fp-gray);
-            margin-bottom: 8px;
-        }
-
-        .product-price {
-            font-weight: 600;
-            color: var(--fp-coral);
-        }
-
-        .shop-btn {
-            display: block;
-            width: 100%;
-            text-align: center;
-            margin-top: 30px;
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                padding: 40px 20px;
-            }
-            
-            .question, .results {
-                padding: 30px 20px;
-            }
-            
-            .product-card {
-                flex-direction: column;
-            }
-        }
+        :root { --fp-cream: #FAF7F5; --fp-white: #FFFFFF; --fp-charcoal: #2D2D2D; --fp-gray: #6B6B6B; --fp-light: #F5F5F5; --fp-blue: #7EC8E3; --fp-coral: #FF8C69; --fp-sage: #9CAF88; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: var(--fp-cream); color: var(--fp-charcoal); line-height: 1.6; }
+        h1, h2, h3, h4 { font-family: 'Playfair Display', serif; font-weight: 400; }
+        .header { background: var(--fp-white); padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(0,0,0,0.05); }
+        .logo { font-family: 'Playfair Display', serif; font-size: 24px; color: var(--fp-charcoal); text-decoration: none; }
+        .container { max-width: 800px; margin: 0 auto; padding: 60px 20px; }
+        .dog-info { background: var(--fp-sage); color: white; padding: 15px 25px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; }
+        .dog-info a { color: white; text-decoration: underline; font-size: 14px; }
+        .intro { text-align: center; margin-bottom: 60px; }
+        .intro-icon { font-size: 60px; margin-bottom: 20px; }
+        .intro h1 { font-size: 42px; margin-bottom: 20px; }
+        .intro p { color: var(--fp-gray); font-size: 18px; max-width: 600px; margin: 0 auto 30px; }
+        .coat-type { background: var(--fp-cream); padding: 20px; margin: 20px 0; text-align: center; }
+        .coat-type h3 { margin-bottom: 10px; }
+        .progress-bar { height: 4px; background: var(--fp-light); margin-bottom: 40px; border-radius: 2px; }
+        .progress-fill { height: 100%; background: var(--fp-blue); border-radius: 2px; transition: width 0.3s; }
+        .question-container { display: none; }
+        .question-container.active { display: block; }
+        .question { background: var(--fp-white); padding: 40px; margin-bottom: 20px; }
+        .question-number { font-size: 12px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--fp-gray); margin-bottom: 10px; }
+        .question h2 { font-size: 24px; margin-bottom: 30px; }
+        .question-context { background: var(--fp-cream); padding: 15px; margin-bottom: 20px; font-size: 14px; color: var(--fp-gray); }
+        .options { display: flex; flex-direction: column; gap: 12px; }
+        .option { display: flex; align-items: center; padding: 20px; background: var(--fp-light); border: 2px solid transparent; cursor: pointer; transition: all 0.3s; }
+        .option:hover { border-color: var(--fp-blue); }
+        .option input { margin-right: 15px; }
+        .btn { display: inline-block; padding: 18px 40px; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.15em; text-decoration: none; border: 2px solid transparent; cursor: pointer; transition: all 0.3s; background: var(--fp-blue); color: white; border-color: var(--fp-blue); margin-top: 20px; }
+        .btn:hover { background: transparent; color: var(--fp-blue); }
+        .results { display: none; background: var(--fp-white); padding: 60px; }
+        .results.show { display: block; }
+        .score-circle { width: 200px; height: 200px; border-radius: 50%; background: linear-gradient(135deg, var(--fp-coral), var(--fp-sage)); display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 0 auto 40px; color: white; }
+        .score-number { font-family: 'Playfair Display', serif; font-size: 72px; font-weight: 600; }
+        .score-label { font-size: 14px; text-transform: uppercase; letter-spacing: 0.1em; }
+        .results h2 { text-align: center; font-size: 32px; margin-bottom: 20px; }
+        .results-summary { text-align: center; color: var(--fp-gray); margin-bottom: 40px; font-size: 18px; }
+        .recommendations { margin-top: 40px; }
+        .recommendations h3 { font-size: 24px; margin-bottom: 30px; text-align: center; }
+        .product-card { display: flex; gap: 20px; padding: 20px; background: var(--fp-light); margin-bottom: 20px; text-decoration: none; color: inherit; transition: transform 0.3s; }
+        .product-card:hover { transform: translateX(10px); }
+        .product-image { width: 100px; height: 100px; background: var(--fp-white); display: flex; align-items: center; justify-content: center; font-size: 40px; }
+        .product-info h4 { font-size: 18px; margin-bottom: 8px; }
+        .product-info p { font-size: 14px; color: var(--fp-gray); margin-bottom: 8px; }
+        .product-price { font-weight: 600; color: var(--fp-coral); }
+        .shop-btn { display: block; width: 100%; text-align: center; margin-top: 30px; }
+        @media (max-width: 768px) { .container { padding: 40px 20px; } .question, .results { padding: 30px 20px; } .product-card { flex-direction: column; } }
     </style>
 </head>
 <body>
     <header class="header">
         <a href="/" class="logo">Happy Puppy Supply</a>
     </header>
-
     <div class="container">
+        <div class="dog-info" id="dogInfo" style="display: none;">
+            <span id="dogDetails"></span>
+            <a href="/" onclick="clearData()">Change Dog</a>
+        </div>
         <div class="intro" id="intro">
             <div class="intro-icon">✨</div>
             <h1>Skin & Coat Check</h1>
-            <p>"As a veterinary dermatology consultant, I see this daily: a dull coat is never 'just cosmetic.' It's an external report card for internal nutrition, immune balance, and inflammatory status."</p>
-            <p style="font-size: 16px; margin-top: 20px;">In 45 seconds, you'll know whether your dog is thriving or silently inflamed, with personalized grooming & supplement recommendations.</p>
-            <button class="btn" onclick="startAssessment()">Start Assessment</button>
+            <p>"The skin is the largest organ and often the first to show signs of allergies, nutritional deficiencies, or underlying health issues. Early detection leads to better outcomes."</p>
+            <div id="coatInfo" class="coat-type"></div>
+            <button class="btn" onclick="startAssessment()" id="startBtn" style="display: none;">Start Assessment</button>
+            <p id="noData" style="color: var(--fp-coral); margin-top: 20px;">Please select your dog's breed and age from the <a href="/" style="color: var(--fp-coral);">homepage</a> first.</p>
         </div>
-
         <div id="assessment" style="display: none;">
-            <div class="progress-bar">
-                <div class="progress-fill" id="progress" style="width: 0%"></div>
-            </div>
-
-            <div class="question-container active" data-question="1">
-                <div class="question">
-                    <div class="question-number">Question 1 of 6</div>
-                    <h2>How would you describe your dog's coat shine?</h2>
-                    <div class="options">
-                        <label class="option">
-                            <input type="radio" name="q1" value="3" onchange="nextQuestion()">
-                            <span>Very shiny and lustrous</span>
-                        </label>
-                        <label class="option">
-                            <input type="radio" name="q1" value="2" onchange="nextQuestion()">
-                            <span>Moderately shiny</span>
-                        </label>
-                        <label class="option">
-                            <input type="radio" name="q1" value="1" onchange="nextQuestion()">
-                            <span>Dull or matte appearance</span>
-                        </label>
-                        <label class="option">
-                            <input type="radio" name="q1" value="0" onchange="nextQuestion()">
-                            <span>Very dull with possible patches</span>
-                        </label>
-                    </div>
-                </div>
-            </div>
-
-            <div class="question-container" data-question="2">
-                <div class="question">
-                    <div class="question-number">Question 2 of 6</div>
-                    <h2>Does your dog scratch or itch frequently?</h2>
-                    <div class="options">
-                        <label class="option">
-                            <input type="radio" name="q2" value="3" onchange="nextQuestion()">
-                            <span>Rarely or never</span>
-                        </label>
-                        <label class="option">
-                            <input type="radio" name="q2" value="2" onchange="nextQuestion()">
-                            <span>Occasionally after being outside</span>
-                        </label>
-                        <label class="option">
-                            <input type="radio" name="q2" value="1" onchange="nextQuestion()">
-                            <span>Often throughout the day</span>
-                        </label>
-                        <label class="option">
-                            <input type="radio" name="q2" value="0" onchange="nextQuestion()">
-                            <span>Constantly, affecting sleep/behavior</span>
-                        </label>
-                    </div>
-                </div>
-            </div>
-
-            <div class="question-container" data-question="3">
-                <div class="question">
-                    <div class="question-number">Question 3 of 6</div>
-                    <h2>Do you notice any dandruff or dry skin flakes?</h2>
-                    <div class="options">
-                        <label class="option">
-                            <input type="radio" name="q3" value="3" onchange="nextQuestion()">
-                            <span>None at all</span>
-                        </label>
-                        <label class="option">
-                            <input type="radio" name="q3" value="2" onchange="nextQuestion()">
-                            <span>Minimal, only when brushing</span>
-                        </label>
-                        <label class="option">
-                            <input type="radio" name="q3" value="1" onchange="nextQuestion()">
-                            <span>Visible flakes on coat and bedding</span>
-                        </label>
-                        <label class="option">
-                            <input type="radio" name="q3" value="0" onchange="nextQuestion()">
-                            <span>Severe dandruff and dry patches</span>
-                        </label>
-                    </div>
-                </div>
-            </div>
-
-            <div class="question-container" data-question="4">
-                <div class="question">
-                    <div class="question-number">Question 4 of 6</div>
-                    <h2>Are there any hotspots, redness, or irritated areas?</h2>
-                    <div class="options">
-                        <label class="option">
-                            <input type="radio" name="q4" value="3" onchange="nextQuestion()">
-                            <span>No hotspots or redness</span>
-                        </label>
-                        <label class="option">
-                            <input type="radio" name="q4" value="2" onchange="nextQuestion()">
-                            <span>Rare minor irritation</span>
-                        </label>
-                        <label class="option">
-                            <input type="radio" name="q4" value="1" onchange="nextQuestion()">
-                            <span>Occasional hotspots that heal slowly</span>
-                        </label>
-                        <label class="option">
-                            <input type="radio" name="q4" value="0" onchange="nextQuestion()">
-                            <span>Current hotspots or chronic redness</span>
-                        </label>
-                    </div>
-                </div>
-            </div>
-
-            <div class="question-container" data-question="5">
-                <div class="question">
-                    <div class="question-number">Question 5 of 6</div>
-                    <h2>How is your dog's current diet?</h2>
-                    <div class="options">
-                        <label class="option">
-                            <input type="radio" name="q5" value="3" onchange="nextQuestion()">
-                            <span>Premium food with omega supplements</span>
-                        </label>
-                        <label class="option">
-                            <input type="radio" name="q5" value="2" onchange="nextQuestion()">
-                            <span>Good quality commercial food</span>
-                        </label>
-                        <label class="option">
-                            <input type="radio" name="q5" value="1" onchange="nextQuestion()">
-                            <span>Standard grocery store brand</span>
-                        </label>
-                        <label class="option">
-                            <input type="radio" name="q5" value="0" onchange="nextQuestion()">
-                            <span>Unsure or frequently changes</span>
-                        </label>
-                    </div>
-                </div>
-            </div>
-
-            <div class="question-container" data-question="6">
-                <div class="question">
-                    <div class="question-number">Question 6 of 6</div>
-                    <h2>Does your dog experience seasonal allergies?</h2>
-                    <div class="options">
-                        <label class="option">
-                            <input type="radio" name="q6" value="3" onchange="showResults()">
-                            <span>No seasonal issues</span>
-                        </label>
-                        <label class="option">
-                            <input type="radio" name="q6" value="2" onchange="showResults()">
-                            <span>Mild symptoms in spring/fall</span>
-                        </label>
-                        <label class="option">
-                            <input type="radio" name="q6" value="1" onchange="showResults()">
-                            <span>Moderate seasonal reactions</span>
-                        </label>
-                        <label class="option">
-                            <input type="radio" name="q6" value="0" onchange="showResults()">
-                            <span>Severe seasonal allergies</span>
-                        </label>
-                    </div>
-                </div>
-            </div>
+            <div class="progress-bar"><div class="progress-fill" id="progress" style="width: 0%"></div></div>
+            <div id="questionsContainer"></div>
         </div>
-
         <div class="results" id="results">
-            <div class="score-circle">
-                <div class="score-number" id="score">85</div>
-                <div class="score-label">Skin & Coat Score</div>
-            </div>
-            <h2 id="result-title">Beautiful Coat!</h2>
-            <p class="results-summary" id="result-summary">Your dog's skin and coat are in great condition with minimal concerns.</p>
-            
+            <div class="score-circle"><div class="score-number" id="score">75</div><div class="score-label">Coat Score</div></div>
+            <h2 id="result-title">Healthy Coat!</h2>
+            <p class="results-summary" id="result-summary">Your dog's coat is in good condition.</p>
             <div class="recommendations">
-                <h3>Recommended Products for Skin & Coat Health</h3>
+                <h3>Recommended Products for <span id="breedName"></span>'s Coat</h3>
                 <div id="product-recommendations"></div>
             </div>
-            
-            <a href="/" class="btn" style="margin-top: 40px;">Take Another Assessment</a>
+            <a href="/" class="btn" style="margin-top: 40px;">Start New Assessment</a>
         </div>
     </div>
-
     <script>
-        let currentQuestion = 1;
-        const totalQuestions = 6;
+        const urlParams = new URLSearchParams(window.location.search);
+        let breed = urlParams.get('breed') || localStorage.getItem('dogBreed');
+        let age = parseFloat(urlParams.get('age')) || parseFloat(localStorage.getItem('dogAge'));
+        let breedData = JSON.parse(localStorage.getItem('breedData') || '{}');
+        
+        let currentQuestion = 0;
         let answers = {};
+        let questions = [];
+
+        // Coat types by breed
+        const coatTypes = {
+            labrador: { type: 'double', length: 'short', shedding: 'heavy' },
+            german_shepherd: { type: 'double', length: 'medium', shedding: 'heavy' },
+            golden_retriever: { type: 'double', length: 'long', shedding: 'heavy' },
+            french_bulldog: { type: 'single', length: 'short', shedding: 'moderate' },
+            beagle: { type: 'double', length: 'short', shedding: 'moderate' },
+            poodle: { type: 'single', length: 'curly', shedding: 'minimal' },
+            bulldog: { type: 'single', length: 'short', shedding: 'moderate' },
+            yorkshire_terrier: { type: 'single', length: 'long', shedding: 'minimal' },
+            boxer: { type: 'single', length: 'short', shedding: 'moderate' },
+            dachshund: { type: 'varies', length: 'short/long', shedding: 'moderate' },
+            siberian_husky: { type: 'double', length: 'medium', shedding: 'heavy' },
+            chihuahua: { type: 'varies', length: 'short/long', shedding: 'minimal' },
+            shih_tzu: { type: 'single', length: 'long', shedding: 'minimal' },
+            pug: { type: 'double', length: 'short', shedding: 'heavy' },
+            rottweiler: { type: 'double', length: 'short', shedding: 'moderate' },
+            australian_shepherd: { type: 'double', length: 'medium', shedding: 'heavy' },
+            corgi: { type: 'double', length: 'medium', shedding: 'heavy' },
+            great_dane: { type: 'single', length: 'short', shedding: 'moderate' },
+            doberman: { type: 'single', length: 'short', shedding: 'moderate' },
+            border_collie: { type: 'double', length: 'medium', shedding: 'moderate' },
+            mixed: { type: 'varies', length: 'varies', shedding: 'varies' }
+        };
+
+        function getCoatDescription(coat) {
+            if (!coat) return 'various coat types';
+            let desc = [];
+            if (coat.length === 'curly') desc.push('curly coat');
+            else if (coat.length === 'varies') desc.push('varied coat length');
+            else desc.push(`${coat.length} coat`);
+            
+            if (coat.type === 'double') desc.push('double coat (requires special care)');
+            else if (coat.type === 'single') desc.push('single coat');
+            
+            return desc.join(', ');
+        }
+
+        function generateQuestions(breed, age, data) {
+            const qs = [];
+            const coat = coatTypes[breed] || coatTypes.mixed;
+            const lifeStage = age < 2 ? 'puppy' : age > 7 ? 'senior' : 'adult';
+            
+            // Coat shine and texture
+            qs.push({
+                category: 'shine',
+                question: `How would you describe your ${data.name}'s coat?`,
+                context: `A ${getCoatDescription(coat)} should have natural shine and good texture.`,
+                options: [
+                    { text: 'Shiny, soft, and healthy', value: 3 },
+                    { text: 'Mostly shiny with some dull areas', value: 2 },
+                    { text: 'Dull or dry in patches', value: 1 },
+                    { text: 'Very dull, brittle, or greasy', value: 0 }
+                ]
+            });
+
+            // Shedding assessment
+            if (coat.shedding === 'heavy') {
+                qs.push({
+                    category: 'shedding',
+                    question: `How is your ${data.name}'s shedding pattern?`,
+                    context: `${data.name}s are heavy shedders. Excessive shedding can indicate poor nutrition or health issues.`,
+                    options: [
+                        { text: 'Normal seasonal shedding', value: 3 },
+                        { text: 'Slightly more than usual', value: 2 },
+                        { text: 'Excessive year-round shedding', value: 1 },
+                        { text: 'Patchy hair loss or bald spots', value: 0 }
+                    ]
+                });
+            } else {
+                qs.push({
+                    category: 'shedding',
+                    question: `Any unusual hair loss in your ${data.name}?`,
+                    context: 'Any abnormal hair loss should be investigated.',
+                    options: [
+                        { text: 'No unusual hair loss', value: 3 },
+                        { text: 'Minor thinning in some areas', value: 2 },
+                        { text: 'Noticeable patches of hair loss', value: 1 },
+                        { text: 'Significant hair loss or bald spots', value: 0 }
+                    ]
+                });
+            }
+
+            // Skin condition (especially for allergy-prone breeds)
+            qs.push({
+                category: 'skin',
+                question: `What is your ${data.name}'s skin condition like?`,
+                context: data.skinRisk === 'high' ? `${data.name}s are prone to skin allergies and sensitivities.` : 'Check for redness, flaking, or irritation.',
+                options: [
+                    { text: 'Clear, no redness or flaking', value: 3 },
+                    { text: 'Minor dryness in some areas', value: 2 },
+                    { text: 'Redness, hot spots, or flaking', value: 1 },
+                    { text: 'Severe irritation, rashes, or infections', value: 0 }
+                ]
+            });
+
+            // Itching/scratching
+            qs.push({
+                category: 'itching',
+                question: `How often does your ${data.name} scratch or lick?`,
+                context: data.skinRisk === 'high' ? `Frequent scratching is common in ${data.name}s with allergies.` : 'Occasional scratching is normal; constant scratching is not.',
+                options: [
+                    { text: 'Rarely, just normal grooming', value: 3 },
+                    { text: 'Occasional scratching', value: 2 },
+                    { text: 'Frequent scratching or licking', value: 1 },
+                    { text: 'Constant scratching, causing skin damage', value: 0 }
+                ]
+            });
+
+            // Grooming routine
+            qs.push({
+                category: 'grooming',
+                question: `How often do you groom your ${data.name}?`,
+                context: coat.shedding === 'heavy' ? `${data.name}s need frequent brushing to manage shedding and skin health.` : 'Regular grooming promotes healthy skin and coat.',
+                options: [
+                    { text: 'Daily or every other day', value: 3 },
+                    { text: '2-3 times per week', value: 2 },
+                    { text: 'Weekly or less', value: 1 },
+                    { text: 'Rarely groomed', value: 0 }
+                ]
+            });
+
+            // Ear health (often related to skin/allergies)
+            if (data.skinRisk === 'high' || breed === 'labrador' || breed === 'golden_retriever') {
+                qs.push({
+                    category: 'ears',
+                    question: `How are your ${data.name}'s ears?`,
+                    context: 'Ear infections often accompany skin allergies in susceptible breeds.',
+                    options: [
+                        { text: 'Clean with no odor', value: 3 },
+                        { text: 'Slight wax buildup', value: 2 },
+                        { text: 'Redness, odor, or discharge', value: 1 },
+                        { text: 'Frequent infections or severe issues', value: 0 }
+                    ]
+                });
+            }
+
+            // Diet/Nutrition for coat
+            qs.push({
+                category: 'nutrition',
+                question: 'Does your dog get omega fatty acids or skin supplements?',
+                context: 'Essential fatty acids are crucial for coat health, especially in breeds prone to skin issues.',
+                options: [
+                    { text: 'Yes, daily supplement', value: 3 },
+                    { text: 'In their food or occasional treats', value: 2 },
+                    { text: 'Rarely or unsure', value: 1 },
+                    { text: 'No supplements', value: 0 }
+                ]
+            });
+
+            return qs;
+        }
+
+        function init() {
+            if (!breed || !age || !breedData.name) {
+                document.getElementById('startBtn').style.display = 'none';
+                document.getElementById('noData').style.display = 'block';
+                return;
+            }
+
+            document.getElementById('dogInfo').style.display = 'flex';
+            document.getElementById('dogDetails').textContent = `${breedData.name}, ${age} years old`;
+            document.getElementById('startBtn').style.display = 'inline-block';
+            document.getElementById('noData').style.display = 'none';
+
+            // Show coat info
+            const coat = coatTypes[breed] || coatTypes.mixed;
+            document.getElementById('coatInfo').innerHTML = `
+                <h3>Coat Profile: ${breedData.name}</h3>
+                <p>${getCoatDescription(coat)} | ${coat.shedding === 'heavy' ? 'Heavy shedder' : coat.shedding === 'minimal' ? 'Minimal shedding' : 'Moderate shedding'}</p>
+                ${breedData.skinRisk === 'high' ? '<p style="color: var(--fp-coral); margin-top: 10px;">⚠️ This breed is prone to skin allergies</p>' : ''}
+            `;
+
+            questions = generateQuestions(breed, age, breedData);
+            renderQuestions();
+        }
+
+        function renderQuestions() {
+            const container = document.getElementById('questionsContainer');
+            container.innerHTML = questions.map((q, i) => `
+                <div class="question-container ${i === 0 ? 'active' : ''}" data-question="${i}">
+                    <div class="question">
+                        <div class="question-number">Question ${i + 1} of ${questions.length}</div>
+                        <div class="question-context">${q.context}</div>
+                        <h2>${q.question}</h2>
+                        <div class="options">
+                            ${q.options.map((opt, j) => `
+                                <label class="option">
+                                    <input type="radio" name="q${i}" value="${opt.value}" onchange="${i === questions.length - 1 ? 'showResults()' : 'nextQuestion()'}">
+                                    <span>${opt.text}</span>
+                                </label>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
 
         function startAssessment() {
             document.getElementById('intro').style.display = 'none';
@@ -490,13 +304,11 @@
         function nextQuestion() {
             const current = document.querySelector(`.question-container[data-question="${currentQuestion}"]`);
             const selected = current.querySelector('input:checked');
-            
             if (selected) {
-                answers[`q${currentQuestion}`] = selected.value;
+                answers[questions[currentQuestion].category] = parseInt(selected.value);
                 current.classList.remove('active');
                 currentQuestion++;
-                
-                if (currentQuestion <= totalQuestions) {
+                if (currentQuestion < questions.length) {
                     const next = document.querySelector(`.question-container[data-question="${currentQuestion}"]`);
                     next.classList.add('active');
                     updateProgress();
@@ -505,58 +317,42 @@
         }
 
         function updateProgress() {
-            const progress = ((currentQuestion - 1) / totalQuestions) * 100;
+            const progress = ((currentQuestion) / questions.length) * 100;
             document.getElementById('progress').style.width = progress + '%';
         }
 
         function showResults() {
-            const current = document.querySelector(`.question-container[data-question="${currentQuestion}"]`);
-            const selected = current.querySelector('input:checked');
-            if (selected) {
-                answers.q6 = selected.value;
+            nextQuestion();
+            
+            let total = 0;
+            let count = 0;
+            for (let cat in answers) {
+                total += answers[cat];
+                count++;
             }
-
-            let score = 0;
-            for (let i = 1; i <= 6; i++) {
-                score += parseInt(answers[`q${i}`] || 0);
-            }
-            score = Math.round((score / 18) * 100);
-
+            const score = Math.round((total / (count * 3)) * 100);
+            
             document.getElementById('assessment').style.display = 'none';
             document.getElementById('results').classList.add('show');
             document.getElementById('score').textContent = score;
+            document.getElementById('breedName').textContent = breedData.name;
 
-            let title, summary, products;
-            
+            let title, summary;
             if (score >= 80) {
-                title = "Beautiful Coat!";
-                summary = "Your dog's skin and coat are in excellent condition! Maintain this healthy glow with premium grooming products and omega-rich supplements.";
-                products = [
-                    {name: "Wuffes Allergy & Itch Chews", desc: "Maintain healthy skin barrier", price: "$34.99", emoji: "✨", link: "https://www.happypuppysupply.com/products/wuffes-allergy-itch-chews"},
-                    {name: "Grooming & Care Collection", desc: "Premium brushes and shampoos", price: "From $19.99", emoji: "🧴", link: "https://www.happypuppysupply.com/collections/grooming-care"},
-                    {name: "100% Natural Bully Sticks", desc: "Clean, natural treats", price: "$24.99", emoji: "🦴", link: "https://www.happypuppysupply.com/products/100-natural-bully-sticks"}
-                ];
+                title = `Beautiful Coat on Your ${breedData.name}! ✨`;
+                summary = `Excellent skin and coat health! Your grooming routine and nutrition are working well for your ${breedData.name}.`;
             } else if (score >= 60) {
-                title = "Good Foundation, Room for Improvement";
-                summary = "Your dog's coat is healthy but could benefit from targeted nutrition. Omega supplements and quality grooming products can help achieve that show-quality shine.";
-                products = [
-                    {name: "Wuffes Allergy & Itch Chews", desc: "Omega fatty acids for skin health", price: "$34.99", emoji: "✨", link: "https://www.happypuppysupply.com/products/wuffes-allergy-itch-chews"},
-                    {name: "Probiotics for Dogs", desc: "Gut health reflects in coat quality", price: "$26.99", emoji: "🥩", link: "https://www.happypuppysupply.com/products/probiotics-for-dogs"},
-                    {name: "Smart Vitality Hip & Joint", desc: "Overall wellness support", price: "$28.99", emoji: "💊", link: "https://www.happypuppysupply.com/products/smart-vitality-hip-joint-supplement"}
-                ];
+                title = `Good Coat with Room for Improvement`;
+                summary = `Your ${breedData.name}'s coat is adequate but could benefit from targeted care.`;
             } else {
-                title = "Let's Transform That Coat";
-                summary = "Your dog's skin and coat need support. The good news: most coat issues improve dramatically within 4-8 weeks with the right nutrition and care routine.";
-                products = [
-                    {name: "Wuffes Allergy & Itch Chews", desc: "Advanced skin & coat formula", price: "$34.99", emoji: "✨", link: "https://www.happypuppysupply.com/products/wuffes-allergy-itch-chews"},
-                    {name: "Pupflex+ Hip and Joint", desc: "Anti-inflammatory support", price: "$29.99", emoji: "💊", link: "https://www.happypuppysupply.com/products/pupflex-hip-joint-supplement"},
-                    {name: "Veterinary Strength Healthy Cognition", desc: "Comprehensive nutritional support", price: "$45.99", emoji: "🧠", link: "https://www.happypuppysupply.com/products/veterinary-strength-healthy-cognition"}
-                ];
+                title = `Coat Health Needs Attention`;
+                summary = `Your ${breedData.name} is showing signs of skin or coat issues. The products below can help, but consider a veterinary check.`;
             }
-
             document.getElementById('result-title').textContent = title;
             document.getElementById('result-summary').textContent = summary;
 
+            // Product recommendations
+            const products = getProductRecommendations(breedData, answers, score);
             const productsHtml = products.map(p => `
                 <a href="${p.link}" class="product-card" target="_blank">
                     <div class="product-image">${p.emoji}</div>
@@ -567,10 +363,66 @@
                     </div>
                 </a>
             `).join('');
-            
-            document.getElementById('product-recommendations').innerHTML = productsHtml + 
-                '<a href="https://www.happypuppysupply.com/collections/health-wellness" class="btn shop-btn" target="_blank">Shop All Skin & Coat Products</a>';
+            document.getElementById('product-recommendations').innerHTML = productsHtml +
+                '<a href="https://www.happypuppysupply.com/collections/grooming-care" class="btn shop-btn" target="_blank">Shop All Grooming Products</a>';
         }
+
+        function getProductRecommendations(data, answers, score) {
+            const products = [];
+            const coat = coatTypes[breed] || coatTypes.mixed;
+            
+            // Core supplement for all
+            products.push({
+                name: "Wuffes Allergy & Itch Chews",
+                desc: `Skin and coat support for ${data.name}s`,
+                price: "$34.99",
+                emoji: "✨",
+                link: "https://www.happypuppysupply.com/products/wuffes-allergy-itch-chews"
+            });
+
+            // Probiotics for skin health
+            if (data.skinRisk === 'high' || answers.skin < 2 || answers.itching < 2) {
+                products.push({
+                    name: "Probiotics for Dogs",
+                    desc: "Gut health supports skin health from within",
+                    price: "$26.99",
+                    emoji: "🥩",
+                    link: "https://www.happypuppysupply.com/products/probiotics-for-dogs"
+                });
+            }
+
+            // Grooming tools for heavy shedders
+            if (coat.shedding === 'heavy' && answers.grooming < 2) {
+                products.push({
+                    name: "Professional Grooming Brush",
+                    desc: `Essential for managing ${data.name} shedding`,
+                    price: "$24.99",
+                    emoji: "🧴",
+                    link: "https://www.happypuppysupply.com/collections/grooming-care"
+                });
+            }
+
+            // Senior coat support
+            if (age > 7) {
+                products.push({
+                    name: "Veterinary Strength Supplements",
+                    desc: "Advanced skin and coat nutrition for seniors",
+                    price: "$45.99",
+                    emoji: "💊",
+                    link: "https://www.happypuppysupply.com/products/veterinary-strength-healthy-cognition"
+                });
+            }
+
+            return products.slice(0, 3);
+        }
+
+        function clearData() {
+            localStorage.removeItem('dogBreed');
+            localStorage.removeItem('dogAge');
+            localStorage.removeItem('breedData');
+        }
+
+        init();
     </script>
 </body>
 </html>

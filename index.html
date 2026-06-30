@@ -18,324 +18,523 @@
             --fp-sage: #9CAF88;
             --fp-blush: #F4E1E1;
         }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: var(--fp-cream); color: var(--fp-charcoal); line-height: 1.6; }
+        h1, h2, h3, h4 { font-family: 'Playfair Display', serif; font-weight: 400; }
+        .header { background: var(--fp-white); padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(0,0,0,0.05); }
+        .logo { font-family: 'Playfair Display', serif; font-size: 24px; color: var(--fp-charcoal); text-decoration: none; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 60px 20px; }
+        .hero { text-align: center; margin-bottom: 80px; }
+        .hero h1 { font-size: 48px; margin-bottom: 24px; }
+        .hero p { font-size: 20px; color: var(--fp-gray); max-width: 600px; margin: 0 auto 40px; }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        /* Breed & Age Selection Modal */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; }
+        .modal-overlay.active { display: flex; }
+        .modal { background: var(--fp-white); padding: 40px; max-width: 500px; width: 90%; }
+        .modal h2 { font-size: 28px; margin-bottom: 10px; }
+        .modal p { color: var(--fp-gray); margin-bottom: 30px; }
+        .form-group { margin-bottom: 25px; }
+        .form-group label { display: block; font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 10px; }
+        .form-group select, .form-group input { width: 100%; padding: 15px; font-size: 16px; border: 2px solid var(--fp-light); font-family: 'Inter', sans-serif; }
+        .form-group select:focus, .form-group input:focus { outline: none; border-color: var(--fp-blue); }
+        .breed-info { background: var(--fp-cream); padding: 15px; margin-top: 15px; font-size: 14px; color: var(--fp-gray); display: none; }
+        .breed-info.show { display: block; }
+        .btn { display: inline-block; padding: 18px 40px; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.15em; text-decoration: none; border: 2px solid transparent; cursor: pointer; transition: all 0.3s; background: var(--fp-blue); color: white; border-color: var(--fp-blue); width: 100%; }
+        .btn:hover { background: transparent; color: var(--fp-blue); }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background: var(--fp-cream);
-            color: var(--fp-charcoal);
-            line-height: 1.6;
-        }
-
-        h1, h2, h3, h4 {
-            font-family: 'Playfair Display', serif;
-            font-weight: 400;
-        }
-
-        /* Header */
-        .header {
-            background: var(--fp-white);
-            padding: 20px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid rgba(0,0,0,0.05);
-        }
-
-        .logo {
-            font-family: 'Playfair Display', serif;
-            font-size: 24px;
-            color: var(--fp-charcoal);
-            text-decoration: none;
-        }
-
-        .nav-links a {
-            margin-left: 30px;
-            text-decoration: none;
-            color: var(--fp-gray);
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            transition: color 0.3s;
-        }
-
-        .nav-links a:hover {
-            color: var(--fp-blue);
-        }
-
-        /* Hero */
-        .hero {
-            text-align: center;
-            padding: 100px 20px;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .hero-subtitle {
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.25em;
-            color: var(--fp-gray);
-            margin-bottom: 20px;
-        }
-
-        .hero h1 {
-            font-size: clamp(36px, 5vw, 56px);
-            line-height: 1.1;
-            margin-bottom: 24px;
-        }
-
-        .hero p {
-            font-size: 18px;
-            color: var(--fp-gray);
-            max-width: 600px;
-            margin: 0 auto 40px;
-        }
-
-        /* Assessment Grid */
-        .assessments {
-            padding: 60px 40px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: 60px;
-        }
-
-        .section-header h2 {
-            font-size: 36px;
-            margin-bottom: 12px;
-        }
-
-        .section-header p {
-            color: var(--fp-gray);
-        }
-
-        .assessment-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 30px;
-        }
-
-        .assessment-card {
-            background: var(--fp-white);
-            padding: 40px;
-            border: 1px solid rgba(0,0,0,0.05);
-            transition: transform 0.3s, box-shadow 0.3s;
-            text-decoration: none;
-            color: inherit;
-            display: block;
-        }
-
-        .assessment-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
-        }
-
-        .assessment-icon {
-            font-size: 40px;
-            margin-bottom: 20px;
-        }
-
-        .assessment-card h3 {
-            font-size: 22px;
-            margin-bottom: 12px;
-        }
-
-        .assessment-card p {
-            font-size: 14px;
-            color: var(--fp-gray);
-            margin-bottom: 20px;
-            line-height: 1.6;
-        }
-
-        .assessment-meta {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            font-size: 13px;
-            color: var(--fp-gray);
-        }
-
-        .assessment-cta {
-            margin-left: auto;
-            color: var(--fp-blue);
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            font-size: 12px;
-        }
-
-        /* Footer */
-        .footer {
-            background: var(--fp-charcoal);
-            color: white;
-            padding: 60px 40px;
-            text-align: center;
-        }
-
-        .footer p {
-            opacity: 0.7;
-            font-size: 14px;
-        }
-
-        .footer a {
-            color: var(--fp-blue);
-            text-decoration: none;
-        }
+        /* Assessment Cards */
+        .assessments { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px; margin-top: 60px; }
+        .assessment-card { background: var(--fp-white); padding: 40px; text-decoration: none; color: inherit; display: flex; flex-direction: column; transition: transform 0.3s; cursor: pointer; }
+        .assessment-card:hover { transform: translateY(-5px); }
+        .assessment-icon { font-size: 40px; margin-bottom: 20px; }
+        .assessment-card h3 { font-size: 20px; margin-bottom: 12px; }
+        .assessment-card p { font-size: 15px; color: var(--fp-gray); margin-bottom: 20px; flex-grow: 1; }
+        .assessment-meta { display: flex; gap: 20px; font-size: 13px; color: var(--fp-gray); text-transform: uppercase; letter-spacing: 0.05em; }
+        .assessment-arrow { margin-top: 20px; font-size: 20px; color: var(--fp-blue); }
 
         @media (max-width: 768px) {
-            .header {
-                padding: 15px 20px;
-            }
-            
-            .nav-links {
-                display: none;
-            }
-            
-            .hero {
-                padding: 60px 20px;
-            }
-            
-            .assessments {
-                padding: 40px 20px;
-            }
+            .hero h1 { font-size: 32px; }
+            .hero p { font-size: 18px; }
+            .assessments { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
     <header class="header">
         <a href="/" class="logo">Happy Puppy Supply</a>
-        <nav class="nav-links">
-            <a href="https://www.happypuppysupply.com">Shop</a>
-            <a href="/">Assessments</a>
-            <a href="https://www.happypuppysupply.com/pages/happy-puppy-club">Club</a>
-        </nav>
     </header>
 
-    <section class="hero">
-        <p class="hero-subtitle">Personalized Pet Wellness</p>
-        <h1>Know Your Dog Inside & Out</h1>
-        <p>Take our science-backed assessments to discover your dog's wellness needs and get personalized product recommendations from our curated collection.</p>
-    </section>
-
-    <section class="assessments">
-        <div class="section-header">
-            <h2>Choose an Assessment</h2>
-            <p>Each assessment takes 1-2 minutes and provides personalized recommendations</p>
+    <div class="container">
+        <div class="hero">
+            <h1>Know Your Dog Inside & Out</h1>
+            <p>Breed-specific health assessments powered by real veterinary research. Get personalized recommendations based on your dog's breed and age.</p>
         </div>
 
-        <div class="assessment-grid">
-            <a href="/wellness" class="assessment-card">
+        <div class="assessments">
+            <div class="assessment-card" onclick="openModal('wellness')">
                 <div class="assessment-icon">🦴</div>
                 <h3>Dog Wellness Check</h3>
-                <p>Comprehensive health screening covering mobility, skin, immunity & nutrition. Get a personalized wellness score and supplement recommendations.</p>
+                <p>Comprehensive health screening covering mobility, skin, immunity & nutrition tailored to your breed's specific needs.</p>
                 <div class="assessment-meta">
-                    <span>⏱ 60 sec</span>
-                    <span>7 questions</span>
-                    <span class="assessment-cta">Start →</span>
+                    <span>⏱ 2 min</span>
+                    <span>Breed-specific</span>
                 </div>
-            </a>
+                <div class="assessment-arrow">Start →</div>
+            </div>
 
-            <a href="/skin" class="assessment-card">
+            <div class="assessment-card" onclick="openModal('skin')">
                 <div class="assessment-icon">✨</div>
                 <h3>Skin & Coat Check</h3>
-                <p>Is that coat as glossy as it could be? Check for dandruff, itching, hotspots and get targeted grooming & supplement picks.</p>
+                <p>Assess coat quality, shedding, and skin health with breed-specific recommendations for your dog's coat type.</p>
                 <div class="assessment-meta">
-                    <span>⏱ 45 sec</span>
-                    <span>6 questions</span>
-                    <span class="assessment-cta">Start →</span>
+                    <span>⏱ 90 sec</span>
+                    <span>Breed-specific</span>
                 </div>
-            </a>
+                <div class="assessment-arrow">Start →</div>
+            </div>
 
-            <a href="/mobility" class="assessment-card">
+            <div class="assessment-card" onclick="openModal('mobility')">
                 <div class="assessment-icon">🏃</div>
                 <h3>Mobility & Joints Check</h3>
-                <p>Spot stiffness before it slows your dog down. Get joint-support supplement & exercise tips tailored to their age.</p>
+                <p>Critical for breeds prone to hip dysplasia and joint issues. Early intervention can add years of active life.</p>
                 <div class="assessment-meta">
-                    <span>⏱ 50 sec</span>
-                    <span>5 questions</span>
-                    <span class="assessment-cta">Start →</span>
+                    <span>⏱ 90 sec</span>
+                    <span>Breed-specific</span>
                 </div>
-            </a>
+                <div class="assessment-arrow">Start →</div>
+            </div>
 
-            <a href="/nutrition" class="assessment-card">
+            <div class="assessment-card" onclick="openModal('nutrition')">
                 <div class="assessment-icon">🥩</div>
                 <h3>Nutrition Check</h3>
-                <p>Is your dog getting everything they need? Evaluate diet, treats, and nutritional gaps. Get a tailored feeding plan.</p>
+                <p>Evaluate your dog's diet and get supplement recommendations based on breed size, age, and nutritional needs.</p>
                 <div class="assessment-meta">
-                    <span>⏱ 50 sec</span>
-                    <span>6 questions</span>
-                    <span class="assessment-cta">Start →</span>
+                    <span>⏱ 2 min</span>
+                    <span>Breed-specific</span>
                 </div>
-            </a>
+                <div class="assessment-arrow">Start →</div>
+            </div>
 
-            <a href="/dental" class="assessment-card">
+            <div class="assessment-card" onclick="openModal('dental')">
                 <div class="assessment-icon">🦷</div>
                 <h3>Dental Health Check</h3>
-                <p>Bad breath, tartar, or gum issues? Assess dental health and get chew & dental care product recommendations.</p>
-                <div class="assessment-meta">
-                    <span>⏱ 40 sec</span>
-                    <span>5 questions</span>
-                    <span class="assessment-cta">Start →</span>
-                </div>
-            </a>
-
-            <a href="/anxiety" class="assessment-card">
-                <div class="assessment-icon">🧘</div>
-                <h3>Calm & Stress Check</h3>
-                <p>Thunderstorms, separation, or general anxiety? Identify triggers and get calming product & routine recommendations.</p>
+                <p>By age three, most dogs show signs of dental disease. Small breeds especially need early dental care.</p>
                 <div class="assessment-meta">
                     <span>⏱ 60 sec</span>
-                    <span>7 questions</span>
-                    <span class="assessment-cta">Start →</span>
+                    <span>Breed-specific</span>
                 </div>
-            </a>
+                <div class="assessment-arrow">Start →</div>
+            </div>
 
-            <a href="/allergy" class="assessment-card">
+            <div class="assessment-card" onclick="openModal('anxiety')">
+                <div class="assessment-icon">💙</div>
+                <h3>Calm & Stress Check</h3>
+                <p>Identify anxiety triggers and get calming product recommendations. Some breeds are more prone to anxiety.</p>
+                <div class="assessment-meta">
+                    <span>⏱ 2 min</span>
+                    <span>Breed-specific</span>
+                </div>
+                <div class="assessment-arrow">Start →</div>
+            </div>
+
+            <div class="assessment-card" onclick="openModal('allergy')">
                 <div class="assessment-icon">🤧</div>
                 <h3>Allergy & Immunity Check</h3>
-                <p>Seasonal allergies, itchy skin, or frequent infections? Identify immune gaps and get targeted allergy & defense support.</p>
+                <p>Certain breeds are predisposed to allergies. Get targeted immune support recommendations.</p>
                 <div class="assessment-meta">
-                    <span>⏱ 55 sec</span>
-                    <span>6 questions</span>
-                    <span class="assessment-cta">Start →</span>
+                    <span>⏱ 90 sec</span>
+                    <span>Breed-specific</span>
                 </div>
-            </a>
+                <div class="assessment-arrow">Start →</div>
+            </div>
 
-            <a href="/happiness" class="assessment-card">
+            <div class="assessment-card" onclick="openModal('happiness')">
                 <div class="assessment-icon">📸</div>
                 <h3>Happy Puppy Score™</h3>
-                <p>Rate your dog's happiness across behavior, energy, and sociability. Get a happiness report and enrichment tips.</p>
+                <p>Rate your dog's happiness and get enrichment recommendations based on your breed's energy level and needs.</p>
                 <div class="assessment-meta">
-                    <span>⏱ 45 sec</span>
-                    <span>5 questions</span>
-                    <span class="assessment-cta">Start →</span>
+                    <span>⏱ 90 sec</span>
+                    <span>Breed-specific</span>
                 </div>
-            </a>
+                <div class="assessment-arrow">Start →</div>
+            </div>
 
-            <a href="/age" class="assessment-card">
+            <div class="assessment-card" onclick="openModal('age')">
                 <div class="assessment-icon">🎂</div>
                 <h3>Dog Age Calculator</h3>
-                <p>How old is your dog in human years? A science-backed calculator plus a quick senior or puppy wellness screen.</p>
+                <p>Convert dog years to human years (it's not 7:1!). Get life-stage appropriate care recommendations by breed.</p>
                 <div class="assessment-meta">
-                    <span>⏱ Instant</span>
-                    <span>Calculator + 4 questions</span>
-                    <span class="assessment-cta">Start →</span>
+                    <span>⏱ 30 sec</span>
+                    <span>Breed-specific</span>
                 </div>
-            </a>
+                <div class="assessment-arrow">Start →</div>
+            </div>
         </div>
-    </section>
+    </div>
 
-    <footer class="footer">
-        <p>© 2026 Happy Puppy Supply. All recommendations link to products at <a href="https://www.happypuppysupply.com">happypuppysupply.com</a></p>
-    </footer>
+    <!-- Breed & Age Selection Modal -->
+    <div class="modal-overlay" id="modal">
+        <div class="modal">
+            <h2>Tell Us About Your Dog</h2>
+            <p>We'll customize the assessment based on your dog's breed and age.</p>
+            
+            <div class="form-group">
+                <label for="breed">Dog Breed</label>
+                <select id="breed" onchange="updateBreedInfo()">
+                    <option value="">Select your dog's breed...</option>
+                    <optgroup label="Popular Breeds">
+                        <option value="labrador">Labrador Retriever</option>
+                        <option value="german_shepherd">German Shepherd</option>
+                        <option value="golden_retriever">Golden Retriever</option>
+                        <option value="french_bulldog">French Bulldog</option>
+                        <option value="beagle">Beagle</option>
+                        <option value="poodle">Poodle</option>
+                        <option value="bulldog">Bulldog</option>
+                        <option value="yorkshire_terrier">Yorkshire Terrier</option>
+                        <option value="boxer">Boxer</option>
+                        <option value="dachshund">Dachshund</option>
+                    </optgroup>
+                    <optgroup label="Other Breeds">
+                        <option value="siberian_husky">Siberian Husky</option>
+                        <option value="chihuahua">Chihuahua</option>
+                        <option value="shih_tzu">Shih Tzu</option>
+                        <option value="pug">Pug</option>
+                        <option value="rottweiler">Rottweiler</option>
+                        <option value="australian_shepherd">Australian Shepherd</option>
+                        <option value="corgi">Pembroke Welsh Corgi</option>
+                        <option value="great_dane">Great Dane</option>
+                        <option value="doberman">Doberman Pinscher</option>
+                        <option value="border_collie">Border Collie</option>
+                        <option value="mixed">Mixed Breed</option>
+                    </optgroup>
+                </select>
+                <div class="breed-info" id="breedInfo"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="age">Dog's Age (in years)</label>
+                <input type="number" id="age" min="0" max="25" step="0.5" placeholder="e.g., 3.5" onchange="updateAgeInfo()">
+            </div>
+
+            <button class="btn" id="startBtn" onclick="startAssessment()" disabled>Start Assessment</button>
+        </div>
+    </div>
+
+    <script>
+        // Breed health data
+        const breedData = {
+            labrador: {
+                name: "Labrador Retriever",
+                size: "large",
+                commonIssues: ["Hip/elbow dysplasia", "Obesity", "Ear infections", "Exercise-induced collapse"],
+                jointRisk: "high",
+                skinRisk: "medium",
+                obesityRisk: "high",
+                dentalRisk: "low",
+                anxietyRisk: "low",
+                allergyRisk: "medium",
+                energyLevel: "high"
+            },
+            german_shepherd: {
+                name: "German Shepherd",
+                size: "large",
+                commonIssues: ["Hip/elbow dysplasia", "Bloat", "Degenerative myelopathy", "Pancreatic insufficiency"],
+                jointRisk: "high",
+                skinRisk: "high",
+                obesityRisk: "medium",
+                dentalRisk: "medium",
+                anxietyRisk: "medium",
+                allergyRisk: "high",
+                energyLevel: "high"
+            },
+            golden_retriever: {
+                name: "Golden Retriever",
+                size: "large",
+                commonIssues: ["Hip/elbow dysplasia", "Cancer", "Skin allergies", "Heart disease"],
+                jointRisk: "high",
+                skinRisk: "high",
+                obesityRisk: "high",
+                dentalRisk: "medium",
+                anxietyRisk: "low",
+                allergyRisk: "high",
+                energyLevel: "medium"
+            },
+            french_bulldog: {
+                name: "French Bulldog",
+                size: "small",
+                commonIssues: ["Brachycephalic syndrome", "Skin allergies", "Spinal issues", "Heat sensitivity"],
+                jointRisk: "medium",
+                skinRisk: "high",
+                obesityRisk: "high",
+                dentalRisk: "medium",
+                anxietyRisk: "medium",
+                allergyRisk: "high",
+                energyLevel: "low"
+            },
+            beagle: {
+                name: "Beagle",
+                size: "medium",
+                commonIssues: ["Obesity", "Ear infections", "Epilepsy", "Disc disease"],
+                jointRisk: "medium",
+                skinRisk: "medium",
+                obesityRisk: "high",
+                dentalRisk: "medium",
+                anxietyRisk: "high",
+                allergyRisk: "medium",
+                energyLevel: "high"
+            },
+            poodle: {
+                name: "Poodle",
+                size: "varies",
+                commonIssues: ["Addison's disease", "Hip dysplasia", "Bloat", "Sebaceous adenitis"],
+                jointRisk: "medium",
+                skinRisk: "medium",
+                obesityRisk: "low",
+                dentalRisk: "high",
+                anxietyRisk: "medium",
+                allergyRisk: "medium",
+                energyLevel: "high"
+            },
+            bulldog: {
+                name: "Bulldog",
+                size: "medium",
+                commonIssues: ["Brachycephalic syndrome", "Skin infections", "Hip dysplasia", "Breathing issues"],
+                jointRisk: "high",
+                skinRisk: "high",
+                obesityRisk: "high",
+                dentalRisk: "medium",
+                anxietyRisk: "low",
+                allergyRisk: "high",
+                energyLevel: "low"
+            },
+            yorkshire_terrier: {
+                name: "Yorkshire Terrier",
+                size: "small",
+                commonIssues: ["Dental disease", "Patellar luxation", "Tracheal collapse", "Liver shunt"],
+                jointRisk: "medium",
+                skinRisk: "medium",
+                obesityRisk: "low",
+                dentalRisk: "high",
+                anxietyRisk: "high",
+                allergyRisk: "medium",
+                energyLevel: "medium"
+            },
+            boxer: {
+                name: "Boxer",
+                size: "large",
+                commonIssues: ["Cancer", "Heart disease", "Hip dysplasia", "Bloat"],
+                jointRisk: "medium",
+                skinRisk: "medium",
+                obesityRisk: "medium",
+                dentalRisk: "medium",
+                anxietyRisk: "high",
+                allergyRisk: "medium",
+                energyLevel: "high"
+            },
+            dachshund: {
+                name: "Dachshund",
+                size: "small",
+                commonIssues: ["IVDD (back problems)", "Obesity", "Dental disease", "Patellar luxation"],
+                jointRisk: "high",
+                skinRisk: "medium",
+                obesityRisk: "high",
+                dentalRisk: "high",
+                anxietyRisk: "medium",
+                allergyRisk: "low",
+                energyLevel: "medium"
+            },
+            siberian_husky: {
+                name: "Siberian Husky",
+                size: "medium",
+                commonIssues: ["Eye issues", "Hip dysplasia", "Hypothyroidism", "Zinc deficiency"],
+                jointRisk: "medium",
+                skinRisk: "medium",
+                obesityRisk: "low",
+                dentalRisk: "medium",
+                anxietyRisk: "high",
+                allergyRisk: "medium",
+                energyLevel: "very_high"
+            },
+            chihuahua: {
+                name: "Chihuahua",
+                size: "small",
+                commonIssues: ["Dental disease", "Patellar luxation", "Heart problems", "Hypoglycemia"],
+                jointRisk: "medium",
+                skinRisk: "low",
+                obesityRisk: "low",
+                dentalRisk: "high",
+                anxietyRisk: "high",
+                allergyRisk: "low",
+                energyLevel: "medium"
+            },
+            shih_tzu: {
+                name: "Shih Tzu",
+                size: "small",
+                commonIssues: ["Dental disease", "Eye problems", "Brachycephalic syndrome", "Kidney disease"],
+                jointRisk: "medium",
+                skinRisk: "medium",
+                obesityRisk: "medium",
+                dentalRisk: "high",
+                anxietyRisk: "medium",
+                allergyRisk: "medium",
+                energyLevel: "low"
+            },
+            pug: {
+                name: "Pug",
+                size: "small",
+                commonIssues: ["Brachycephalic syndrome", "Eye problems", "Skin fold infections", "Obesity"],
+                jointRisk: "medium",
+                skinRisk: "high",
+                obesityRisk: "high",
+                dentalRisk: "medium",
+                anxietyRisk: "medium",
+                allergyRisk: "medium",
+                energyLevel: "low"
+            },
+            rottweiler: {
+                name: "Rottweiler",
+                size: "large",
+                commonIssues: ["Hip/elbow dysplasia", "Cancer", "Heart disease", "Bloat"],
+                jointRisk: "high",
+                skinRisk: "medium",
+                obesityRisk: "medium",
+                dentalRisk: "medium",
+                anxietyRisk: "low",
+                allergyRisk: "medium",
+                energyLevel: "medium"
+            },
+            australian_shepherd: {
+                name: "Australian Shepherd",
+                size: "medium",
+                commonIssues: ["Hip dysplasia", "Eye issues", "Epilepsy", "MDR1 drug sensitivity"],
+                jointRisk: "medium",
+                skinRisk: "medium",
+                obesityRisk: "low",
+                dentalRisk: "medium",
+                anxietyRisk: "medium",
+                allergyRisk: "low",
+                energyLevel: "very_high"
+            },
+            corgi: {
+                name: "Pembroke Welsh Corgi",
+                size: "medium",
+                commonIssues: ["IVDD (back problems)", "Hip dysplasia", "Obesity", "Degenerative myelopathy"],
+                jointRisk: "high",
+                skinRisk: "medium",
+                obesityRisk: "high",
+                dentalRisk: "medium",
+                anxietyRisk: "medium",
+                allergyRisk: "low",
+                energyLevel: "high"
+            },
+            great_dane: {
+                name: "Great Dane",
+                size: "giant",
+                commonIssues: ["Bloat", "Hip dysplasia", "Heart disease", "Wobbler syndrome"],
+                jointRisk: "high",
+                skinRisk: "low",
+                obesityRisk: "low",
+                dentalRisk: "medium",
+                anxietyRisk: "medium",
+                allergyRisk: "low",
+                energyLevel: "medium"
+            },
+            doberman: {
+                name: "Doberman Pinscher",
+                size: "large",
+                commonIssues: ["Dilated cardiomyopathy", "Von Willebrand's disease", "Hip dysplasia", "Wobbler syndrome"],
+                jointRisk: "medium",
+                skinRisk: "medium",
+                obesityRisk: "low",
+                dentalRisk: "medium",
+                anxietyRisk: "medium",
+                allergyRisk: "medium",
+                energyLevel: "high"
+            },
+            border_collie: {
+                name: "Border Collie",
+                size: "medium",
+                commonIssues: ["Hip dysplasia", "Epilepsy", "Collie eye anomaly", "MDR1 drug sensitivity"],
+                jointRisk: "medium",
+                skinRisk: "medium",
+                obesityRisk: "low",
+                dentalRisk: "medium",
+                anxietyRisk: "high",
+                allergyRisk: "low",
+                energyLevel: "very_high"
+            },
+            mixed: {
+                name: "Mixed Breed",
+                size: "varies",
+                commonIssues: ["Various - depends on dominant breeds", "Generally healthier due to hybrid vigor"],
+                jointRisk: "medium",
+                skinRisk: "medium",
+                obesityRisk: "medium",
+                dentalRisk: "medium",
+                anxietyRisk: "medium",
+                allergyRisk: "medium",
+                energyLevel: "medium"
+            }
+        };
+
+        let currentAssessment = '';
+
+        function openModal(assessment) {
+            currentAssessment = assessment;
+            document.getElementById('modal').classList.add('active');
+            document.getElementById('breed').value = '';
+            document.getElementById('age').value = '';
+            document.getElementById('breedInfo').classList.remove('show');
+            document.getElementById('startBtn').disabled = true;
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.remove('active');
+        }
+
+        function updateBreedInfo() {
+            const breed = document.getElementById('breed').value;
+            const infoDiv = document.getElementById('breedInfo');
+            
+            if (breed && breedData[breed]) {
+                const data = breedData[breed];
+                infoDiv.innerHTML = `<strong>${data.name}</strong><br>Common issues: ${data.commonIssues.join(', ')}`;
+                infoDiv.classList.add('show');
+            } else {
+                infoDiv.classList.remove('show');
+            }
+            checkFormValid();
+        }
+
+        function updateAgeInfo() {
+            checkFormValid();
+        }
+
+        function checkFormValid() {
+            const breed = document.getElementById('breed').value;
+            const age = document.getElementById('age').value;
+            document.getElementById('startBtn').disabled = !(breed && age);
+        }
+
+        function startAssessment() {
+            const breed = document.getElementById('breed').value;
+            const age = document.getElementById('age').value;
+            
+            // Save to localStorage
+            localStorage.setItem('dogBreed', breed);
+            localStorage.setItem('dogAge', age);
+            localStorage.setItem('breedData', JSON.stringify(breedData[breed]));
+            
+            // Navigate to assessment
+            window.location.href = `/${currentAssessment}.html?breed=${breed}&age=${age}`;
+        }
+
+        // Close modal on overlay click
+        document.getElementById('modal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+    </script>
 </body>
 </html>

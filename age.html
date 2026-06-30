@@ -7,35 +7,29 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --fp-cream: #FAF7F5; --fp-white: #FFFFFF; --fp-charcoal: #2D2D2D;
-            --fp-gray: #6B6B6B; --fp-light: #F5F5F5; --fp-blue: #7EC8E3;
-            --fp-coral: #FF8C69; --fp-sage: #9CAF88; --fp-blush: #F4E1E1;
-        }
+        :root { --fp-cream: #FAF7F5; --fp-white: #FFFFFF; --fp-charcoal: #2D2D2D; --fp-gray: #6B6B6B; --fp-light: #F5F5F5; --fp-blue: #7EC8E3; --fp-coral: #FF8C69; --fp-sage: #9CAF88; }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Inter', sans-serif; background: var(--fp-cream); color: var(--fp-charcoal); line-height: 1.6; }
         h1, h2, h3, h4 { font-family: 'Playfair Display', serif; font-weight: 400; }
         .header { background: var(--fp-white); padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(0,0,0,0.05); }
         .logo { font-family: 'Playfair Display', serif; font-size: 24px; color: var(--fp-charcoal); text-decoration: none; }
         .container { max-width: 800px; margin: 0 auto; padding: 60px 20px; }
+        .dog-info { background: var(--fp-sage); color: white; padding: 15px 25px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; }
+        .dog-info a { color: white; text-decoration: underline; font-size: 14px; }
         .intro { text-align: center; margin-bottom: 60px; }
         .intro-icon { font-size: 60px; margin-bottom: 20px; }
         .intro h1 { font-size: 42px; margin-bottom: 20px; }
         .intro p { color: var(--fp-gray); font-size: 18px; max-width: 600px; margin: 0 auto 30px; }
-        .calculator { background: var(--fp-white); padding: 40px; margin-bottom: 40px; }
-        .form-group { margin-bottom: 30px; }
-        .form-group label { display: block; font-size: 14px; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 10px; color: var(--fp-gray); }
-        .form-group input, .form-group select { width: 100%; padding: 15px; border: 2px solid var(--fp-light); font-size: 16px; font-family: inherit; }
-        .form-group input:focus, .form-group select:focus { outline: none; border-color: var(--fp-blue); }
-        .btn { display: inline-block; padding: 18px 40px; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.15em; text-decoration: none; border: 2px solid transparent; cursor: pointer; transition: all 0.3s; background: var(--fp-blue); color: white; border-color: var(--fp-blue); }
+        .age-display { background: var(--fp-white); padding: 40px; margin: 30px 0; text-align: center; }
+        .age-display h2 { font-size: 48px; margin-bottom: 10px; }
+        .age-display p { color: var(--fp-gray); }
+        .life-stage { background: var(--fp-cream); padding: 20px; margin: 20px 0; }
+        .life-stage h3 { margin-bottom: 10px; }
+        .btn { display: inline-block; padding: 18px 40px; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.15em; text-decoration: none; border: 2px solid transparent; cursor: pointer; transition: all 0.3s; background: var(--fp-blue); color: white; border-color: var(--fp-blue); margin-top: 20px; }
         .btn:hover { background: transparent; color: var(--fp-blue); }
-        .results { display: none; background: var(--fp-white); padding: 60px; text-align: center; }
+        .results { display: none; background: var(--fp-white); padding: 60px; }
         .results.show { display: block; }
-        .age-display { font-family: 'Playfair Display', serif; font-size: 72px; color: var(--fp-blue); margin: 20px 0; }
-        .age-label { font-size: 14px; text-transform: uppercase; letter-spacing: 0.2em; color: var(--fp-gray); }
-        .life-stage { background: var(--fp-light); padding: 30px; margin: 40px 0; }
-        .life-stage h3 { font-size: 24px; margin-bottom: 10px; }
-        .recommendations { margin-top: 40px; text-align: left; }
+        .recommendations { margin-top: 40px; }
         .recommendations h3 { font-size: 24px; margin-bottom: 30px; text-align: center; }
         .product-card { display: flex; gap: 20px; padding: 20px; background: var(--fp-light); margin-bottom: 20px; text-decoration: none; color: inherit; transition: transform 0.3s; }
         .product-card:hover { transform: translateX(10px); }
@@ -43,7 +37,12 @@
         .product-info h4 { font-size: 18px; margin-bottom: 8px; }
         .product-info p { font-size: 14px; color: var(--fp-gray); margin-bottom: 8px; }
         .product-price { font-weight: 600; color: var(--fp-coral); }
-        @media (max-width: 768px) { .container { padding: 40px 20px; } .calculator, .results { padding: 30px 20px; } .product-card { flex-direction: column; } }
+        .care-tips { background: var(--fp-cream); padding: 30px; margin: 30px 0; }
+        .care-tips h3 { margin-bottom: 20px; }
+        .care-tips ul { list-style: none; padding: 0; }
+        .care-tips li { padding: 10px 0; padding-left: 30px; position: relative; }
+        .care-tips li:before { content: "✓"; position: absolute; left: 0; color: var(--fp-sage); font-weight: bold; }
+        @media (max-width: 768px) { .container { padding: 40px 20px; } .results { padding: 30px 20px; } .product-card { flex-direction: column; } }
     </style>
 </head>
 <body>
@@ -51,107 +50,118 @@
         <a href="/" class="logo">Happy Puppy Supply</a>
     </header>
     <div class="container">
-        <div class="intro">
+        <div class="dog-info" id="dogInfo" style="display: none;">
+            <span id="dogDetails"></span>
+            <a href="/" onclick="clearData()">Change Dog</a>
+        </div>
+        <div class="intro" id="intro">
             <div class="intro-icon">🎂</div>
             <h1>Dog Age Calculator</h1>
-            <p>Discover your dog's age in human years and get age-appropriate wellness recommendations. Our science-backed calculator accounts for breed size and life stage.</p>
-        </div>
-        <div class="calculator">
-            <div class="form-group">
-                <label>Dog's Age (in years)</label>
-                <input type="number" id="dogAge" min="0" max="30" step="0.5" placeholder="e.g., 3">
-            </div>
-            <div class="form-group">
-                <label>Dog's Size</label>
-                <select id="dogSize">
-                    <option value="">Select size...</option>
-                    <option value="small">Small (under 25 lbs)</option>
-                    <option value="medium">Medium (25-60 lbs)</option>
-                    <option value="large">Large (60-100 lbs)</option>
-                    <option value="giant">Giant (over 100 lbs)</option>
-                </select>
-            </div>
-            <button class="btn" onclick="calculateAge()" style="width: 100%;">Calculate Human Age</button>
+            <p>"It's not as simple as '7 dog years = 1 human year.' Larger breeds age faster, and different life stages require different care. Calculate your dog's true age and get personalized recommendations."</p>
+            <button class="btn" onclick="calculateAge()" id="calcBtn" style="display: none;">Calculate Age</button>
+            <p id="noData" style="color: var(--fp-coral); margin-top: 20px;">Please select your dog's breed and age from the <a href="/" style="color: var(--fp-coral);">homepage</a> first.</p>
         </div>
         <div class="results" id="results">
-            <div class="age-label">Your dog is</div>
-            <div class="age-display" id="humanAge">28</div>
-            <div class="age-label">years old in human years</div>
-            <div class="life-stage" id="lifeStage">
-                <h3>Adult (Prime Years)</h3>
-                <p>Your dog is in their physical and mental prime. Focus on maintaining health through proper nutrition, regular exercise, and preventive care.</p>
+            <div class="age-display">
+                <h2 id="humanAge">0</h2>
+                <p>Human Equivalent Years</p>
+                <div id="lifeStage" class="life-stage"></div>
             </div>
+            
+            <div class="care-tips">
+                <h3>Care Recommendations for <span id="breedName"></span></h3>
+                <ul id="careList"></ul>
+            </div>
+            
             <div class="recommendations">
-                <h3>Age-Appropriate Recommendations</h3>
+                <h3>Recommended Products for This Life Stage</h3>
                 <div id="product-recommendations"></div>
             </div>
-            <a href="/" class="btn" style="margin-top: 40px;">Take Another Assessment</a>
+            
+            <a href="/" class="btn" style="margin-top: 40px;">Calculate Another Dog</a>
         </div>
     </div>
     <script>
-        function calculateAge() {
-            const age = parseFloat(document.getElementById('dogAge').value);
-            const size = document.getElementById('dogSize').value;
-            if (!age || !size) {
-                alert('Please enter your dog\'s age and size');
+        const urlParams = new URLSearchParams(window.location.search);
+        let breed = urlParams.get('breed') || localStorage.getItem('dogBreed');
+        let age = parseFloat(urlParams.get('age')) || parseFloat(localStorage.getItem('dogAge'));
+        let breedData = JSON.parse(localStorage.getItem('breedData') || '{}');
+
+        // Age multipliers by size
+        const ageMultipliers = {
+            small: { first: 12, rest: 5 },      // Small dogs age slower after year 1
+            medium: { first: 12, rest: 6 },
+            large: { first: 12, rest: 7 },
+            giant: { first: 12, rest: 8 }       // Giant dogs age fastest
+        };
+
+        function calculateHumanAge(dogAge, size) {
+            const mult = ageMultipliers[size] || ageMultipliers.medium;
+            if (dogAge <= 1) {
+                return Math.round(dogAge * mult.first);
+            } else {
+                return mult.first + Math.round((dogAge - 1) * mult.rest);
+            }
+        }
+
+        function getLifeStage(dogAge, size) {
+            const thresholds = {
+                small: { puppy: 1, adult: 7, senior: 11 },
+                medium: { puppy: 1, adult: 6, senior: 10 },
+                large: { puppy: 1.5, adult: 5, senior: 8 },
+                giant: { puppy: 2, adult: 4, senior: 6 }
+            };
+            const t = thresholds[size] || thresholds.medium;
+            
+            if (dogAge < t.puppy) return 'puppy';
+            if (dogAge < t.adult) return 'young_adult';
+            if (dogAge < t.senior) return 'adult';
+            return 'senior';
+        }
+
+        function init() {
+            if (!breed || !age || !breedData.name) {
+                document.getElementById('calcBtn').style.display = 'none';
+                document.getElementById('noData').style.display = 'block';
                 return;
             }
-            let humanAge;
-            if (age <= 2) {
-                humanAge = Math.round(age * 10.5);
-            } else {
-                const multiplier = { small: 4, medium: 5, large: 6, giant: 7 }[size];
-                humanAge = 21 + Math.round((age - 2) * multiplier);
-            }
+
+            document.getElementById('dogInfo').style.display = 'flex';
+            document.getElementById('dogDetails').textContent = `${breedData.name}, ${age} years old`;
+            document.getElementById('calcBtn').style.display = 'inline-block';
+            document.getElementById('noData').style.display = 'none';
+        }
+
+        function calculateAge() {
+            document.getElementById('intro').style.display = 'none';
+            document.getElementById('results').classList.add('show');
+            
+            const humanAge = calculateHumanAge(age, breedData.size);
+            const lifeStage = getLifeStage(age, breedData.size);
+            
             document.getElementById('humanAge').textContent = humanAge;
-            let stage, stageTitle, stageDesc, products;
-            if (age < 1) {
-                stage = 'puppy';
-                stageTitle = 'Puppy (Growth Phase)';
-                stageDesc = 'Your puppy is growing rapidly! Focus on proper nutrition for development, early socialization, and establishing good habits.';
-                products = [
-                    {name: "Training Treats", desc: "Perfect for puppy training sessions", price: "$18.99", emoji: "🥩", link: "https://www.happypuppysupply.com/products/rewarding-life-soft-training-treats"},
-                    {name: "Interactive Toys", desc: "Mental stimulation for growing minds", price: "$19.99", emoji: "🧸", link: "https://www.happypuppysupply.com/collections/toys-entertainment"},
-                    {name: "Puppy-Safe Chews", desc: "Gentle on developing teeth", price: "$16.99", emoji: "🦴", link: "https://www.happypuppysupply.com/collections/dog-treats-chews"}
-                ];
-            } else if (age < 3) {
-                stage = 'young';
-                stageTitle = 'Young Adult (High Energy)';
-                stageDesc = 'Your dog is at peak energy and learning capacity. Maintain their health with quality nutrition and plenty of physical activity.';
-                products = [
-                    {name: "High-Quality Dog Beds", desc: "Support for active rest", price: "$69.99", emoji: "🛏️", link: "https://www.happypuppysupply.com/collections/dog-beds-mats"},
-                    {name: "Active Play Toys", desc: "Burn energy constructively", price: "$22.99", emoji: "🎾", link: "https://www.happypuppysupply.com/collections/toys-entertainment"},
-                    {name: "Natural Treats", desc: "Reward good behavior", price: "$24.99", emoji: "🦴", link: "https://www.happypuppysupply.com/collections/dog-treats-chews"}
-                ];
-            } else if (age < 7) {
-                stage = 'adult';
-                stageTitle = 'Adult (Prime Years)';
-                stageDesc = 'Your dog is in their physical and mental prime. Focus on maintaining health through proper nutrition, regular exercise, and preventive care.';
-                products = [
-                    {name: "Hip & Joint Chews", desc: "Preventive joint support", price: "$32.99", emoji: "🦴", link: "https://www.happypuppysupply.com/products/wuffes-hip-joint-chews"},
-                    {name: "Premium Beds", desc: "Quality rest for active days", price: "$79.99", emoji: "🛏️", link: "https://www.happypuppysupply.com/collections/dog-beds-mats"},
-                    {name: "Dental Chews", desc: "Maintain oral health", price: "$21.99", emoji: "🦷", link: "https://www.happypuppysupply.com/products/100-natural-bully-sticks"}
-                ];
-            } else if (age < 10) {
-                stage = 'senior';
-                stageTitle = 'Mature (Senior Transition)';
-                stageDesc = 'Your dog is entering their golden years. Support joint health, maintain cognitive function, and adjust exercise as needed.';
-                products = [
-                    {name: "Orthopedic Memory Foam Bed", desc: "Joint pressure relief", price: "$89.99", emoji: "🛏️", link: "https://www.happypuppysupply.com/collections/dog-beds-mats"},
-                    {name: "Senior Joint Supplements", desc: "Mobility support", price: "$32.99", emoji: "💊", link: "https://www.happypuppysupply.com/products/wuffes-hip-joint-chews"},
-                    {name: "Cognitive Health Supplements", desc: "Brain function support", price: "$45.99", emoji: "🧠", link: "https://www.happypuppysupply.com/products/veterinary-strength-healthy-cognition"}
-                ];
-            } else {
-                stage = 'geriatric';
-                stageTitle = 'Senior (Golden Years)';
-                stageDesc = 'Your senior dog deserves extra comfort and care. Focus on pain management, accessibility, and maintaining quality of life.';
-                products = [
-                    {name: "Premium Orthopedic Bed", desc: "Maximum comfort for aging joints", price: "$119.99", emoji: "🛏️", link: "https://www.happypuppysupply.com/collections/dog-beds-mats"},
-                    {name: "Comprehensive Joint Support", desc: "Advanced mobility formula", price: "$45.99", emoji: "💊", link: "https://www.happypuppysupply.com/products/veterinary-strength-healthy-cognition"},
-                    {name: "Gentle Grooming Supplies", desc: "Comfort care essentials", price: "$29.99", emoji: "✨", link: "https://www.happypuppysupply.com/collections/grooming-care"}
-                ];
-            }
-            document.getElementById('lifeStage').innerHTML = `<h3>${stageTitle}</h3><p>${stageDesc}</p>`;
+            document.getElementById('breedName').textContent = breedData.name;
+            
+            // Life stage display
+            const stageInfo = {
+                puppy: { title: 'Puppy Stage (0-1 year)', desc: 'Rapid growth and development. Focus on socialization and foundation training.' },
+                young_adult: { title: 'Young Adult (1-2 years)', desc: 'Full of energy! Continue training and establish lifelong routines.' },
+                adult: { title: 'Adult (Prime Years)', desc: 'Maintenance phase. Keep up with exercise and preventive care.' },
+                senior: { title: 'Senior Years', desc: 'Slowing down. Increase vet checkups and adjust diet for aging needs.' }
+            };
+            
+            const info = stageInfo[lifeStage];
+            document.getElementById('lifeStage').innerHTML = `
+                <h3>${info.title}</h3>
+                <p>${info.desc}</p>
+            `;
+            
+            // Care tips based on breed risks and life stage
+            const tips = getCareTips(breedData, lifeStage, age);
+            document.getElementById('careList').innerHTML = tips.map(t => `<li>${t}</li>`).join('');
+            
+            // Product recommendations
+            const products = getProductRecommendations(breedData, lifeStage, age);
             const productsHtml = products.map(p => `
                 <a href="${p.link}" class="product-card" target="_blank">
                     <div class="product-image">${p.emoji}</div>
@@ -164,9 +174,135 @@
             `).join('');
             document.getElementById('product-recommendations').innerHTML = productsHtml +
                 '<a href="https://www.happypuppysupply.com/collections/all" class="btn" style="display: block; text-align: center; margin-top: 30px;" target="_blank">Shop All Products</a>';
-            document.getElementById('results').classList.add('show');
-            document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
         }
+
+        function getCareTips(data, stage, age) {
+            const tips = [];
+            
+            if (stage === 'puppy') {
+                tips.push('Schedule vaccinations and deworming');
+                tips.push('Begin socialization immediately');
+                if (data.jointRisk === 'high') {
+                    tips.push('⚠️ Avoid high-impact exercise to protect developing joints');
+                }
+                tips.push('Start with high-quality puppy food');
+            } else if (stage === 'young_adult') {
+                tips.push('Continue daily exercise and training');
+                if (data.jointRisk === 'high') {
+                    tips.push('Start joint supplements at age 2');
+                }
+                tips.push('Maintain healthy weight');
+            } else if (stage === 'adult') {
+                tips.push('Annual wellness exams');
+                if (data.jointRisk === 'high') {
+                    tips.push('Continue joint supplements');
+                }
+                if (data.obesityRisk === 'high') {
+                    tips.push('Monitor weight carefully - obesity worsens joint issues');
+                }
+                tips.push('Keep up with dental care');
+            } else { // senior
+                tips.push('Bi-annual vet checkups recommended');
+                tips.push('Switch to senior formula food');
+                if (data.jointRisk === 'high') {
+                    tips.push('Consider orthopedic bed and ramps');
+                }
+                tips.push('Watch for cognitive changes');
+                tips.push('Adjust exercise - shorter, more frequent walks');
+            }
+            
+            return tips;
+        }
+
+        function getProductRecommendations(data, stage, age) {
+            const products = [];
+            
+            if (stage === 'puppy') {
+                products.push({
+                    name: "Puppy Training Treats",
+                    desc: "Perfect for training and socialization",
+                    price: "$18.99",
+                    emoji: "🦴",
+                    link: "https://www.happypuppysupply.com/products/rewarding-life-soft-training-treats"
+                });
+                products.push({
+                    name: "Puppy Comfort Toys",
+                    desc: "Safe chewing and comfort",
+                    price: "$16.99",
+                    emoji: "🧸",
+                    link: "https://www.happypuppysupply.com/collections/toys-entertainment"
+                });
+            } else if (stage === 'senior') {
+                products.push({
+                    name: "Orthopedic Memory Foam Bed",
+                    desc: "Joint support for aging dogs",
+                    price: "$99.99",
+                    emoji: "🛏️",
+                    link: "https://www.happypuppysupply.com/collections/dog-beds-mats"
+                });
+                products.push({
+                    name: "Veterinary Strength Supplements",
+                    desc: "Cognitive and joint support for seniors",
+                    price: "$45.99",
+                    emoji: "💊",
+                    link: "https://www.happypuppysupply.com/products/veterinary-strength-healthy-cognition"
+                });
+                products.push({
+                    name: "Hip & Joint Chews",
+                    desc: "Maintain mobility in senior years",
+                    price: "$32.99",
+                    emoji: "🦴",
+                    link: "https://www.happypuppysupply.com/products/wuffes-hip-joint-chews"
+                });
+            } else {
+                // Adult products
+                if (data.jointRisk === 'high') {
+                    products.push({
+                        name: "Hip & Joint Chews",
+                        desc: `Preventive care for ${data.name}s`,
+                        price: "$32.99",
+                        emoji: "🦴",
+                        link: "https://www.happypuppysupply.com/products/wuffes-hip-joint-chews"
+                    });
+                }
+                
+                products.push({
+                    name: "Premium Dog Bed",
+                    desc: "Comfortable rest for active dogs",
+                    price: "$79.99",
+                    emoji: "🛏️",
+                    link: "https://www.happypuppysupply.com/collections/dog-beds-mats"
+                });
+                
+                if (data.energyLevel === 'high' || data.energyLevel === 'very_high') {
+                    products.push({
+                        name: "Active Play Toys",
+                        desc: "Burn energy constructively",
+                        price: "$24.99",
+                        emoji: "🎾",
+                        link: "https://www.happypuppysupply.com/collections/toys-entertainment"
+                    });
+                } else {
+                    products.push({
+                        name: "Natural Dental Chews",
+                        desc: "Entertainment + dental health",
+                        price: "$24.99",
+                        emoji: "🦷",
+                        link: "https://www.happypuppysupply.com/products/100-natural-bully-sticks"
+                    });
+                }
+            }
+            
+            return products.slice(0, 3);
+        }
+
+        function clearData() {
+            localStorage.removeItem('dogBreed');
+            localStorage.removeItem('dogAge');
+            localStorage.removeItem('breedData');
+        }
+
+        init();
     </script>
 </body>
 </html>
