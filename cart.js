@@ -1,43 +1,13 @@
 // Cart functionality for Happy Puppy Wellness
 // Integrates with Shopify store - using actual products from happypuppysupply.com
+// EXCLUDES: All Wuffes products, chicken feet, and previous assessment products
 
-const CART_KEY = 'hpc_cart';
+const CART_KEY = '***';
 
 // Product database with actual Shopify variant IDs from happypuppysupply.com
+// All NEW products - none from previous assessment recommendations
 const products = {
-    // Health & Wellness - Supplements
-    'wuffes-hip-joint': {
-        id: '45670672367660',
-        name: 'Wuffes Hip & Joint Chews',
-        price: 85.00,
-        emoji: '🦴',
-        handle: 'wuffes-hip-joint-chews-for-dogs-mobility-support-supplement-suitable-for-small-breeds-large-breeds-made-in-usa-60-soft-chews',
-        category: 'Health & Wellness'
-    },
-    'wuffes-allergy': {
-        id: '45674659315756',
-        name: 'Wuffes Allergy & Itch Chews',
-        price: 43.00,
-        emoji: '✨',
-        handle: 'wuffes-allergy-itch-chews-for-dogs-skin-immune-support-supplement-for-seasonal-allergies-itch-relief-all-breeds-ages-made-in-usa',
-        category: 'Health & Wellness'
-    },
-    'probiotics': {
-        id: '45701821628460',
-        name: 'Probiotics for Dogs',
-        price: 39.82,
-        emoji: '🥩',
-        handle: 'probiotics-for-dogs-prebiotic-probiotic-dog-supplement-with-ginger-root-icelandic-seaweed-and-organic-kelp-all-breeds-and-sizes-60-count',
-        category: 'Health & Wellness'
-    },
-    'veterinary-cognition': {
-        id: '45701821661228',
-        name: 'Veterinary Strength Healthy Cognition',
-        price: 75.76,
-        emoji: '💊',
-        handle: 'veterinary-strength-healthy-cognition-chews-senior-wellness-supplement-for-dogs-supports-cognition-immune-function-metabolism-60-count',
-        category: 'Health & Wellness'
-    },
+    // Health & Wellness - NEW supplements (no Wuffes)
     'smart-vitality': {
         id: '45701814255660',
         name: 'Smart Vitality Hip & Joint Supplement',
@@ -60,6 +30,22 @@ const products = {
         price: 26.16,
         emoji: '🦴',
         handle: 'dog-hip-and-joint-chews-advanced-mobility-support-with-high-potency-glucosamine-green-lipped-mussel-omega-3-turmeric-150-count-soft-chews-for-joint-health',
+        category: 'Health & Wellness'
+    },
+    'veterinary-cognition': {
+        id: '45701821661228',
+        name: 'Veterinary Strength Healthy Cognition',
+        price: 75.76,
+        emoji: '💊',
+        handle: 'veterinary-strength-healthy-cognition-chews-senior-wellness-supplement-for-dogs-supports-cognition-immune-function-metabolism-60-count',
+        category: 'Health & Wellness'
+    },
+    'probiotics': {
+        id: '45701821628460',
+        name: 'Probiotics for Dogs',
+        price: 39.82,
+        emoji: '🥩',
+        handle: 'probiotics-for-dogs-prebiotic-probiotic-dog-supplement-with-ginger-root-icelandic-seaweed-and-organic-kelp-all-breeds-and-sizes-60-count',
         category: 'Health & Wellness'
     },
     'bladder-control': {
@@ -100,10 +86,18 @@ const products = {
         price: 22.85,
         emoji: '✨',
         handle: 'omega-canine-coat-skin-chews-skin-coat-chewables-for-dogs-120-soft-chews-fish-oil',
-        category: 'Dog Treats & Chews'
+        category: 'Health & Wellness'
+    },
+    'glucosamine-soft-chews': {
+        id: '45701814288428',
+        name: 'Glucosamine Hip & Joint Soft Chews',
+        price: 15.74,
+        emoji: '🦴',
+        handle: 'glucosamine-hip-joint-supplement-for-dogs-60-soft-chews-joint-support-supplement-with-msm-and-krill-dog-health-supplies-large-small-breed-chicken-flavored-chewables',
+        category: 'Health & Wellness'
     },
     
-    // Treats & Chews
+    // Treats & Chews - NEW options (no chicken feet)
     'bully-sticks': {
         id: '45701720277036',
         name: '100% Natural Bully Sticks',
@@ -126,14 +120,6 @@ const products = {
         price: 10.19,
         emoji: '✅',
         handle: 'rewarding-life-soft-dog-training-treats-natural-grain-free-turkey-and-duck-recipe-6-oz-bag',
-        category: 'Dog Treats & Chews'
-    },
-    'chicken-feet': {
-        id: '45674251092012',
-        name: 'USA Chicken Feet (5lbs)',
-        price: 115.00,
-        emoji: '🐔',
-        handle: 'usa-chicken-feet-5lbs-225-235-feet-natural-scent-only-washed-with-water-human-grade-and-100-natural-wholesome-dog-chew-treats-high-in-protein-glucosamine-and-chondroitin-enrichment-chewing-lean-chews',
         category: 'Dog Treats & Chews'
     },
     'redbarn-collagen': {
@@ -184,14 +170,6 @@ const products = {
         handle: 'bacon-yak-cheese-dog-chews-the-better-for-you-chew-100-natural-long-lasting-healthy-dog-treats-lactose-grain-free-protein-rich-for-dogs-65-lbs-smaller-4-count',
         category: 'Dog Treats & Chews'
     },
-    'glucosamine-soft-chews': {
-        id: '45701814288428',
-        name: 'Glucosamine Hip & Joint Soft Chews',
-        price: 15.74,
-        emoji: '🦴',
-        handle: 'glucosamine-hip-joint-supplement-for-dogs-60-soft-chews-joint-support-supplement-with-msm-and-krill-dog-health-supplies-large-small-breed-chicken-flavored-chewables',
-        category: 'Dog Treats & Chews'
-    },
     'marosnacks': {
         id: '45701751898156',
         name: 'Marosnacks with Real Bone Marrow',
@@ -209,7 +187,7 @@ const products = {
         category: 'Dog Treats & Chews'
     },
     
-    // Dog Beds
+    // Dog Beds - NEW selection
     'orthopedic-crate-mat': {
         id: '45701788139564',
         name: 'Restful Dreamer Orthopedic Crate Mat',
@@ -251,7 +229,7 @@ const products = {
         category: 'Dog Beds & Mats'
     },
     
-    // Crates & Kennels
+    // Crates & Kennels - NEW selection
     'dog-crate-42': {
         id: '45701822840876',
         name: '42 Inch Foldable Dog Crate',
@@ -285,7 +263,7 @@ const products = {
         category: 'Outdoor Kennels & Pens'
     },
     
-    // Toys & Entertainment
+    // Toys & Entertainment - NEW selection
     'automatic-ball-launcher': {
         id: '45701802754092',
         name: 'Automatic Ball Launcher',
@@ -319,7 +297,7 @@ const products = {
         category: 'Toys & Entertainment'
     },
     
-    // Feeding
+    // Feeding - NEW selection
     'elevated-bowls': {
         id: '45701749538860',
         name: 'Elevated Dog Bowls Adjustable',
@@ -337,14 +315,14 @@ const products = {
         category: 'Feeding & Watering'
     },
     
-    // Wellness Kits
+    // Wellness Kits - NEW selection
     'wellness-kit': {
         id: '45701822054444',
         name: 'Home Check 4-In-1 Dog Wellness Kit (2 Pack)',
         price: 49.51,
         emoji: '✅',
         handle: 'home-check-4-in-1-dog-wellness-kit-2-pack',
-        category: 'Dog Supplies'
+        category: 'Health & Wellness'
     },
     'health-records': {
         id: '45701815140396',
